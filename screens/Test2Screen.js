@@ -68,6 +68,8 @@ export default class Test2Screen extends React.Component {
 					   <Column>
 					       <Card/>
 					   </Column>
+					</ItemsLayout>
+					<ItemsLayout>
 					   <Column>
 					       <Card/>
 					   </Column>
