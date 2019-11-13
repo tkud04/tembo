@@ -5,7 +5,11 @@ let naira = '\u8358';
 const Card = props => (
 <Container>
    <Cover>
+      <HomeButton
+	    onPress={() =>{alert('Hi');}}
+	  >
       <Image source={require('../assets/images/product-1.jpg')}/>
+	  </HomeButton>
    </Cover>
    <Content>
      <Title>Bags</Title>
@@ -32,6 +36,12 @@ const Cover = styled.View`
 			  border-top-left-radius: 14px;
 			  border-top-right-radius: 14px;
 			  overflow: hidden;
+`;
+
+const HomeButton = styled.TouchableOpacity`
+              width: 100%;
+			  height: 100%;
+
 `;
 
 const Image = styled.Image`

@@ -5,6 +5,7 @@ import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import Categories from '../components/Categories';
 import Card from '../components/Card';
+import HomeCard from '../components/HomeCard';
 import * as helpers from '../Helpers';
 import {FontAwesome} from '@expo/vector-icons';
 
@@ -131,6 +132,10 @@ const Subtitle = styled.Text`
 const ItemsLayout = styled.View`
                      flex-direction: row;
 					 flex: 1;
+					 flex-wrap: wrap;
+					 margin-right: 10px;
 `;
 
-const Column = styled.View``;
+const Column = styled.View`
+                   width: 50%;
+`;
