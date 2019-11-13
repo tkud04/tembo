@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Tecno Inventory App",
+    "description": "Inventory app for Tecno Android phones",
+    "slug": "inventory-app",
+    "privacy": "public",
+    "sdkVersion": "34.0.0",
+    "platforms": ["android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#072865"
+    },
+    "notification": {
+      "icon": "./assets/images/notification.png"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "assets/**/*"
+    ],
+	"android": {
+      "package": "com.tecno.inventory",
+	  "permissions": ["NOTIFICATIONS"]
+    }
+  }
+}
