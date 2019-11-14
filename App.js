@@ -8,10 +8,8 @@ import * as helpers from './Helpers';
 import AppNavigator from './navigation/AppNavigator';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
-import WebScreen from './screens/WebScreen';
-import TestScreen from './screens/TestScreen';
-import Test2Screen from './screens/Test2Screen';
 import { Notifications } from 'expo';
+import { createAppContainer } from 'react-navigation';
 
 export default class App extends React.Component {
   state = {
@@ -40,10 +38,11 @@ export default class App extends React.Component {
         />
       );
     } else {
+		const AppContainer = createAppContainer(AppNavigator);
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <Test2Screen />
+          <AppContainer />
         </View>
       );
     }

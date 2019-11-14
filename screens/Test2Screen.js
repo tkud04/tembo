@@ -46,20 +46,7 @@ export default class Test2Screen extends React.Component {
 			             <Name>Tobi</Name>
 				         <FontAwesome name="user" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
 			        </TitleBar>
-			        <ScrollView
-			         horizontal={true}
-				     style={{
-					     padding: 20,
-					     paddingLeft: 12,
-					     paddingTop: 30,
-				    	 flexDirection: 'row'
-				     }}
-				     showsHorizontalScrollIndicator={false}
-			        >
-			           {items.map((category, index) => (
-				         <Categories name={category.text} key={index}/>   
-			           ))}
-			        </ScrollView>
+			        
 			        <Subtitle>Items</Subtitle>
 					
 					<ItemsLayout>

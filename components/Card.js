@@ -1,20 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
-let naira = '\u8358';
+let naira = '\x8358';
 const Card = props => (
 <Container>
-   <Cover>
-      <HomeButton
+    <HomeButton
 	    onPress={() =>{alert('Hi');}}
 	  >
-      <Image source={require('../assets/images/product-1.jpg')}/>
-	  </HomeButton>
+	  
+   <Cover>    
+      <Image source={require('../assets/images/product-1.jpg')}/>	 
    </Cover>
    <Content>
      <Title>Bags</Title>
      <Price>{naira}5,000.00</Price>
    </Content>
+   
+    </HomeButton>
 </Container>
 );
 
