@@ -23,12 +23,12 @@ export default class Test2Screen extends React.Component {
   }
 
   static navigationOptions = {
-       header: null
+       drawerLabel: 'Home',
+	   drawerIcon: ({tintColor}) => (
+	      <FontAwesome name="home" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
+	   )
 	  };
 
-  static navigatorStyle = {
-    tabBarHidden: true,
-}
 
   render() {
 	  let items = [];
@@ -46,8 +46,11 @@ export default class Test2Screen extends React.Component {
 			             <Name>Tobi</Name>
 				         <FontAwesome name="user" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
 			        </TitleBar>
-			        
-			        <Subtitle>Items</Subtitle>
+			        <Button
+					 onPress={() => (this.props.navigation.navigate('Test'))}
+					 title="Go to Test screen"
+					>
+					<Subtitle>Items</Subtitle>
 					
 					<ItemsLayout>
 					   <Column>

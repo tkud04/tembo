@@ -9,21 +9,25 @@ import { Notifications } from 'expo';
 //var RNFS = require('react-native-fs');
 
 export default class TestScreen extends React.Component { 
-  static navigationOptions = {
-       header: null
+   static navigationOptions = {
+       drawerLabel: 'Test',
+	   drawerIcon: ({tintColor}) => (
+	      <FontAwesome name="bar-chart" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
+	   )
 	  };
 
   state = {
 	userCook: "",
 	activeUser: ""
   };
-  static navigatorStyle = {
-    tabBarHidden: true,
-}
 
   render() {
     return (
 	        <Container>
+			<Button
+					 onPress={() => (this.props.navigation.navigate('Test'))}
+					 title="Go to Test screen"
+					>
 			   <Title>This component is styled using styled-components</Title>
 			   <CustomButton text="Click me" textColor="#01d1e5" backgroundColor="lavenderblush"/>
 			</Container>
