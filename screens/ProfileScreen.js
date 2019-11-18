@@ -1,66 +1,39 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
 import styled from 'styled-components';
 import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
-import Categories from '../components/Categories';
-import Card from '../components/Card';
+import Tips from '../components/Tips';
+import AppHeader from '../components/AppHeader';
 import * as helpers from '../Helpers';
+import {ScrollView} from 'react-native';
 import {FontAwesome} from '@expo/vector-icons';
 
 import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class Test2Screen extends React.Component { 
-
- constructor(props) {
+export default class ProfileScreen extends React.Component { 
+   constructor(props) {
     super(props);
     this.state = { text: '', loading: false,dataSource: []};
-	
-		 
   }
 
-  static navigationOptions = {
-       drawerLabel: 'Home'
-	   
+   static navigationOptions = {
+	   headerTitle: () => <AppHeader title="Profile"/>
 	  };
 
-
   render() {
-	  let items = [];
-	  let navv = this.props.navigation;
-	  helpers.getList((dt => {
-		  items = dt;
-		 }));
-		 console.log(items);
-		 
     return (
 	        <Container>
-			    <ScrollView>
-			        <TitleBar>
+			  <ScrollView>
+			     <TitleBar>
 			             <Logo source={require('../assets/images/pic-11.jpg')}/>
-			             <Title>Daily Sales</Title>
+			             <Title>Welcome back,</Title>
 			             <Name>Tobi</Name>
 				         <FontAwesome name="user" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
 			        </TitleBar>
-					<ItemsLayout>
-					   <Column>
-					       <Card src={require('../assets/images/product-1.jpg')} title="Products" navv={navv}/>
-					   </Column>
-					   <Column>
-					       <Card  src={require('../assets/images/product-1.jpg')} title="Customers" navv={navv}/>
-					   </Column>
-					</ItemsLayout>
-					<ItemsLayout>
-					   <Column>
-					       <Card  src={require('../assets/images/product-1.jpg')} title="Sales" navv={navv}/>
-					   </Column>
-					   <Column>
-					       <Card  src={require('../assets/images/product-1.jpg')} title="Reports" navv={navv}/>
-					   </Column>
-					</ItemsLayout>
-			    </ScrollView>
+				   <Tips/>		    
+			  </ScrollView>
 			</Container>
     );
   }
@@ -69,7 +42,9 @@ export default class Test2Screen extends React.Component {
 
 const Container = styled.View`
                      flex: 1;
-					 background-color: white;
+					 background-color: #fff;
+					 justify-content: center;
+					 align-items: center;
 `;
 
 const TitleBar = styled.View`
@@ -115,26 +90,5 @@ const Name = styled.Text`
 					 margin-left: 10px;
 					 margin-top: -5px;
 `;
-
-const Subtitle = styled.Text`
-                    font-size: 20px;
-					color: #3c4560;
-					font-weight: 500;
-					margin-top: 10px;
-					margin-left: 25px;
-					text-transform: uppercase;
-`;
-
-const ItemsLayout = styled.View`
-                     flex-direction: row;
-					 flex: 1;
-					 flex-wrap: wrap;					 
-`;
-
-const Column = styled.View`
-                   width: 50%;
-				   align-items: center;
-`;
-
 
 const NavButton = styled.Button``;

@@ -4,19 +4,18 @@ import { createBottomTabNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import TabBarIcon from '../components/TabBarIcon';
-import WebScreen from '../screens/WebScreen';
-import TestScreen from '../screens/TestScreen';
-import Test2Screen from '../screens/Test2Screen';
+import AppStack from './AppStack';
+import ProfileStack from './ProfileStack';
 
 /////////////////////////////////////////////////
 
 const ret = createDrawerNavigator(
   {
-    Home: {
-		screen: Test2Screen
+    Dashboard: {
+		screen: AppStack
 	},
-	Products: {
-		screen: TestScreen
+	Profile: {
+		screen: ProfileStack
 	}
   },
 );
