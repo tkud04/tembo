@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
-    "expo": "^34.0.3",
+    "expo": "^35.0.0",
     "expo-asset": "^6.0.0",
     "expo-file-system": "^6.0.2",
     "expo-font": "^6.0.1",
@@ -22,7 +22,7 @@
     "expo-server-sdk": "^3.3.0",
     "expo-web-browser": "^6.0.0",
     "react": "16.8.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-native-background-task": "^0.2.1",
     "react-native-fs": "^2.14.1",
     "react-native-generic-table-page": "^0.4.1",
@@ -39,7 +39,7 @@
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.0.0",
-    "jest-expo": "^34.0.0"
+    "babel-preset-expo": "^7.0.0",
+    "jest-expo": "^35.0.0"
   }
 }

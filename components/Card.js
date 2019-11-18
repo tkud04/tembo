@@ -5,17 +5,19 @@ let naira = '\x8358';
 const Card = props => (
 <Container>
     <HomeButton
-	    onPress={() =>{alert('Hi');}}
+	    onPress={() =>{
+			let navv = props.navv;
+			console.log(navv);
+			navv.navigate(props.title);
+		}}
 	  >
 	  
    <Cover>    
-      <Image source={require('../assets/images/product-1.jpg')}/>	 
+      <Image source={props.src}/>	 
    </Cover>
    <Content>
-     <Title>Bags</Title>
-     <Price>{naira}5,000.00</Price>
+     <Price>{props.title}</Price>
    </Content>
-   
     </HomeButton>
 </Container>
 );
@@ -34,7 +36,7 @@ const Container = styled.View`
 
 const Cover = styled.View`
               width: 100%;
-			  height: 120px;
+			  height: 150px;
 			  border-top-left-radius: 14px;
 			  border-top-right-radius: 14px;
 			  overflow: hidden;

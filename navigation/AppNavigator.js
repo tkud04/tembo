@@ -15,7 +15,7 @@ const ret = createDrawerNavigator(
     Home: {
 		screen: Test2Screen
 	},
-	Test: {
+	Products: {
 		screen: TestScreen
 	}
   },

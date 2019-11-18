@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import * as helpers from '../Helpers';
+import {ScrollView} from 'react-native';
 
 import { Notifications } from 'expo';
 
@@ -10,10 +11,8 @@ import { Notifications } from 'expo';
 
 export default class TestScreen extends React.Component { 
    static navigationOptions = {
-       drawerLabel: 'Test',
-	   drawerIcon: ({tintColor}) => (
-	      <FontAwesome name="bar-chart" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
-	   )
+       drawerLabel: 'Products'
+	   
 	  };
 
   state = {
@@ -24,12 +23,11 @@ export default class TestScreen extends React.Component {
   render() {
     return (
 	        <Container>
-			<Button
-					 onPress={() => (this.props.navigation.navigate('Test'))}
-					 title="Go to Test screen"
-					>
-			   <Title>This component is styled using styled-components</Title>
-			   <CustomButton text="Click me" textColor="#01d1e5" backgroundColor="lavenderblush"/>
+			  <ScrollView>
+			     <NavButton onPress={() => (this.props.navigation.navigate('Test'))} title="Go to Test screen"></NavButton>
+			     <Title>This component is styled using styled-components</Title>
+			     <CustomButton text="Click me" textColor="#01d1e5" backgroundColor="lavenderblush"/>
+			  </ScrollView>
 			</Container>
     );
   }
@@ -48,3 +46,5 @@ const Title = styled.Text`
 					 font-weight: 500;
 					 color: palevioletred;
 `;
+
+const NavButton = styled.Button``;

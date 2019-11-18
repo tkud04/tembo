@@ -5,7 +5,6 @@ import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import Categories from '../components/Categories';
 import Card from '../components/Card';
-import HomeCard from '../components/HomeCard';
 import * as helpers from '../Helpers';
 import {FontAwesome} from '@expo/vector-icons';
 
@@ -23,15 +22,14 @@ export default class Test2Screen extends React.Component {
   }
 
   static navigationOptions = {
-       drawerLabel: 'Home',
-	   drawerIcon: ({tintColor}) => (
-	      <FontAwesome name="home" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
-	   )
+       drawerLabel: 'Home'
+	   
 	  };
 
 
   render() {
 	  let items = [];
+	  let navv = this.props.navigation;
 	  helpers.getList((dt => {
 		  items = dt;
 		 }));
@@ -41,31 +39,25 @@ export default class Test2Screen extends React.Component {
 	        <Container>
 			    <ScrollView>
 			        <TitleBar>
-			             <Avatar source={require('../assets/images/pic-11.jpg')}/>
-			             <Title>Welcome back,</Title>
+			             <Logo source={require('../assets/images/pic-11.jpg')}/>
+			             <Title>Daily Sales</Title>
 			             <Name>Tobi</Name>
 				         <FontAwesome name="user" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
 			        </TitleBar>
-			        <Button
-					 onPress={() => (this.props.navigation.navigate('Test'))}
-					 title="Go to Test screen"
-					>
-					<Subtitle>Items</Subtitle>
-					
 					<ItemsLayout>
 					   <Column>
-					       <Card/>
+					       <Card src={require('../assets/images/product-1.jpg')} title="Products" navv={navv}/>
 					   </Column>
 					   <Column>
-					       <Card/>
+					       <Card  src={require('../assets/images/product-1.jpg')} title="Customers" navv={navv}/>
 					   </Column>
 					</ItemsLayout>
 					<ItemsLayout>
 					   <Column>
-					       <Card/>
+					       <Card  src={require('../assets/images/product-1.jpg')} title="Sales" navv={navv}/>
 					   </Column>
 					   <Column>
-					       <Card/>
+					       <Card  src={require('../assets/images/product-1.jpg')} title="Reports" navv={navv}/>
 					   </Column>
 					</ItemsLayout>
 			    </ScrollView>
@@ -84,11 +76,23 @@ const TitleBar = styled.View`
                      width: 100%;
 					 margin-top: 40px;
 					 padding-left: 80px;
+					 flex-direction: row;
 `;
 
 const Avatar = styled.Image`
            width: 44px;
 		   height: 44px;
+		   background: black;
+		   border-radius: 22px;
+		   margin-left: 20px;
+		   position: absolute;
+		   top: 0;
+		   left: 0;
+`;
+
+const Logo = styled.Image`
+           width: 33px;
+		   height: 33px;
 		   background: black;
 		   border-radius: 22px;
 		   margin-left: 20px;
@@ -108,6 +112,8 @@ const Name = styled.Text`
                      font-size: 24;
 					 font-weight: bold;
 					 color: #3c4560;
+					 margin-left: 10px;
+					 margin-top: -5px;
 `;
 
 const Subtitle = styled.Text`
@@ -122,10 +128,13 @@ const Subtitle = styled.Text`
 const ItemsLayout = styled.View`
                      flex-direction: row;
 					 flex: 1;
-					 flex-wrap: wrap;
-					 margin-right: 10px;
+					 flex-wrap: wrap;					 
 `;
 
 const Column = styled.View`
                    width: 50%;
+				   align-items: center;
 `;
+
+
+const NavButton = styled.Button``;

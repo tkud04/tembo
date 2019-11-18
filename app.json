@@ -4,8 +4,10 @@
     "description": "Inventory app for Tecno Android phones",
     "slug": "inventory-app",
     "privacy": "public",
-    "sdkVersion": "34.0.0",
-    "platforms": ["android"],
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -23,9 +25,11 @@
     "assetBundlePatterns": [
       "assets/**/*"
     ],
-	"android": {
+    "android": {
       "package": "com.tecno.inventory",
-	  "permissions": ["NOTIFICATIONS"]
+      "permissions": [
+        "NOTIFICATIONS"
+      ]
     }
   }
 }
