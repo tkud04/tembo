@@ -14,16 +14,16 @@ export default Tips;
 
 const TipsBar = styled.View`
                      width: 100%;
-					 margin-top: 20px;
+					 margin-top: 10px;
 					 margin-left: 3px;
 					 flex-direction: row;
 					 background-color: green;					 
-					 font-weight: 600;
+					 font-weight: 300;
 `;
 
 
 const Tip = styled.Text`
-                     font-size: 17;					 
+                     font-size: 14;					 
 					 margin: 5px;
 					 color: #fff;
 `;

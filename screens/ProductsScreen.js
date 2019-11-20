@@ -26,10 +26,32 @@ export default class ProductsScreen extends React.Component {
 	  };
 
   render() {
+	  let navv = this.props.navigation;
     return (
 	        <Container>
 			  <ScrollView>		     
-				   <Tips/>		    
+				  <Tips/>
+                  <SearchInput
+				    placeholder="Product name or SKU"
+				    onChangeText={text => {
+						console.log(`Current text: ${text}`);
+					}}
+                  />
+				  
+				  <Row>
+				    <ProductName>
+				      <Logo source={require('../assets/images/pic-11.jpg')}/>
+					  <Name>Product Name</Name>
+                    </ProductName>				  
+				    <ProductInfo>
+				   
+				    </ProductInfo>
+				   </Row>
+				  
+                  <TestButton
+				  onPress={() => navv.navigate('AddProduct')}
+				  title="Add a new product"
+				  />				  
 			  </ScrollView>
 			</Container>
     );
@@ -42,4 +64,70 @@ const Container = styled.View`
 					 background-color: #fff;
 					 justify-content: center;
 					 align-items: center;
+`;
+					 
+const SearchInput = styled.TextInput`
+					 align-items: center;
+					 border: 1px solid #bcbcbc;
+					 border-radius: 5;
+					 margin-top: 10px;
+`;
+
+const Logo = styled.Image`
+           width: 55px;
+		   height: 55px;
+		   background: black;
+		   border-radius: 30px;
+		   margin-left: 2px;
+		   margin-bottom: 8px;
+`;
+
+const Row = styled.View`
+   marginVertical: 20px;
+   width: 100%;
+   border-bottom-width: 1;
+   border-bottom-color: #000;
+   flex-direction: row;
+`;
+
+const ProductName = styled.View`
+   margin-left: 4px;
+   margin-right: 5px;
+   border-right-width: 1;
+   border-right-color: #000;
+   width: 60%;
+   flex-direction: row;
+`;
+const ProductInfo = styled.View`
+   width: 40%;
+`;
+
+const Name = styled.Text`
+  font-size: 15;
+  font-weight: 300;
+  margin-left: 6px;
+  margin-top: 10px;
+  align-items: center;
+`;
+
+const Price = styled.Text`
+  font-size: 19;
+  font-weight: 400;
+  margin-left: 3px;
+  margin-top: 6px;
+  align-items: center;
+`;
+
+const Stock = styled.Text`
+  font-size: 19;
+  font-weight: 400;
+  margin-left: 3px;
+  margin-top: 6px;
+  align-items: center;
+`;
+
+const TestButton = styled.Button`
+  background-color: blue;
+  color: #fff;
+  border-radius: 5;
 `;

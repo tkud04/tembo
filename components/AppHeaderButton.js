@@ -2,21 +2,29 @@ import React from 'react';
 import styled from 'styled-components';
 import {FontAwesome} from '@expo/vector-icons';
 
-
-const AppHeaderButton = props => (
+export default class AppHeaderButton extends React.Component {
+	constructor(props) {
+      super(props);
+      this.state = {};		 
+    }
+	
+	render(){
+		return (
 <Btn
-onPress={props.onPress}
+onPress={() => {
+	console.log("button pressed"); 
+	this.props.onPress();
+	}}
 >
 <BtnContent>
-<Txt>{props.title}</Txt>
+<Txt>{this.props.title}</Txt>
 </BtnContent>
-<Btn/>			             				         
+</Btn>			             				         
 );
+	}
+}
 
-export default AppHeaderButton;
-
-
-const Btn = styled.TouchableOpacity`
+const Btn = styled.TouchableHighlight`
               width: 100%;
 			  height: 100%;
 `;

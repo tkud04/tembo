@@ -5,19 +5,15 @@ import { createStackNavigator } from 'react-navigation-stack';
 import TabBarIcon from '../components/TabBarIcon';
 import ProductsScreen from '../screens/ProductsScreen';
 import AddProductScreen from '../screens/AddProductScreen';
-import HomeScreen from '../screens/HomeScreen';
 
 /////////////////////////////////////////////////
 
 const ret = createStackNavigator(
   {
-    Home: {
-		screen: HomeScreen
-	},
-	Products: {
+    Products: {
 		screen: ProductsScreen
 	},
-	AddProduct: {
+	'Add Product': {
 		screen: AddProductScreen
 	}
   },

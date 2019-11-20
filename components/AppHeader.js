@@ -13,4 +13,5 @@ export default AppHeader;
 const Title = styled.Text`
  font-size: 24;
  font-weight: bold;
+ margin-left: 7px;
 `;
