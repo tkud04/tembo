@@ -5,6 +5,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 import TabBarIcon from '../components/TabBarIcon';
 import ProductsScreen from '../screens/ProductsScreen';
 import AddProductScreen from '../screens/AddProductScreen';
+import CustomersScreen from '../screens/CustomersScreen';
+import AddCustomerScreen from '../screens/AddCustomerScreen';
 import HomeScreen from '../screens/HomeScreen';
 
 /////////////////////////////////////////////////
@@ -19,6 +21,12 @@ const ret = createStackNavigator(
 	},
 	AddProduct: {
 		screen: AddProductScreen
+	},
+	Customers: {
+		screen: CustomersScreen
+	},
+	AddCustomer: {
+		screen: AddCustomerScreen
 	}
   },
 );

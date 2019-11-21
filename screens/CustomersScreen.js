@@ -14,15 +14,15 @@ import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class ProductsScreen extends React.Component { 
+export default class CustomersScreen extends React.Component { 
    constructor(props) {
     super(props);
     this.state = { text: '', loading: false,dataSource: []};		 
   }
 
    static navigationOptions = {
-	   headerTitle: () => <AppHeader title="Products"/>,
-	   headerRight: () => <AppHeaderButton title="+  " onPress={() => {Alert.alert('Add a new product')}}/>
+	   headerTitle: () => <AppHeader title="Customers"/>,
+	   headerRight: () => <AppHeaderButton title="+  " onPress={() => {Alert.alert('Add a new customer')}}/>
 	  };
 
   render() {
@@ -32,30 +32,34 @@ export default class ProductsScreen extends React.Component {
 			  <ScrollView>		     
 				  <Tips/>
                   <SearchInput
-				    placeholder="Product name or SKU"
+				    placeholder="Type customer name"
 				    onChangeText={text => {
 						console.log(`Current text: ${text}`);
 					}}
                   />
 				  
 				  <Row>
-				    <ProductName>
+				    <CustomerName>
 				      <Logo source={require('../assets/images/pic-11.jpg')}/>
-					  <Name>Product Name</Name>
-                    </ProductName>				  
-				    <ProductInfo>
+					  <CustomerBio>
+					    <Name>Tobi Kudayisi</Name>
+					    <Email>kudayisitobi@gmail.com</Email>
+					    <Phone>Phone: 07054291601</Phone>
+					  </CustomerBio>
+                    </CustomerName>				  
+				    <CustomerInfo>
 				      <PriceView>
-					    <Price>N1,500.00</Price>
+					    <Price>Debit</Price>
 					  </PriceView>
 					  <StockView>
-					    <Stock>10,000 litres</Stock>
+					    <Stock>Something</Stock>
 					  </StockView>
-				    </ProductInfo>
+				    </CustomerInfo>
 				   </Row>
 				  
                   <TestButton
-				  onPress={() => navv.navigate('AddProduct')}
-				  title="Add a new product"
+				  onPress={() => navv.navigate('AddCustomer')}
+				  title="Add a new customer"
 				  />				  
 			  </ScrollView>
 			</Container>
@@ -95,20 +99,40 @@ const Row = styled.View`
    flex-direction: row;
 `;
 
-const ProductName = styled.View`
+const CustomerName = styled.View`
    margin-left: 4px;
    margin-right: 5px;
    border-right-width: 1;
    border-right-color: #000;
-   width: 60%;
+   width: 70%;
    flex-direction: row;
 `;
-const ProductInfo = styled.View`
-   width: 40%;
+const CustomerBio = styled.View`
+  
+`;
+const CustomerInfo = styled.View`
+   width: 30%;
 `;
 
 const Name = styled.Text`
   font-size: 15;
+  font-weight: 300;
+  margin-left: 6px;
+  margin-top: 10px;
+  align-items: center;
+`;
+
+const Email = styled.Text`
+  font-size: 12;
+  color: blue;
+  font-weight: 300;
+  margin-left: 6px;
+  margin-top: 10px;
+  align-items: center;
+`;
+
+const Phone = styled.Text`
+  font-size: 12;
   font-weight: 300;
   margin-left: 6px;
   margin-top: 10px;

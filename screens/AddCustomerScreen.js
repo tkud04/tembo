@@ -14,7 +14,7 @@ import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class ProductsScreen extends React.Component { 
+export default class AddCustomerScreen extends React.Component { 
    constructor(props) {
     super(props);
     this.state = { inputBorderBottomColor: '#ccc',
@@ -227,7 +227,7 @@ const SubmitButton = styled.Button`
   border-radius: 5;
   margin-top: 40px;
    margin-bottom: 10px;
-  width: 50%;
+  width: 70%;
   align-items: center;
 `;
 

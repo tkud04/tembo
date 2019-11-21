@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import {FontAwesome} from '@expo/vector-icons';
+import {Icon} from 'expo';
 
 
 const Tips = props => (
 <TipsBar>
-	 <FontAwesome name="info" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}/>
-     <Tip>Tip: Swipe right to open the menu.</Tip>			             				         
+    <Tip>Tip: Swipe right to open the menu.</Tip>			             				         
 </TipsBar>
 );
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import {FontAwesome} from '@expo/vector-icons';
 
 export default class AppHeaderButton extends React.Component {
 	constructor(props) {
