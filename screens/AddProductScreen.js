@@ -8,6 +8,7 @@ import AppHeaderButton from '../components/AppHeader';
 import * as helpers from '../Helpers';
 import {ScrollView} from 'react-native';
 import {Alert} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
 import { Notifications } from 'expo';
@@ -61,6 +62,7 @@ export default class ProductsScreen extends React.Component {
 	this.stock = "0";
 	this.notes = "";
 	this.productImg = "";
+	this.categories = "";
     
   }
 
@@ -78,13 +80,51 @@ export default class ProductsScreen extends React.Component {
   }
   
   _addProduct = () => {
-	 console.log(`Product name: ${this.productName}`);
+	  //form validation
 	 if(this.productName.length < 6){
-		 Alert.alert("Product name must be at least 6 characters");
+		 showMessage({
+			 message: "Product name must be at least 6 characters",
+			 type: 'danger'
+		 });
 	 }
+	 if(this.quantityType ==  "none"){
+		 showMessage({
+			 message: "Please choose a quantity type for your product",
+			 type: 'danger'
+		 });
+	 }
+	 if(this.costPrice < 0){
+		 showMessage({
+			 message: "Please add the cost price for your product",
+			 type: 'danger'
+		 });
+	 }
+	 if(this.sellingPrice < 0){
+		 showMessage({
+			 message: "Please add the sale price for your product",
+			 type: 'danger'
+		 });
+	 }
+	 if(this.stock < 0){
+		 showMessage({
+			 message: "Please add the initial stock for your product",
+			 type: 'danger'
+		 });
+	 }
+	 
 	 const dt = {
-		name: this.productName
+		name: this.productName,
+		quantityType: this.quantityType,
+		sku: this.sku,
+		costPrice: this.costPrice,
+		sellingPrice: this.sellingPrice,
+		stock: this.stock,
+		notes: this.notes,
+		productImg: this.productImg,
+		categories: this.categories,
 	 };  
+	 
+	 console.log(dt);
   }
   
   render() {
@@ -122,7 +162,7 @@ export default class ProductsScreen extends React.Component {
 					  <ProductSelect
 					    selectedValue={this.state.quantityType}
 						mode="dropdown"
-					    onValueChange={(value,index) => {this.setState({quantityType: value})}}
+					    onValueChange={(value,index) => {this.quantityType = value}}
 					  >
 					    <ProductSelect.Item key="qtype-1" label="Quantity type" value="none"/>
 						{
@@ -139,7 +179,7 @@ export default class ProductsScreen extends React.Component {
 				    <ProductInput
 				     placeholder="Cost price"
 				     onChangeText={text => {
-						console.log(`Current text: ${text}`);
+						this.costPrice = text;
 					 }}
 					 onFocus={() => {
 						 console.log('focus');
@@ -156,7 +196,7 @@ export default class ProductsScreen extends React.Component {
 				    <ProductInput
 				     placeholder="Sale price"
 				     onChangeText={text => {
-						console.log(`Current text: ${text}`);
+						this.sellingPrice = text;
 					 }}
 					 onFocus={() => {
 						 console.log('focus');
@@ -173,7 +213,7 @@ export default class ProductsScreen extends React.Component {
 				    <ProductInput
 				     placeholder="Stock"
 				     onChangeText={text => {
-						console.log(`Current text: ${text}`);
+						this.stock = text;
 					 }}
 					 onFocus={() => {
 						 console.log('focus');
@@ -190,7 +230,7 @@ export default class ProductsScreen extends React.Component {
 				    <ProductInput
 				     placeholder="Notes"
 				     onChangeText={text => {
-						console.log(`Current text: ${text}`);
+						this.notes = text;
 					 }}
 					 onFocus={() => {
 						 console.log('focus');

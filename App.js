@@ -10,6 +10,7 @@ import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
 import { Notifications } from 'expo';
 import { createAppContainer } from 'react-navigation';
+import FlashMessage from 'react-native-flash-message';
 
 export default class App extends React.Component {
   state = {
@@ -43,6 +44,7 @@ export default class App extends React.Component {
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <AppContainer />
+          <FlashMessage position="bottom" />
         </View>
       );
     }
