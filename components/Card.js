@@ -7,7 +7,6 @@ const Card = props => (
     <HomeButton
 	    onPress={() =>{
 			let navv = props.navv;
-			console.log(navv);
 			navv.navigate(props.title);
 		}}
 	  >

@@ -17,13 +17,13 @@ import { Notifications } from 'expo';
 export default class ProductsScreen extends React.Component { 
    constructor(props) {
     super(props);
-    this.state = { inputBorderBottomColor: '#ccc',
+    this.state = { inputBorderBottomColor: '#aaa',
                    inputBorderBottomWidth: 1,
-				   nameBorderBottomColor: '#ccc',
-				   costPriceBorderBottomColor: '#ccc',
-				   salePriceBorderBottomColor: '#ccc',
-				   stockBorderBottomColor: '#ccc',
-				   notesBorderBottomColor: '#ccc',
+				   nameBorderBottomColor: '#aaa',
+				   costPriceBorderBottomColor: '#aaa',
+				   salePriceBorderBottomColor: '#aaa',
+				   stockBorderBottomColor: '#aaa',
+				   notesBorderBottomColor: '#aaa',
 				   quantityType: "none",
 				   loading: false,
 				   dataSource: [],
@@ -51,6 +51,16 @@ export default class ProductsScreen extends React.Component {
 	                     {key: 22,name: "Yard", value: "yard"},
 	                    ]	
 				 };	
+				 
+	//form data
+	this.productName = "";
+	this.sku = helpers.generateSKU();
+	this.quantityType = "none";
+	this.costPrice = "0";
+	this.sellingPrice = "0";
+	this.stock = "0";
+	this.notes = "";
+	this.productImg = "";
     
   }
 
@@ -66,6 +76,17 @@ export default class ProductsScreen extends React.Component {
 								<ProductSelect.Item label={element.name} value={element.value}/>
 								});						
   }
+  
+  _addProduct = () => {
+	 console.log(`Product name: ${this.productName}`);
+	 if(this.productName.length < 6){
+		 Alert.alert("Product name must be at least 6 characters");
+	 }
+	 const dt = {
+		name: this.productName
+	 };  
+  }
+  
   render() {
 	  let navv = this.props.navigation;
 	  
@@ -85,7 +106,7 @@ export default class ProductsScreen extends React.Component {
 				    <ProductInput
 				     placeholder="Product name"
 				     onChangeText={text => {
-						console.log(`Current text: ${text}`);
+						this.productName = text;
 					 }}
 					 onFocus={() => {
 						 console.log('focus');
@@ -93,7 +114,7 @@ export default class ProductsScreen extends React.Component {
 					 }}
 					 onBlur={() => {
 						 console.log('blur');
-						this.setState({nameBorderBottomColor: "#ccc"});
+						this.setState({nameBorderBottomColor: "#aaa"});
 					 }}
 					/>
 					</ProductInputWrapper>
@@ -126,7 +147,7 @@ export default class ProductsScreen extends React.Component {
 					 }}
 					 onBlur={() => {
 						 console.log('blur');
-						this.setState({costPriceBorderBottomColor: "#ccc"});
+						this.setState({costPriceBorderBottomColor: "#aaa"});
 					 }}
 					 keyboardType="decimal-pad"
 					/>
@@ -143,7 +164,7 @@ export default class ProductsScreen extends React.Component {
 					 }}
 					 onBlur={() => {
 						 console.log('blur');
-						this.setState({salePriceBorderBottomColor: "#ccc"});
+						this.setState({salePriceBorderBottomColor: "#aaa"});
 					 }}
 					 keyboardType="decimal-pad"
 					/>
@@ -160,7 +181,7 @@ export default class ProductsScreen extends React.Component {
 					 }}
 					 onBlur={() => {
 						 console.log('blur');
-						this.setState({stockBorderBottomColor: "#ccc"});
+						this.setState({stockBorderBottomColor: "#aaa"});
 					 }}
 					 keyboardType="decimal-pad"
 					/>
@@ -177,14 +198,14 @@ export default class ProductsScreen extends React.Component {
 					 }}
 					 onBlur={() => {
 						 console.log('blur');
-						this.setState({notesBorderBottomColor: "#ccc"});
+						this.setState({notesBorderBottomColor: "#aaa"});
 					 }}
 					 multiline={true}
 					/>
 					</ProductInputWrapper>
 				   </BottomInputs>
                   <SubmitButton
-				  onPress={() => Alert.alert('Adding a new product')}
+				  onPress={() => this._addProduct()}
 				  title="Submit"				  
 				  />
 				  <TestButton
@@ -211,6 +232,7 @@ const ProductInput = styled.TextInput`
 					 align-items: center;
 					 border: none;
 					 margin-top: 10px;
+					 color: #bcbcbc;
 `;
 
 
@@ -258,7 +280,7 @@ const TopRightInputs = styled.View`
 const ProductSelect = styled.Picker`
     width: 90%;
 	height: 50;
-	color: #ccc;
+	color: #aaa;
 `;
 
 const BottomInputs = styled.View`

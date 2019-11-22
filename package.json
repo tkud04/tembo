@@ -24,6 +24,7 @@
     "react": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-native-background-task": "^0.2.1",
+    "react-native-flash-message": "^0.1.15",
     "react-native-fs": "^2.14.1",
     "react-native-generic-table-page": "^0.4.1",
     "react-native-gesture-handler": "^1.5.0",

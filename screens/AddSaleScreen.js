@@ -14,7 +14,7 @@ import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class AddCustomerScreen extends React.Component { 
+export default class AddSaleScreen extends React.Component { 
    constructor(props) {
     super(props);
     this.state = { inputBorderBottomColor: '#ccc',
@@ -55,7 +55,7 @@ export default class AddCustomerScreen extends React.Component {
   }
 
    static navigationOptions = {
-	   headerTitle: () => <AppHeader title="New Customer"/>,
+	   headerTitle: () => <AppHeader title="New Sale"/>,
 	  };
 	  
   _renderQuantityTypes = (src) => {

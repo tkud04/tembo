@@ -35,7 +35,7 @@ export default class HomeScreen extends React.Component {
 	  helpers.getList((dt => {
 		  items = dt;
 		 }));
-		 console.log(items);
+		 //console.log(items);
 		 
     return (
 	        <Container>
@@ -43,10 +43,10 @@ export default class HomeScreen extends React.Component {
 			        <Tips/>
 					<ItemsLayout>
 					   <Column>
-					       <Card src={require('../assets/images/product-1.jpg')} title="Products" navv={navv}/>
+					       <Card src={require('../assets/images/products-1.png')} title="Products" navv={navv}/>
 					   </Column>
 					   <Column>
-					       <Card  src={require('../assets/images/product-1.jpg')} title="Customers" navv={navv}/>
+					       <Card  src={require('../assets/images/customers-1.jpg')} title="Customers" navv={navv}/>
 					   </Column>
 					</ItemsLayout>
 					<ItemsLayout>

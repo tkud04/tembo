@@ -1,4 +1,4 @@
-import { Text, Linking } from 'react-native';
+import { Text, Linking, AsyncStorage} from 'react-native';
 import { WebView } from 'react-native-webview';
 import util from 'react-native-util';
 import * as FileSystem from 'expo-file-system';
@@ -239,4 +239,34 @@ export function getList(callback){
 	{text: 'Salts'},
 	];
 	callback(ret);
+}
+
+
+export async function addProduct(data)
+{
+	let products = await AsyncStorage.getItem('products');
+	let newProduct = JSON.parse(products);
+	
+	if(!newProduct) newProduct = [];
+	newProduct.push(data);
+	
+	await AsyncStorage.setItem('products',JSON.stringify(newProduct))
+	                  .then(() => {
+						  console.log("Product saved successfully");
+					  })
+					  .catch((error) => {
+						  console.log(`Error: ${error.message}`);
+					  });
+}
+
+export async function getProducts()
+{
+	let products = await AsyncStorage.getItem('products');
+	let ret = JSON.parse(products);
+	return ret;
+}
+
+export function generateSKU()
+{
+	return `SKU + ${Math.floor(Math.random() * Math.floor(999999))}`;
 }

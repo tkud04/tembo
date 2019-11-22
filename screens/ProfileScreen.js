@@ -30,7 +30,7 @@ export default class ProfileScreen extends React.Component {
 			             <Logo source={require('../assets/images/pic-11.jpg')}/>
 			             <Title>Welcome back,</Title>
 			             <Name>Tobi</Name>
-				         //FontAwesome name="user" size={32} color="black" style={{position: 'absolute',right: 20, top: 0}}
+				        
 			        </TitleBar>
 				   <Tips/>		    
 			  </ScrollView>

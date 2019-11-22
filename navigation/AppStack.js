@@ -8,6 +8,9 @@ import AddProductScreen from '../screens/AddProductScreen';
 import CustomersScreen from '../screens/CustomersScreen';
 import AddCustomerScreen from '../screens/AddCustomerScreen';
 import HomeScreen from '../screens/HomeScreen';
+import SalesScreen from '../screens/SalesScreen';
+import AddSaleScreen from '../screens/AddSaleScreen';
+import ReportsScreen from '../screens/ReportsScreen';
 
 /////////////////////////////////////////////////
 
@@ -27,6 +30,15 @@ const ret = createStackNavigator(
 	},
 	AddCustomer: {
 		screen: AddCustomerScreen
+	},
+	Sales: {
+		screen: SalesScreen
+	},
+	AddSale: {
+		screen: AddSaleScreen
+	},
+	Reports: {
+		screen: ReportsScreen
 	}
   },
 );
