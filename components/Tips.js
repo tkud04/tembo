@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Icon} from 'expo';
+import {FontAwesome} from '@expo/vector-icons';
+import AppStyles from '../styles/AppStyles';
 
 
 const Tips = props => (
@@ -16,7 +17,7 @@ const TipsBar = styled.View`
 					 margin-top: 10px;
 					 margin-left: 3px;
 					 flex-direction: row;
-					 background-color: green;					 
+					 background-color: orange;					 
 					 font-weight: 300;
 `;
 
@@ -25,4 +26,5 @@ const Tip = styled.Text`
                      font-size: 14;					 
 					 margin: 5px;
 					 color: #fff;
+					 font-style: ${AppStyles.fontStyle};
 `;

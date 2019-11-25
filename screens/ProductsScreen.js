@@ -6,6 +6,7 @@ import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
 import AppHeaderButton from '../components/AppHeader';
 import * as helpers from '../Helpers';
+import AppStyles from '../styles/AppStyles';
 import {ScrollView} from 'react-native';
 import {Alert} from 'react-native';
 
@@ -21,8 +22,13 @@ export default class ProductsScreen extends React.Component {
   }
 
    static navigationOptions = {
+	   headerStyle: {
+		   backgroundColor: AppStyles.headerBackground,
+		   color: AppStyles.headerColor,
+		   height: AppStyles.headerHeight
+	   },
 	   headerTitle: () => <AppHeader title="Products"/>,
-	   headerRight: () => <AppHeaderButton title="+  " onPress={() => {Alert.alert('Add a new product')}}/>
+	   headerRight: () => <AppHeaderButton title="add" op={() => {Alert.alert('Add a new product')}}/>
 	  };
 
   render() {

@@ -8,6 +8,7 @@ import Card from '../components/Card';
 import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
 import * as helpers from '../Helpers';
+import AppStyles from '../styles/AppStyles';
 
 import { Notifications } from 'expo';
 
@@ -24,7 +25,15 @@ export default class HomeScreen extends React.Component {
 
   static navigationOptions = {
        drawerLabel: 'Home',
-	   headerTitle: () => <AppHeader title="Daily Sales Report"/>
+	   headerStyle: {
+		   backgroundColor: AppStyles.headerBackground,
+		   height: AppStyles.headerHeight    		   
+	   },
+	   headerTitle: () => <AppHeader title="Daily Sales Report"/>,
+	   headerTintColor: AppStyles.headerColor,
+	   headerTitleStyle: {
+		   
+	   }
 	   
 	  };
 
@@ -66,7 +75,8 @@ export default class HomeScreen extends React.Component {
 
 const Container = styled.View`
                      flex: 1;
-					 background-color: white;
+					 background-color: white;	
+                     border-radius: 5px;					 
 `;
 
 const TitleBar = styled.View`

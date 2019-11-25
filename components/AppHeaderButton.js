@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import AppStyles from '../styles/AppStyles';
+import { Icon } from 'expo';
 
 export default class AppHeaderButton extends React.Component {
 	constructor(props) {
@@ -12,18 +14,22 @@ export default class AppHeaderButton extends React.Component {
 <Btn
 onPress={() => {
 	console.log("button pressed"); 
-	this.props.onPress();
+	this.props.op();
 	}}
 >
 <BtnContent>
-<Txt>{this.props.title}</Txt>
+<Icon.Ionicons
+        name={this.props.title}
+        size={26}
+        color={AppStyles.color}
+      />
 </BtnContent>
 </Btn>			             				         
 );
 	}
 }
 
-const Btn = styled.TouchableHighlight`
+const Btn = styled.TouchableOpacity`
               width: 100%;
 			  height: 100%;
 `;
