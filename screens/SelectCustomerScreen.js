@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import Tips from '../components/Tips';
-import AppHeader from '../components/AppHeader';
-import Sale from '../components/Sale';
+import AppInputHeader from '../components/AppInputHeader';
+import Customer from '../components/Customer';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
 import {ScrollView, Button} from 'react-native';
@@ -15,44 +15,43 @@ import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class SalesScreen extends React.Component { 
-  constructor(props) {
+export default class SelectCustomerScreen extends React.Component { 
+   constructor(props) {
     super(props);
-	this.props.navigation.setParams({goToAddSale: this.goToAddSale});
-    this.state = { text: '', loading: false,sales: []};	
+	this.props.navigation.setParams({goToAddCustomer: this.goToAddCustomer});
+    this.state = { text: '', loading: false,customers: []};	
     this.navv = null;
-    this.s = null;	
+    this.c = null;	
 	
-	helpers.getSales((ss => {
-		this.state.sales = ss;
+	helpers.getCustomers((cc => {
+		this.state.customers = cc;
 		}));
   }
   
   
-   goToSale = () => {
+  selectCustomer = () => {
 	showMessage({
-			 message: `Going to sale screen with id ${this.s.id}`,
+			 message: `Going back to add sale screen with customer ${this.c.id}`,
 			 type: 'info'
 		 });
 	
-	this.navv.navigate('EditSale',{
-		s: this.s,
+	this.navv.navigate('AddSale',{
+		c: this.c,
 	});  
   }
   
-  goToAddSale = () => {
-	this.navv.navigate('AddSale');  
+  goToAddCustomer = () => {
+	this.navv.navigate('AddCustomer');  
   }
 
    static navigationOptions = ({navigation}) => {
 	   return {
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight
+		   height: AppStyles.headerHeight / 2
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" xml={AppStyles.svg.headerWallet} title="Sales"/>,
+	   headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerUsers} title="Customers"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => <Button onPress={navigation.getParam('goToAddSale')} title="NEW"></Button>,
 	   headerTitleStyle: {
 		   
        }
@@ -69,19 +68,19 @@ export default class SalesScreen extends React.Component {
 			  <ScrollView>		     
 				  <Tips/>
                   <SearchInput
-				    placeholder="Sales id or customer name"
+				    placeholder="Customer name, email or phone number"
 				    onChangeText={text => {
 						console.log(`Current text: ${text}`);
 					}}
                   />
 				  
-				   {
-					  this.state.sales.map((s) => {
-						  //console.log(s);							  
-						  return  <SalesButton key={s['id']} onPress={() => {this.s = s; this.goToSale()}}><Sale data={s}/></SalesButton>
+				  {
+					  this.state.customers.map((c) => {
+						  //console.log(p);							  
+						  return  <CustomerButton key={c['id']} onPress={() => {this.c = c; this.selectCustomer()}}><Customer data={c}/></CustomerButton>
 					  })
 				  }
-				  
+				  			  
 			  </ScrollView>
 			</Container>
     );
@@ -98,12 +97,16 @@ const Container = styled.View`
 					 
 const SearchInput = styled.TextInput`
 					 align-items: center;
-					 border: 1px solid #bcbcbc;
 					 border-radius: 5;
 					 margin-top: 10px;
+					 border: 1px solid #bbb;
+					 padding: 10px;
+					 margin-bottom: 20px;
+					 color: #ccc;
 `;
 
 
-const SalesButton = styled.TouchableOpacity`
+const CustomerButton = styled.TouchableOpacity`
 
 `;
+

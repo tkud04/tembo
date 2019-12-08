@@ -15,6 +15,7 @@ export default Tips;
 const TipsBar = styled.View`
                      width: 100%;
 					 margin-top: 10px;
+					 margin-bottom: 20px;
 					 margin-left: 3px;
 					 flex-direction: row;
 					 background-color: orange;					 

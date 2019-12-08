@@ -7,21 +7,22 @@ import AppInputHeader from '../components/AppInputHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import * as Permissions from 'expo-permissions';
-import * as Contacts from 'expo-contacts';
 import * as ImagePicker from 'expo-image-picker';
 import {ScrollView} from 'react-native';
 import {showMessage, hideMessage} from 'react-native-flash-message';
+
 
 import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class AddCustomerScreen extends React.Component { 
+export default class EditCustomerScreen extends React.Component { 
    constructor(props) {
     super(props);
-	helpers._getPermissionAsync('camera roll');
-	helpers._getPermissionAsync('contacts');
-	
+	 helpers._getPermissionAsync('camera roll');
+	 helpers._getPermissionAsync('contacts');
+	 	this.c = props.navigation.state.params.c;
+		
     this.state = { inputBorderBottomColor: '#ccc',
                    inputBorderBottomWidth: 1,
 				   nameBorderBottomColor: '#ccc',
@@ -31,45 +32,61 @@ export default class AddCustomerScreen extends React.Component {
 				   notesBorderBottomColor: '#ccc',
 				   customerType: "none",
 				   loading: false,
-				   customerImg: "",
-				   customerName: "",
-				   customerEmail: "",
-				   customerPhone: "",
-				   sa: "",
-				   notes: "",
-				   gender: "",
+				   dataSource: [],
+				   customerImg: this.c.customerImg,
+				   customerName: this.c.customerName,
+				   customerID: "",
+				   customerEmail: this.c.customerEmail,
+				   customerPhone: this.c.customerPhone,
+				   customerType: this.c.customerType,
+				   sa: this.c.sa,
+				   notes: this.c.notes,
+				   gender: this.c.gender,
 				   customerTypes: [{key: 1,name: "Individual", value: "individual"},
 	                     {key: 3,name: "Company", value: "company"}],
 				  genderTypes: [{key: 1,name: "Male", value: "male"},
 	                     {key: 3,name: "Female", value: "female"},
-	                     {key: 5,name: "Company", value: "company"},]
+	                     {key: 5,name: "Company", value: "company"},]	
 				 };	
-    
+				     
+	this.navv = null;
+	
+		if(!isNaN(this.state.customerImg)) this.state.customerImg = require("../assets/images/pic-11.jpg");
+	  console.log(this.c);
   }
 
-  static navigationOptions = {
+   
+   static navigationOptions = {
 	  headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight / 2
 	   },
-	  headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerUsers} title="Add customer"/>,
+	  headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerUsers} title="Edit customer"/>,
 	   headerTintColor: AppStyles.headerColor,
 	  };
 	  
+  _renderQuantityTypes = (src) => {
+      
+	  console.log(src);
+	  
+      return src.map((element) => {
+								<CustomerSelect.Item label={element.name} value={element.value}/>
+								});						
+  }
   
   addImage = async () => {
 	  let ret = await ImagePicker.launchImageLibraryAsync({
 		  mediaTypes: ImagePicker.MediaTypeOptions.All,
 		  allowsEditing: true,
-		  aspect: [4,3],
+		  aspect: [4,4],
 		  quality: 1
 	  });
 	  
 	  console.log(ret);
 	  
 	  if(!ret.cancelled){
-		  this.setState({customerImg: ret.uri});
-		  this.productImg = ret.uri;
+		  this.setState({customerImg: {uri: ret.uri}});
+		  this.customerImg = {uri: ret.uri};
 		  
 		  showMessage({
 			 message: "Image uploaded!",
@@ -78,45 +95,17 @@ export default class AddCustomerScreen extends React.Component {
 	  }
   }
   
- 
-  addContact = async () => {
-	  let ret = [];
-	  console.log(this.rr);
-	  
-	  	  ret = await Contacts.getContactsAsync({
-		  fields: [Contacts.Fields.Emails]
-	  });
-	  
-	  console.log(ret);
-	  
-	  if(ret.length > 0){
-		  /**
-		  this.setState({customerImg: ret.uri});
-		  this.productImg = ret.uri;
-		  
-		  showMessage({
-			 message: "Image uploaded!",
-			 type: 'success'
-		 });
-		 **/
-	  }
-  }
-  
-   /**
-  customerImg: "",
-				   customerName: "",
-				   customerEmail: "",
-				   customerPhone: "",
-				   sa: "",
-				   notes: "",
-				   gender: "",
-  **/
-  
-  _addCustomer = () => {
-	 //form validation
-	  
-  let validationErrors = (this.state.customerName.length < 6 || this.state.customerType ==  "none" || this.state.gender ==  "none" || this.state.customerEmail.length < 6 || this.state.customerPhone.length < 6  || this.state.sa.length < 6);
+  _updateCustomer = () => {
+	  //form validation
+	 	  
+  let validationErrors = (this.state.customerID.length < 4 || this.state.customerName.length < 6 || this.state.customerType ==  "none" || this.state.gender ==  "none" || this.state.customerEmail.length < 6 || this.state.customerPhone.length < 6  || this.state.sa.length < 6);
 	  if(validationErrors){
+	 if(this.state.customerID.length < 4){
+		 showMessage({
+			 message: "Customer ID must be at least 4 characters",
+			 type: 'danger'
+		 });
+	 }
 	 if(this.state.customerName.length < 6){
 		 showMessage({
 			 message: "Customer name must be at least 6 characters",
@@ -166,11 +155,11 @@ export default class AddCustomerScreen extends React.Component {
 				   sa: this.state.sa,
 				   notes: this.state.notes,
 				   gender: this.state.gender,
-				   id: helpers.getUniqueID('customer')
+				   id: this.state.customerID
 	 };  
 	 
 	 console.log(dt);
-	 helpers.addCustomer(dt,this.navv);	
+     helpers.updateCustomer(dt,this.navv);	
 	}
 	 
   }
@@ -192,14 +181,24 @@ export default class AddCustomerScreen extends React.Component {
 				   <Logo source={{uri: this.state.customerImg}}/>
 				   </ImageUpload>
 				   <TopRightInputs>
-					<ProductInputWrapper>
-					  <ContactUpload
-					     onPress={() => this.addContact()}
-					  >
-					  <ContactView>
-					    <ContactText>Click here to select from your contacts</ContactText>
-					  </ContactView>				  
-					  </ContactUpload>
+				   <ProductInputWrapper>
+					 <ProductDescription>Customer name</ProductDescription>
+				    <ProductInput
+					style={{borderColor: this.state.idBorderBottomColor}}
+				     placeholder="Customer ID"
+					  value={this.state.customerID}
+				     onChangeText={text => {
+						this.setState({customerID: text});
+					 }}
+					 onFocus={() => {
+						 
+						this.setState({idBorderBottomColor: "#00a2e8"});
+					 }}
+					 onBlur={() => {
+						
+						this.setState({idBorderBottomColor: "#ccc"});
+					 }}
+					/>
 					</ProductInputWrapper>
 					<ProductInputWrapper>
 					 <ProductDescription>Select customer type</ProductDescription>
@@ -334,7 +333,7 @@ export default class AddCustomerScreen extends React.Component {
 					</ProductInputWrapper>
 				   </BottomInputs>
                   <SubmitButton
-				  onPress={() => this._addCustomer()}
+				  onPress={() => this._updateCustomer()}
 				  title="Submit"				  
 				  />			  
 			  </ScrollView>
@@ -395,22 +394,6 @@ const ImageUpload = styled.TouchableOpacity`
 
 `;
 
-const ContactUpload = styled.TouchableOpacity`
-
-`;
-
-const ContactView = styled.View`
-
-`;
-
-const ContactText = styled.Text` 
-                   color: #fff;
-				   background-color: green;
-				   margin-bottom: 6px;
-				   font-size: 16px;
-				   padding: 8px;
-`;
-					 
 const Logo = styled.Image`
            width: 66px;
 		   height: 66px;

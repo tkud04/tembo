@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import AppStyles from '../styles/AppStyles';
-import { Icon } from 'expo';
+import {SvgXml} from 'react-native-svg';
 
 export default class AppHeaderButton extends React.Component {
 	constructor(props) {
@@ -18,11 +18,7 @@ onPress={() => {
 	}}
 >
 <BtnContent>
-<Icon.Ionicons
-        name={this.props.title}
-        size={26}
-        color={AppStyles.color}
-      />
+<Txt>{props.title}</Txt>
 </BtnContent>
 </Btn>			             				         
 );

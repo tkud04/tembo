@@ -59,11 +59,11 @@ export default class App extends React.Component {
         require('./assets/images/robot-prod.png'),
       ]),
 	  **/
-      Font.loadAsync({
+      await Font.loadAsync({
         // This is the font that we are using for our tab bar
         //...Ionicons.font,
 		//...FontAwesome.font
-		'open-sans-regular': require('./assets/fonts/OpenSans-Regular.ttf'),
+		'open-sans-regular': require('./assets/fonts/OpenSans-Regular.ttf')
       }),
     ]);
   };
@@ -84,6 +84,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-	fontFamily: 'normal'
+	fontFamily: 'Roboto'
   },
 });

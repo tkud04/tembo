@@ -15,7 +15,8 @@ const ret = createStackNavigator(
 	},
 	'Add Product': {
 		screen: AddProductScreen
-	}
+	},
+	
   },
 );
 

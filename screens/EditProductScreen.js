@@ -16,28 +16,30 @@ import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class ProductsScreen extends React.Component { 
+export default class EditProductScreen extends React.Component { 
    constructor(props) {
     super(props);
 	 helpers._getPermissionAsync('camera roll');
+	 	this.p = props.navigation.state.params.p;
+		
     this.state = { inputBorderBottomColor: '#ccc',
                    inputBorderBottomWidth: 1,
 				   nameBorderBottomColor: '#ccc',
 				   costPriceBorderBottomColor: '#ccc',
 				   salePriceBorderBottomColor: '#ccc',
 				   stockBorderBottomColor: '#ccc',
-				   notesBorderBottomColor: '#ccc',			   
+				   notesBorderBottomColor: '#ccc',
 				   loading: false,
 				   dataSource: [],
-				   productImg: '../assets/images/pic-11.jpg',
-                   quantityType: "none",
-				   costPrice: "0",
-				   sellingPrice: "0",
-				   stock: "0",
-				   sku: helpers.generateSKU(),
-				   notes: "",
-				   productName: "",
-				   categories: "",
+				   productName: this.p.name,
+				   quantityType: this.p.quantityType,
+				   costPrice: this.p.costPrice,
+				   sellingPrice: this.p.sellingPrice,
+				   stock: this.p.stock,
+				   sku: this.p.sku,
+				   notes: this.p.notes,
+				   productImg: this.p.productImg,
+				   categories: this.p.categories,
 				   quantityTypes: [{key: 1,name: "Box", value: "box"},
 	                     {key: 3,name: "Case", plural: "Cases", value: "case"},
 	                     {key: 2,name: "Pound", plural: "Pounds", value: "pound"},	                  
@@ -62,17 +64,20 @@ export default class ProductsScreen extends React.Component {
 						 {key: 4,name: "Other", plural: "Units (unspecified)", value: "other"},
 	                    ]	
 				 };	
-				 
-
+				     
 	this.navv = null;
+	
+		if(!isNaN(this.state.productImg)) this.state.productImg = require("../assets/images/pic-11.jpg");
+	  console.log(this.p);
   }
 
+   
    static navigationOptions = {
 	  headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight / 2
 	   },
-	  headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerStore} title="Add product"/>,
+	  headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerStore} title="Edit product"/>,
 	   headerTintColor: AppStyles.headerColor,
 	  };
 	  
@@ -89,15 +94,15 @@ export default class ProductsScreen extends React.Component {
 	  let ret = await ImagePicker.launchImageLibraryAsync({
 		  mediaTypes: ImagePicker.MediaTypeOptions.All,
 		  allowsEditing: true,
-		  aspect: [4,3],
+		  aspect: [4,4],
 		  quality: 1
 	  });
 	  
 	  console.log(ret);
 	  
 	  if(!ret.cancelled){
-		  this.setState({productImg: ret.uri});
-		  this.productImg = ret.uri;
+		  this.setState({productImg: {uri: ret.uri}});
+		  this.productImg = {uri: ret.uri};
 		  
 		  showMessage({
 			 message: "Image uploaded!",
@@ -106,8 +111,8 @@ export default class ProductsScreen extends React.Component {
 	  }
   }
   
-  _addProduct = () => {
-	 //form validation
+  _updateProduct = () => {
+	  //form validation
 	  let cp = parseInt(this.state.costPrice), sp = parseInt(this.state.sellingPrice), stk = parseInt(this.state.stock);
 	  if(isNaN(cp)) cp = 0;
 	  if(isNaN(sp)) sp = 0;
@@ -146,7 +151,7 @@ export default class ProductsScreen extends React.Component {
 		 });
 	 }
 	}
-	
+	 
 	else{
 	  const dt = {
 		name: this.state.productName,
@@ -161,7 +166,7 @@ export default class ProductsScreen extends React.Component {
 	 };  
 	 
 	 console.log(dt);
-	 helpers.addProduct(dt,this.navv);	
+	 helpers.updateProduct(dt,this.navv);	
 	}
 	 
   }
@@ -180,7 +185,7 @@ export default class ProductsScreen extends React.Component {
 				    onPress={() => this.addImage()}
 				   >
 				   
-				   <Logo source={{uri: this.state.productImg}}/>
+				   <Logo source={this.state.productImg}/>
 				   </ImageUpload>
 				   <TopRightInputs>
 					<ProductInputWrapper>
@@ -204,6 +209,7 @@ export default class ProductsScreen extends React.Component {
 				    <ProductInput
 					style={{borderColor: this.state.nameBorderBottomColor}}
 				     placeholder="Product name"
+					 value={this.state.productName}
 				     onChangeText={text => {
 						this.setState({productName: text});
 					 }}
@@ -221,10 +227,11 @@ export default class ProductsScreen extends React.Component {
 				   </Row>
 				   <BottomInputs>
 				     <ProductInputWrapper>
-					 <ProductDescription>How much does it cost?</ProductDescription>
+					 <ProductDescription>How much does it cost(N)?</ProductDescription>
 				    <ProductInput
 					style={{borderColor: this.state.costPriceBorderBottomColor}}
 				     placeholder="Cost price (N)"
+					 value={this.state.costPrice}
 				     onChangeText={text => {
 						this.setState({costPrice: text});
 					 }}
@@ -240,10 +247,11 @@ export default class ProductsScreen extends React.Component {
 					/>
 					</ProductInputWrapper>
 					<ProductInputWrapper>
-					 <ProductDescription>How much do you sell it?</ProductDescription>
+					 <ProductDescription>How much is it sold for(N)?</ProductDescription>
 				    <ProductInput
 					style={{borderColor: this.state.salePriceBorderBottomColor}}
 				     placeholder="Sale price (N)"
+					 value={this.state.sellingPrice}
 				     onChangeText={text => {
 						this.setState({sellingPrice: text});
 					 }}
@@ -263,6 +271,7 @@ export default class ProductsScreen extends React.Component {
 				    <ProductInput
 					style={{borderColor: this.state.stockBorderBottomColor}}
 				     placeholder="Stock"
+					 value={this.state.stock}
 				     onChangeText={text => {
 						this.setState({stock: text});
 					 }}
@@ -282,6 +291,7 @@ export default class ProductsScreen extends React.Component {
 				    <ProductInput
 					 style={{borderColor: this.state.notesBorderBottomColor}}
 				     placeholder="Notes"
+					 value={this.state.notes}
 				     onChangeText={text => {
 						this.setState({notes: text});
 					 }}
@@ -298,7 +308,7 @@ export default class ProductsScreen extends React.Component {
 					</ProductInputWrapper>
 				   </BottomInputs>
                   <SubmitButton
-				  onPress={() => this._addProduct()}
+				  onPress={() => this._updateProduct()}
 				  title="Submit"				  
 				  />			  
 			  </ScrollView>

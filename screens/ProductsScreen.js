@@ -1,15 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
 import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
-import AppHeaderButton from '../components/AppHeader';
+import Product from '../components/Product';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
-import {ScrollView} from 'react-native';
-import {Alert} from 'react-native';
-
+import {ScrollView, Button} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 import { Notifications } from 'expo';
 
@@ -18,21 +15,61 @@ import { Notifications } from 'expo';
 export default class ProductsScreen extends React.Component { 
    constructor(props) {
     super(props);
-    this.state = { text: '', loading: false,dataSource: []};		 
+	this.props.navigation.setParams({goToAddProduct: this.goToAddProduct});
+    this.state = { 
+	    text: '',
+	    loading: false,
+		products: [],
+		navvv: null
+    };	
+    this.navv = null;
+    this.p = null;
+	
+	helpers.getProducts((pp => {
+		//pp.ri = require(pp.img);
+		this.setState({products: pp});
+		}));
+
+	//console.log(this.state.products);
   }
 
-   static navigationOptions = {
+  goToProduct = () => {
+	showMessage({
+			 message: `Going to product screen with sku ${this.p.sku}`,
+			 type: 'info'
+		 });
+	
+	this.navv.navigate('EditProduct',{
+		p: this.p,
+	});  
+  }
+  
+  goToAddProduct = () => {
+	this.navv.navigate('AddProduct');  
+  }
+  
+   static navigationOptions = ({navigation}) => {
+	   return {
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   color: AppStyles.headerColor,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader title="Products"/>,
-	   headerRight: () => <AppHeaderButton title="add" op={() => {Alert.alert('Add a new product')}}/>
-	  };
+	   headerTitle: () => <AppHeader w="80%" h="80%" xml={AppStyles.svg.headerStore} title="Products"/>,
+	   headerTintColor: AppStyles.headerColor,
+	   headerRight: () => <Button onPress={navigation.getParam('goToAddProduct')} title="NEW"></Button>,
+	   headerTitleStyle: {
+		   
+       }
+	   
+	   }
+   
+    };
+
+
 
   render() {
 	  let navv = this.props.navigation;
+	  this.navv = navv;
     return (
 	        <Container>
 			  <ScrollView>		     
@@ -44,25 +81,13 @@ export default class ProductsScreen extends React.Component {
 					}}
                   />
 				  
-				  <Row>
-				    <ProductName>
-				      <Logo source={require('../assets/images/pic-11.jpg')}/>
-					  <Name>Product Name</Name>
-                    </ProductName>				  
-				    <ProductInfo>
-				      <PriceView>
-					    <Price>N1,500.00</Price>
-					  </PriceView>
-					  <StockView>
-					    <Stock>10,000 litres</Stock>
-					  </StockView>
-				    </ProductInfo>
-				   </Row>
-				  
-                  <TestButton
-				  onPress={() => navv.navigate('AddProduct')}
-				  title="Add a new product"
-				  />				  
+				  {
+					  this.state.products.map((p) => {
+						  //console.log(p);					  
+						  return  <ProductButton key={p['sku']} onPress={() => {this.p = p; this.goToProduct()}}><Product data={p}/></ProductButton>
+					  })
+				  }
+                		  
 			  </ScrollView>
 			</Container>
     );
@@ -79,76 +104,15 @@ const Container = styled.View`
 					 
 const SearchInput = styled.TextInput`
 					 align-items: center;
-					 border: 1px solid #bcbcbc;
 					 border-radius: 5;
 					 margin-top: 10px;
+					 border: 1px solid #bbb;
+					 padding: 10px;
+					 margin-bottom: 20px;
+					 color: #ccc;
 `;
 
-const Logo = styled.Image`
-           width: 55px;
-		   height: 55px;
-		   background: black;
-		   border-radius: 30px;
-		   margin-left: 2px;
-		   margin-bottom: 8px;
+const ProductButton = styled.TouchableOpacity`
+
 `;
 
-const Row = styled.View`
-   marginVertical: 20px;
-   width: 100%;
-   border-bottom-width: 1;
-   border-bottom-color: #000;
-   flex-direction: row;
-`;
-
-const ProductName = styled.View`
-   margin-left: 4px;
-   margin-right: 5px;
-   border-right-width: 1;
-   border-right-color: #000;
-   width: 60%;
-   flex-direction: row;
-`;
-const ProductInfo = styled.View`
-   width: 40%;
-`;
-
-const Name = styled.Text`
-  font-size: 15;
-  font-weight: 300;
-  margin-left: 6px;
-  margin-top: 10px;
-  align-items: center;
-`;
-
-const PriceView = styled.View`
-   width: 100%;
-   border-bottom-width: 1;
-   border-bottom-color: #ccc;
-`;
-
-const StockView = styled.View`
-   width: 100%;
-`;
-
-const Price = styled.Text`
-  font-size: 15;
-  font-weight: 300;
-  margin-horizontal: 5px;
-  margin-vertical: 10px;
-  align-items: center;
-`;
-
-const Stock = styled.Text`
-  font-size: 15;
-  font-weight: 300;
-  margin-horizontal: 5px;
-  margin-vertical: 10px;
-  align-items: center;
-`;
-
-const TestButton = styled.Button`
-  background-color: blue;
-  color: #fff;
-  border-radius: 5;
-`;

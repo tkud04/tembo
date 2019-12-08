@@ -5,19 +5,26 @@ import SvgIcon from './SvgIcon';
 import * as helpers from '../Helpers';
 
 
-const AppHeader = props => (
+const AppHeader = props => {
+	console.log(props.src);
+	return (
 <HeaderView>
-  <SvgView>
-     <SvgIcon xml={helpers.insertAppStyle(props.xml)} w={props.w} h={props.h}/>
-  </SvgView>
+ <BackgroundImage source={{uri: props.src}}/>
+
   <TitleView>
   <Title>{props.title}</Title>
   </TitleView>
 </HeaderView>  
 );
 
+}
+
 export default AppHeader;
 
+const BackgroundImage = styled.Image`
+width: 100%;
+height: 100%;
+`;
 
 const Title = styled.Text`
  font-size: 24;
@@ -34,10 +41,8 @@ flex-direction: column;
 
 const SvgView = styled.View`
  margin-left: 20px;
- margin-right: 20px;
  margin-top: 60px;
  width: 100%;
- flex: 1;
 `;
 
 const TitleView = styled.View`

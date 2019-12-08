@@ -38,7 +38,10 @@
     "react-navigation-tabs": "^2.5.6",
     "rn-fetch-blob": "^0.10.16",
     "styled-components": "^4.4.1",
-    "react-native-svg": "9.9.5"
+    "react-native-svg": "9.9.5",
+    "expo-image-picker": "~7.0.0",
+    "expo-constants": "~7.0.0",
+    "expo-contacts": "~7.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0",

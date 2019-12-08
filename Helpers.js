@@ -4,8 +4,9 @@ import util from 'react-native-util';
 import * as FileSystem from 'expo-file-system';
 import * as WebBrowser from 'expo-web-browser';
 import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 import { Notifications } from 'expo';
- 
+import {showMessage, hideMessage} from 'react-native-flash-message';
  
   export async function download(url){
 	 //result = await WebBrowser.openBrowserAsync(url);
@@ -116,18 +117,32 @@ import { Notifications } from 'expo';
    }
   
   
-    export async function _getPermissionAsync(){
+    export async function _getPermissionAsync(type){
   //const { status, permissions } = await Permissions.askAsync(Permissions.READ_EXTERNAL_STORAGE,Permissions.WRITE_EXTERNAL_STORAGE,Permissions.CAMERA);
  // const {cp} = await Permissions.askAsync(Permissions.READ_EXTERNAL_STORAGE);
   //const {wes} = await Permissions.askAsync(Permissions.WRITE_EXTERNAL_STORAGE);
-  const {wen} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  
+  if(Constants.platform.ios){
 
-  if (wen === 'granted') {
-    console.log('permissions granted');
-  } else {
-    throw new Error('permissions not granted');
+	     let {status} = null;
+	     if(type == 'camera roll'){
+		     status = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+	        }
+		 else if(type == 'contacts'){
+		     status = await Permissions.askAsync(Permissions.READ_CONTACTS);
+	        }
+			console.log(status);
+	    if(status !== 'granted'){
+		 showMessage({
+			 message: `Sorry, we need ${type} permissions to make this work!`,
+			 type: 'danger'
+		 });	
+        }		 
+	  
+	  return status;
+    }
+    
   }
-}
 
 
 
@@ -242,7 +257,7 @@ export function getList(callback){
 }
 
 
-export async function addProduct(data)
+export async function addProduct(data,n)
 {
 	let products = await AsyncStorage.getItem('products');
 	let newProduct = JSON.parse(products);
@@ -252,21 +267,217 @@ export async function addProduct(data)
 	
 	await AsyncStorage.setItem('products',JSON.stringify(newProduct))
 	                  .then(() => {
-						  console.log("Product saved successfully");
+						  showMessage({
+			               message: `Product saved!`,
+			               type: 'success'
+		                 });
+						 n.navigate("Home");
 					  })
 					  .catch((error) => {
-						  console.log(`Error: ${error.message}`);
+						  showMessage({
+			               message: `Error: ${error.message}`,
+			               type: 'success'
+		                 });
 					  });
 }
 
-export async function getProducts()
+export async function updateProduct(data,n)
 {
 	let products = await AsyncStorage.getItem('products');
-	let ret = JSON.parse(products);
-	return ret;
+	let newProduct = JSON.parse(products);
+	let updatedProducts = [];
+	
+	if(!newProduct){
+	  updatedProducts.push(data);
+	} 
+	
+	else{
+	    updatedProducts = newProduct.map((p) =>{
+			if(p.sku == data.sku){
+				console.log('found you');
+				p = data;
+			}
+			return p;
+		});
+	}
+	
+	await AsyncStorage.setItem('products',JSON.stringify(updatedProducts))
+	                  .then(() => {
+						  showMessage({
+			               message: `Product updated!`,
+			               type: 'success'
+		                 });
+						 n.navigate("Home");
+					  })
+					  .catch((error) => {
+						  showMessage({
+			               message: `Error: ${error.message}`,
+			               type: 'danger'
+		                 });
+					  });
+					  
 }
+
+export async function getProducts(callback)
+{
+	try{
+		let products = await AsyncStorage.getItem('products');
+		//console.log(products);
+		if(products !== null){
+			let ret = JSON.parse(products);
+			//console.log(ret);
+			callback(ret);
+		}
+	
+	}
+	catch(error){
+		console.log(error);
+	}
+	
+}
+
+
+export async function addCustomer(data,n)
+{
+	let customers = await AsyncStorage.getItem('customers');
+	let newCustomers = JSON.parse(customers);
+	
+	if(!newCustomers) newCustomers = [];
+	newCustomers.push(data);
+	
+	await AsyncStorage.setItem('customers',JSON.stringify(newCustomers))
+	                  .then(() => {
+						  showMessage({
+			               message: `Customer saved!`,
+			               type: 'success'
+		                 });
+						 n.navigate("Home");
+					  })
+					  .catch((error) => {
+						  showMessage({
+			               message: `Error: ${error.message}`,
+			               type: 'success'
+		                 });
+					  });
+}
+
+export async function getCustomers(callback)
+{
+	try{
+		let customers = await AsyncStorage.getItem('customers');
+		//console.log(customers);
+		if(customers !== null){
+			let ret = JSON.parse(customers);
+			console.log(ret);
+			callback(ret);
+		}
+	}
+	catch(error){
+		console.log(error);
+	}
+	
+}
+
+export async function updateCustomer(data,n)
+{
+	let customers = await AsyncStorage.getItem('customers');
+	let newCustomers = JSON.parse(customers);
+	let updatedCustomers = [];
+	
+	if(!newCustomers){
+	  updatedCustomers.push(data);
+	} 
+	
+	else{
+	    updatedCustomers = newCustomers.map((c) =>{
+			if(c.customerEmail == data.customerEmail){
+				console.log('found you');
+				c = data;
+			}
+			return c;
+		});
+	}
+	
+	await AsyncStorage.setItem('customers',JSON.stringify(updatedCustomers))
+	                  .then(() => {
+						  showMessage({
+			               message: `Customer info updated!`,
+			               type: 'success'
+		                 });
+						 n.navigate("Home");
+					  })
+					  .catch((error) => {
+						  showMessage({
+			               message: `Error: ${error.message}`,
+			               type: 'danger'
+		                 });
+					  });
+					  
+}
+
+
+export async function getSales(callback)
+{
+	try{
+		let sales = {};
+		//let customers = await AsyncStorage.getItem('customers');
+		//console.log(customers);
+		if(sales !== null){
+			//let ret = JSON.parse(customers);
+			let ret = [];
+			//console.log(ret);
+			callback(ret);
+		}
+	}
+	catch(error){
+		console.log(error);
+	}
+	
+}
+
+
 
 export function generateSKU()
 {
-	return `SKU + ${Math.floor(Math.random() * Math.floor(999999))}`;
+	return `SKU${Math.floor(Math.random() * Math.floor(999999))}`;
+}
+
+export function getUniqueID(txt)
+{
+	return `${txt}_${Math.floor(Math.random() * Math.floor(999999))}`;
+}
+
+export function _launchDrawer(){
+	showMessage({
+			 message: "Launching drawer menu",
+			 type: 'success'
+		 })	 
+}
+
+export function insertAppStyle(s){
+return `
+<style>
+svg{
+	display: block; 
+	margin: 0 auto;
+}
+</style>
+<svg role="img" viewBox="0 0 512 512">
+${s}
+</svg>
+`;	
+}
+
+export let nav = null;
+
+export function setNavState(n){
+	nav = n;
+}
+
+export function navigate(r){
+	nav.navigate(r);
+}
+
+export function goToAddProduct(){
+	this.navigate('AddProduct');
 }

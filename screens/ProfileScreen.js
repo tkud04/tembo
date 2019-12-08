@@ -4,8 +4,11 @@ import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
+import Sale from '../components/Sale';
 import * as helpers from '../Helpers';
-import {ScrollView} from 'react-native';
+import AppStyles from '../styles/AppStyles';
+import {ScrollView, Button} from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
 import { Notifications } from 'expo';
@@ -13,14 +16,39 @@ import { Notifications } from 'expo';
 //var RNFS = require('react-native-fs');
 
 export default class ProfileScreen extends React.Component { 
-   constructor(props) {
+     constructor(props) {
     super(props);
-    this.state = { text: '', loading: false,dataSource: []};
+	this.props.navigation.setParams({goToCharts: this.goToCharts});
+    this.state = { text: '', loading: false,sales: []};	
+    this.navv = null;
   }
 
-   static navigationOptions = {
-	   headerTitle: () => <AppHeader title="Profile"/>
-	  };
+  goToCharts = () => {
+	showMessage({
+			 message: `Takes you the the Charts screen.. coming soon`,
+			 type: 'info'
+		 });
+	
+	//this.navv.navigate('EditSale',{
+	//	s: this.s,
+	//});  
+  }
+
+   static navigationOptions = ({navigation}) => {
+	   return {
+	   headerStyle: {
+		   backgroundColor: AppStyles.headerBackground,
+		   height: AppStyles.headerHeight
+	   },
+	   headerTitle: () => <AppHeader w="80%" h="80%" xml={AppStyles.svg.headerUsers} title="Profile"/>,
+	   headerTintColor: AppStyles.headerColor,
+	   headerTitleStyle: {
+		   
+       }
+	   
+	   }
+   
+    };
 
   render() {
     return (

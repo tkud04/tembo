@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, Button} from 'react-native';
 import styled from 'styled-components';
 import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
@@ -9,38 +9,50 @@ import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
+
+
 
 export default class HomeScreen extends React.Component { 
 
  constructor(props) {
     super(props);
     this.state = { text: '', loading: false,dataSource: []};
-	
-		 
+    this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
+	this.navv = null;
+  }
+  
+  launchDrawer = () => {
+	this.navv.toggleDrawer();  
   }
 
-  static navigationOptions = {
+static navigationOptions = ({navigation}) => {
+	
+	  return {
        drawerLabel: 'Home',
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHeader title="Daily Sales Report"/>,
+	   headerTitle: () => <AppHeader w="80%" h="80%" xml={AppStyles.svg.chartBar} title="Daily Sales Report"/>,
 	   headerTintColor: AppStyles.headerColor,
+	  headerLeft: () => <Button onPress={navigation.getParam('launchDrawer')} title="MENU"></Button>,
 	   headerTitleStyle: {
 		   
 	   }
-	   
+	  }
+	  
 	  };
 
 
   render() {
 	  let items = [];
 	  let navv = this.props.navigation;
+	  this.navv = navv;
 	  helpers.getList((dt => {
 		  items = dt;
 		 }));
@@ -52,18 +64,18 @@ export default class HomeScreen extends React.Component {
 			        <Tips/>
 					<ItemsLayout>
 					   <Column>
-					       <Card src={require('../assets/images/products-1.png')} title="Products" navv={navv}/>
+					       <Card w="50%" h="50%" ml="20px" xml={AppStyles.svg.cardStore} title="Products" navv={navv}/>
 					   </Column>
 					   <Column>
-					       <Card  src={require('../assets/images/customers-1.jpg')} title="Customers" navv={navv}/>
+					       <Card w="50%" h="50%" ml="20px" xml={AppStyles.svg.cardUsers} title="Customers" navv={navv}/>
 					   </Column>
 					</ItemsLayout>
-					<ItemsLayout>
+					<ItemsLayout style={{marginTop: -30}}>
 					   <Column>
-					       <Card  src={require('../assets/images/product-1.jpg')} title="Sales" navv={navv}/>
+					       <Card w="50%" h="50%" ml="20px" xml={AppStyles.svg.cardWallet} title="Sales" navv={navv}/>
 					   </Column>
 					   <Column>
-					       <Card  src={require('../assets/images/product-1.jpg')} title="Reports" navv={navv}/>
+					       <Card w="50%" h="50%" ml="40px" xml={AppStyles.svg.cardFile} title="Reports" navv={navv}/>
 					   </Column>
 					</ItemsLayout>
 			    </ScrollView>
@@ -76,7 +88,7 @@ export default class HomeScreen extends React.Component {
 const Container = styled.View`
                      flex: 1;
 					 background-color: white;	
-                     border-radius: 5px;					 
+                     border-radius: 20px;					 
 `;
 
 const TitleBar = styled.View`
@@ -134,8 +146,7 @@ const Subtitle = styled.Text`
 
 const ItemsLayout = styled.View`
                      flex-direction: row;
-					 flex: 1;
-					 flex-wrap: wrap;					 
+					 flex: 1;					 
 `;
 
 const Column = styled.View`
