@@ -2,19 +2,18 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import TabBarIcon from '../components/TabBarIcon';
-import SignupScreen from '../screens/SignupScreen';
-import SigninScreen from '../screens/SigninScreen';
+import SubscribeScreen from '../screens/SubscribeScreen';
+import PackageScreen from '../screens/PackageScreen';
 
 /////////////////////////////////////////////////
 
 const ret = createStackNavigator(
   {
-    'Sign in': {
-		screen: SigninScreen
+    Subscribe: {
+		screen: SubscribeScreen
 	},
-	'Sign up': {
-		screen: SignupScreen
+	Package: {
+		screen: PackageScreen
 	},
   },
 );

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
+import HeaderMenuButton from '../components/HeaderMenuButton';
 import Product from '../components/Product';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
@@ -54,9 +55,13 @@ export default class ProductsScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" xml={AppStyles.svg.headerStore} title="Products"/>,
+	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.headerStore} title="Products"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => <Button onPress={navigation.getParam('goToAddProduct')} title="NEW"></Button>,
+	   headerRight: () => (
+	    <MenuButton onPress={navigation.getParam('goToAddProduct')}>
+		  <HeaderMenuButton xml={AppStyles.svg.headerPlus} w={30} h={30} ss={{marginRight: 10}}/>
+		</MenuButton>
+		),
 	   headerTitleStyle: {
 		   
        }
@@ -73,8 +78,7 @@ export default class ProductsScreen extends React.Component {
     return (
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
-                  <SearchInput
+				  <SearchInput
 				    placeholder="Product name or SKU"
 				    onChangeText={text => {
 						console.log(`Current text: ${text}`);
@@ -113,6 +117,10 @@ const SearchInput = styled.TextInput`
 `;
 
 const ProductButton = styled.TouchableOpacity`
+
+`;
+
+const MenuButton = styled.TouchableOpacity`
 
 `;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
+import HeaderMenuButton from '../components/HeaderMenuButton';
 import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
 import Sale from '../components/Sale';
@@ -40,9 +40,13 @@ export default class ReportsScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" xml={AppStyles.svg.headerClipboard} title="Reports"/>,
+	   headerTitle: () => <AppHeader w="90%" h="80%" ml="40px" xml={AppStyles.svg.headerClipboard} title="Reports"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => <Button onPress={navigation.getParam('goToCharts')} title="CHARTS"></Button>,
+	   headerRight: () => (
+	    <MenuButton onPress={navigation.getParam('goToCharts')}>
+		  <HeaderMenuButton xml={AppStyles.svg.chartArea} w={30} h={30} ss={{marginRight: 10}}/>
+		</MenuButton>
+		),
 	   headerTitleStyle: {
 		   
        }
@@ -56,9 +60,8 @@ export default class ReportsScreen extends React.Component {
     return (
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
-                  <SearchInput
-				    placeholder="Search"
+				  <SearchInput
+				    placeholder="Customer or product name"
 				    onChangeText={text => {
 						console.log(`Current text: ${text}`);
 					}}
@@ -84,9 +87,12 @@ const Container = styled.View`
 					 
 const SearchInput = styled.TextInput`
 					 align-items: center;
-					 border: 1px solid #bcbcbc;
 					 border-radius: 5;
 					 margin-top: 10px;
+					 border: 1px solid #bbb;
+					 padding: 10px;
+					 margin-bottom: 20px;
+					 color: #ccc;
 `;
 
 const Logo = styled.Image`
@@ -157,3 +163,8 @@ const TestButton = styled.Button`
   color: #fff;
   border-radius: 5;
 `;
+
+const MenuButton = styled.TouchableOpacity`
+
+`;
+

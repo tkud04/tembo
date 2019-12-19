@@ -9,7 +9,7 @@ let ml = "20px";
 
 const Card = props => {
 ml = props.ml;
-console.log(`ml before": ${ml}`);
+//console.log(`ml before": ${ml}`);
 return(
 <Container>
     <HomeButton
@@ -19,10 +19,10 @@ return(
 		}}
 	  >
 	  
-   <Cover ml={props.ml}> 
+   <Cover ml={props.ml} mt={props.mt}> 
       <SvgXml xml={helpers.insertAppStyle(props.xml)} fill="white" width={props.w} height={props.h} />     	 
    </Cover>
-   <Content>
+   <Content cmt={props.cmt}>
      <Title>{props.title}</Title>
    </Content>
     </HomeButton>
@@ -33,24 +33,28 @@ return(
 export default Card;
 
 const Container = styled.View`
-                  background: #fff;
-				  height: 200px;
-				  width: 150px;
-				  border-radius: 14px;
-				  border-color: #cdcdcd;
-				  margin: 18px;
-				  margin-top: 20px;
-				  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+				  height: 120px;
+				  width: 120px;
+				  border-radius: 10px;
+				  border-color: #ccc;
+				  border-width: 1;
+				  margin-vertical: 20px;
+				  margin-horizontal: 15px;
+				  shadow-color: #000;
+				  shadow-offset: 5px 10px;
+				  shadow-opacity: 0.8;
+				  shadow-radius: 10px;
+				  justify-content: center;
+				  align-items: center;
+				  padding-bottom: 5px;
+				  
 `;
-
-console.log(`ml": ${ml}`);
 
 const Cover = styled.View`
               width: 100%;
 			  height:90px;
 			  margin-left: ${props => props.ml};
-			  border-top-left-radius: 14px;
-			  border-top-right-radius: 14px;
+			  margin-top: ${props => props.mt};
 			  overflow: hidden;
 `;
 
@@ -66,9 +70,10 @@ const Image = styled.Image`
 `;
 
 const Content = styled.View`
-			 flex-direction: column;
 			 align-items: center;
-			 height: 30px;
+			 justify-content: center;
+			 margin-top: ${props => props.cmt};
+			 margin-bottom: 5px;
 `;
 
 const Title = styled.Text`
@@ -76,5 +81,7 @@ const Title = styled.Text`
 			 font-weight: 500;
 			 font-family: sans-serif;
 			 font-size: 15px;
-			 margin-top: 5px;
+			 text-align: center;
+			 padding-bottom: 5px;
+			
 `;

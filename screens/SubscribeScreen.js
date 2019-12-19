@@ -2,12 +2,10 @@ import React from 'react';
 import {ScrollView, Button} from 'react-native';
 import styled from 'styled-components';
 import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
 import HeaderMenuButton from '../components/HeaderMenuButton';
 import Categories from '../components/Categories';
-import Card from '../components/Card';
+import SubscribeCard from '../components/SubscribeCard';
 import Tips from '../components/Tips';
-import SvgIcon from '../components/SvgIcon';
 import AppHeader from '../components/AppHeader';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
@@ -19,13 +17,51 @@ import { Notifications } from 'expo';
 
 
 
-export default class HomeScreen extends React.Component { 
+export default class SubscribeScreen extends React.Component { 
 
  constructor(props) {
     super(props);
     this.state = { text: '', loading: false,dataSource: []};
     this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 	this.navv = null;
+	
+	this.pkgRow1 = [
+		{
+		   id: 345,
+	 	   name: "30 days",
+		   price: "N1,500.00",
+		   saved: "N0"
+		},
+		{
+		   id: 232,
+	 	   name: "90 days",
+		   price: "N5,000.00",
+		   saved: "N0"
+		},
+	];
+	
+	this.pkgRow2 = [
+		{
+		   id: 125,
+	 	   name: "180 days",
+		   price: "N9,500.00",
+		   saved: "N500"
+		},
+		{
+		   id: 962,
+	 	   name: "360 days",
+		   price: "N19,000.00",
+		   saved: "N100"
+		},
+	];
+		
+	this.lifetimePkg = {
+		   id: 837,
+	 	   name: "One Time Purchase (Lifetime)",
+		   price: "N100,000.00",
+		   saved: "N0"
+		};
+	
   }
   
   launchDrawer = () => {
@@ -35,14 +71,13 @@ export default class HomeScreen extends React.Component {
 static navigationOptions = ({navigation}) => {
 	
 	  return {
-       drawerLabel: 'Home',
-	   headerStyle: {
+       headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight    		   
+		   height: AppStyles.headerHeight / 2  		   
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="20px" xml={AppStyles.svg.chartBar} title="Daily Sales Report"/>,
+	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.chartBar} title="Subscribe"/>,
 	   headerTintColor: AppStyles.headerColor,
-	  headerLeft: () => (
+	   headerLeft: () => (
 	    <MenuButton onPress={navigation.getParam('launchDrawer')}>
 		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10}}/>
 		</MenuButton>
@@ -59,29 +94,39 @@ static navigationOptions = ({navigation}) => {
 	  let items = [];
 	  let navv = this.props.navigation;
 	  this.navv = navv;
-	  helpers.getList((dt => {
-		  items = dt;
-		 }));
 		 //console.log(items);
 		 
     return (
 	        <Container>
 			    <ScrollView>
-			        <ItemsLayout>
-					   <Column>
-					       <Card w="50%" h="40%" ml="20px" mt="30px" cmt="-35px" xml={AppStyles.svg.cardStore} title="Products" navv={navv}/>
-					   </Column>
-					   <Column>
-					       <Card w="50%" h="40%" ml="20px" mt="30px" cmt="-35px" xml={AppStyles.svg.cardUsers} title="Customers" navv={navv}/>
-					   </Column>
+					<ItemsLayout>
+					 {
+					  this.pkgRow1.map((p) => {
+						  //console.log(p);					  
+						  return (
+						    <Column key={p.id}>
+					          <SubscribeCard pkg={p} navv={navv}/>
+					        </Column>  
+						  )
+					  })
+				     }			
 					</ItemsLayout>
 					<ItemsLayout style={{marginTop: -30}}>
-					   <Column>
-					       <Card w="50%" h="50%" ml="30px" mt="20px" cmt="-30px" xml={AppStyles.svg.cardWallet} title="Sales" navv={navv}/>
-					   </Column>
-					   <Column>
-					       <Card w="50%" h="50%" ml="30px" mt="30px" cmt="-35px" xml={AppStyles.svg.cardFile} title="Reports" navv={navv}/>
-					   </Column>
+					  {
+					  this.pkgRow2.map((p) => {
+						  //console.log(p);					  
+						  return (
+						    <Column key={p.id}>
+					          <SubscribeCard pkg={p} navv={navv}/>
+					        </Column>  
+						  )
+					  })
+				     }
+					</ItemsLayout>
+					<ItemsLayout style={{marginTop: -30,alignItems: 'center'}}>				
+						    <FullColumn key={this.lifetimePkg.id}>
+					          <SubscribeCard pkg={this.lifetimePkg} navv={navv}/>
+					        </FullColumn>  						 
 					</ItemsLayout>
 			    </ScrollView>
 			</Container>
@@ -156,6 +201,11 @@ const ItemsLayout = styled.View`
 
 const Column = styled.View`
                    width: 50%;
+				   align-items: center;
+`;
+
+const FullColumn = styled.View`
+                   width: 90%;
 				   align-items: center;
 `;
 

@@ -6,7 +6,7 @@ import * as helpers from '../Helpers';
 
 
 const AppHeader = props => (
-<HeaderView>
+<HeaderView ml={props.ml}>
   <SvgView>
      <SvgIcon xml={helpers.insertAppStyle(props.xml)} w={props.w} h={props.h}/>
   </SvgView>
@@ -30,14 +30,17 @@ const Title = styled.Text`
 
 const HeaderView = styled.View`
 flex-direction: column;
+ margin-left: ${props => props.ml};
+ align-items: center;
+ justify-content: center;
 `;
 
 const SvgView = styled.View`
- margin-left: 20px;
- margin-right: 20px;
  margin-top: 60px;
  width: 100%;
  flex: 1;
+  align-items: center;
+ justify-content: center;
 `;
 
 const TitleView = styled.View`

@@ -4,6 +4,7 @@ import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
+import HeaderMenuButton from '../components/HeaderMenuButton';
 import Customer from '../components/Customer';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
@@ -50,9 +51,13 @@ export default class CustomersScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" xml={AppStyles.svg.headerUsers} title="Customers"/>,
+	   headerTitle: () => <AppHeader w="80%" h="80%"  ml="30px" xml={AppStyles.svg.headerUsers} title="Customers"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => <Button onPress={navigation.getParam('goToAddCustomer')} title="NEW"></Button>,
+	   headerRight: () => (
+	    <MenuButton onPress={navigation.getParam('goToAddCustomer')}>
+		  <HeaderMenuButton xml={AppStyles.svg.headerPlus} w={30} h={30} ss={{marginRight: 10}}/>
+		</MenuButton>
+		),
 	   headerTitleStyle: {
 		   
        }
@@ -67,8 +72,7 @@ export default class CustomersScreen extends React.Component {
     return (
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
-                  <SearchInput
+				  <SearchInput
 				    placeholder="Customer name, email or phone number"
 				    onChangeText={text => {
 						console.log(`Current text: ${text}`);
@@ -111,3 +115,6 @@ const CustomerButton = styled.TouchableOpacity`
 
 `;
 
+const MenuButton = styled.TouchableOpacity`
+
+`;

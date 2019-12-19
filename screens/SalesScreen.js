@@ -4,6 +4,7 @@ import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import Tips from '../components/Tips';
 import AppHeader from '../components/AppHeader';
+import HeaderMenuButton from '../components/HeaderMenuButton';
 import Sale from '../components/Sale';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
@@ -50,9 +51,13 @@ export default class SalesScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" xml={AppStyles.svg.headerWallet} title="Sales"/>,
+	   headerTitle: () => <AppHeader w="80%" h="80%" ml="60px" xml={AppStyles.svg.headerWallet} title="Sales"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => <Button onPress={navigation.getParam('goToAddSale')} title="NEW"></Button>,
+	   headerRight: () => (
+	    <MenuButton onPress={navigation.getParam('goToAddSale')}>
+		  <HeaderMenuButton xml={AppStyles.svg.headerPlus} w={30} h={30} ss={{marginRight: 10}}/>
+		</MenuButton>
+		),
 	   headerTitleStyle: {
 		   
        }
@@ -67,8 +72,7 @@ export default class SalesScreen extends React.Component {
     return (
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
-                  <SearchInput
+				  <SearchInput
 				    placeholder="Sales id or customer name"
 				    onChangeText={text => {
 						console.log(`Current text: ${text}`);
@@ -105,5 +109,9 @@ const SearchInput = styled.TextInput`
 
 
 const SalesButton = styled.TouchableOpacity`
+
+`;
+
+const MenuButton = styled.TouchableOpacity`
 
 `;

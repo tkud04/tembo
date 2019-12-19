@@ -6,6 +6,16 @@ import SvgIcon from './SvgIcon';
 import * as helpers from '../Helpers';
 import { DrawerItems } from 'react-navigation-drawer';
 
+let user = {};
+helpers.getLoggedInUser((u) => {user = u});
+
+let username = "Guest",email = "guest@yahoo.com";
+
+if(user.id){
+	username = user.name;
+	email = user.email;
+}
+
 const ripple = TouchableNativeFeedback.Ripple('#adacac', false);
 const CustomDrawerComponent = props => (
   <View style={{ flex: 1 }}>
@@ -17,21 +27,14 @@ const CustomDrawerComponent = props => (
           >
             <View style={{ backgroundColor: AppStyles.headerBackground }}>
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-			    <SvgView>
-                <SvgIcon xml={AppStyles.svg.chartBar} w="30%" h="30%"/>
-                </SvgView>
-				<Username style={{ color: '#f9f9f9', marginTop: '3%', fontFamily: 'sans-serif-condensed' }}>{`Hi tkud04`}</Username>
-                <Email style={{ color: '#f9f9f9', fontFamily: 'sans-serif-condensed' }}>{`kudayisitobi@gmail.com`}</Email>
+			    <Logo source={require('../assets/images/bg.jpg')}/>
+				<Username style={{ color: '#f9f9f9', marginTop: '3%', fontFamily: 'sans-serif-condensed' }}>{`Hi ${username}`}</Username>
+                <Email style={{ color: '#f9f9f9', fontFamily: 'sans-serif-condensed' }}>{`${email}`}</Email>
               </View>
             </View>
 
             <DrawerItems {...props} />
 
-            <View>
-              <View style={{ marginTop: '5%' }}>
-                <Divider />
-              </View>
-            </View>
           </SafeAreaView>
         </ScrollView>
 
@@ -39,7 +42,7 @@ const CustomDrawerComponent = props => (
           <TouchableNativeFeedback background={ripple}>
             <FooterItem>
               <SvgIcon xml={AppStyles.svg.cardUsers} w="10%" h="10%"/>
-              <FooterItemText style={{ fontFamily: 'sans-serif-medium' }}>Logout</FooterItemText>
+              <FooterItemText style={{ fontFamily: 'sans-serif-medium' }}>FAQ</FooterItemText>
             </FooterItem>
           </TouchableNativeFeedback>
 
@@ -90,4 +93,12 @@ const SvgView = styled.View`
  margin-top: 60px;
  width: 100%;
  flex: 1;
+`;
+
+const Logo = styled.Image`
+           width: 110px;
+		   height: 110px;
+		   background: black;
+		   border-radius: 55px;
+		   margin-top: 25px;
 `;

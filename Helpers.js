@@ -147,8 +147,8 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
 
-export async function registerForPushNotificationsAsync(pm) {
-	const PUSH_ENDPOINT = 'https://whispering-river-45224.herokuapp.com/push-token';
+export async function signup(pm, callback) {
+	const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com/app-signup';
 	//const PUSH_ENDPOINT = encodeURIComponent(`https://www.eschoolng.net/mobileapp/expo_url.php?ppp=n`);
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS
@@ -173,19 +173,19 @@ export async function registerForPushNotificationsAsync(pm) {
   let token = await Notifications.getExpoPushTokenAsync();
 
   // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = PUSH_ENDPOINT + "?tk=" + token + "&sc=" + pm.userCook + "&au=" + pm.activeUser + "&cid=" + pm.cid;
+  let upu = PUSH_ENDPOINT + "?tk=" + token + "&name=" + pm.name + "&phone=" + pm.phone + "&email=" + pm.email + "&password=" + pm.password;
   return fetch(upu, {
     method: 'GET'
   })
   .then(response => {
-	    console.log(`response: ${response}`);
+	    console.log(response);
          if(response.status === 200){
 			   //console.log(response);
 			   
 			   return response.json();
 		   }
 		   else{
-			   return {status: "error:", message: "Couldn't fetch push endpoint url"};
+			   return {status: "error:", message: "Couldn't fetch signup URL"};
 		   }
 		   })
     .catch(error => {
@@ -193,30 +193,84 @@ export async function registerForPushNotificationsAsync(pm) {
 	   })
 	   .then(res => {
 		   console.log(res); 
-		   
+		   res.tk = token;
+		   callback(res);
 		   
 	   }).catch(error => {
 		   console.log(`Unknown error: ${error}`);			
 	   });
 }
 
-export async function logout() {
-	const PUSH_ENDPOINT2 = 'https://powerful-tundra-70186.herokuapp.com/logout';
-	//const PUSH_ENDPOINT2 = 'https://www.eschoolng.net/mobileapp/expo_url.php?ppp=l';
- 
+export async function login(data,callback)
+{
+	const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com/app-login';
+	 const { status: existingStatus } = await Permissions.getAsync(
+    Permissions.NOTIFICATIONS
+  );
+  let finalStatus = existingStatus;
+
+  // only ask if permissions have not already been determined, because
+  // iOS won't necessarily prompt the user a second time.
+  if (existingStatus !== 'granted') {
+    // Android remote notification permissions are granted during the app
+    // install, so this will only ask on iOS
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    finalStatus = status;
+  }
+
+  // Stop here if the user did not grant permissions
+  if (finalStatus !== 'granted') {
+    return;
+  }
+
   // Get the token that uniquely identifies this device
   let token = await Notifications.getExpoPushTokenAsync();
 
   // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = PUSH_ENDPOINT2 + "?tk=" + token;
+  let upu = PUSH_ENDPOINT + "?tk=" + token + "&username=" + pm.username + "&password=" + pm.password;
   return fetch(upu, {
     method: 'GET'
-  });
+  })
+  .then(response => {
+	    console.log(response);
+         if(response.status === 200){
+			   //console.log(response);
+			   
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error:", message: "Couldn't fetch login URL"};
+		   }
+		   })
+    .catch(error => {
+		   console.log(`Failed to fetch push endpoint ${PUSH_ENDPOINT}: ${error}`);
+           return {status: "error:", message: "Couldn't fetch login URL [HARD FAIL]"};		   
+	   })
+	   .then(res => {
+		   console.log(res); 
+		   /**if(res.status == "ok"){
+			   
+		   }
+		   else{
+			   
+		   }**/
+		   callback(res);
+		   
+	   }).catch(error => {
+		   console.log(`Unknown error: ${error}`);			
+	   });   
+}
+
+export async function logout() {
+	  await AsyncStorage.removeItem('ivtry_user');
+	  await AsyncStorage.removeItem('products');
+	  await AsyncStorage.removeItem('customers');
+	  await AsyncStorage.removeItem('sales');
 }
 
 
-/**
-export function getList(callback){
+
+export function getData(callback){
 	let req = "http://peaceful-scrubland-30200.herokuapp.com/flowers";
 	
 	//fetch request
@@ -242,7 +296,7 @@ export function getList(callback){
 		    alert("Unknown error: " + error);			
 	   });
 }
-**/
+
 
 
 export function getList(callback){
@@ -480,4 +534,78 @@ export function navigate(r){
 
 export function goToAddProduct(){
 	this.navigate('AddProduct');
+}
+
+export async function getLoggedInUser(callback){
+
+	let ret = {};
+	/**
+	try{
+		let uuu = await AsyncStorage.getItem('ivtry_user');
+		//console.log(customers);
+		if(uuu !== null){
+			let ret = JSON.parse(uuu);
+			console.log(ret);
+			callback(ret);
+		}
+	}
+	catch(error){
+		console.log(error);
+	}
+	**/
+	ret = {
+		id: 345,
+		name: "Tobi Kudayisi",
+		email: "kudayisitobi@gmail.com",
+		phone: "07054291601"
+	};
+	callback(ret);
+}
+
+
+
+
+export async function getPackage(id,callback){
+
+	let	ret = [
+		{
+		   id: 345,
+	 	   name: "30 days",
+		   price: "N1,500.00",
+		   saved: "N0"
+		},
+		{
+		   id: 232,
+	 	   name: "90 days",
+		   price: "N5,000.00",
+		   saved: "N0"
+		},
+		{
+		   id: 125,
+	 	   name: "180 days",
+		   price: "N9,500.00",
+		   saved: "N500"
+		},
+		{
+		   id: 962,
+	 	   name: "360 days",
+		   price: "N19,000.00",
+		   saved: "N100"
+		},
+		{
+		   id: 837,
+	 	   name: "One Time Purchase (Lifetime)",
+		   price: "N100,000.00",
+		   saved: "N0"
+		},
+	];
+	
+	let rret = {};
+	ret.map((p) =>{
+			if(p.id == data.id){
+				console.log('found you');
+				rret = p;
+			}
+		});
+	callback(rret);
 }

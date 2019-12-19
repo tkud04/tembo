@@ -199,7 +199,10 @@ export default class ProductsScreen extends React.Component {
 						}
 					  </ProductSelect>
 					</ProductInputWrapper>
-					<ProductInputWrapper>
+				   </TopRightInputs>
+				   </Row>
+				   <BottomInputs>
+				   <ProductInputWrapper>
 					 <ProductDescription>Product name</ProductDescription>
 				    <ProductInput
 					style={{borderColor: this.state.nameBorderBottomColor}}
@@ -217,9 +220,6 @@ export default class ProductsScreen extends React.Component {
 					 }}
 					/>
 					</ProductInputWrapper>
-				   </TopRightInputs>
-				   </Row>
-				   <BottomInputs>
 				     <ProductInputWrapper>
 					 <ProductDescription>How much does it cost?</ProductDescription>
 				    <ProductInput

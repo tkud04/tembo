@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as helpers from './Helpers';
 import AppNavigator from './navigation/AppNavigator';
+import GuestNavigator from './navigation/GuestNavigator';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
 import { Notifications } from 'expo';
@@ -14,9 +15,16 @@ import { createAppContainer } from 'react-navigation';
 import FlashMessage from 'react-native-flash-message';
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false
+constructor(props){
+	super(props);
+	this.state = {
+    isLoadingComplete: false,
+	uu: {}
   };
+  
+    helpers.getLoggedInUser((u) => {console.log(u); this._updateUser(u)});
+
+}
   
   _notificationSubscription = null;
   
@@ -27,9 +35,13 @@ export default class App extends React.Component {
 	   console.log(JSON.stringify(notification.data));
     this.setState({notification: notification});
   };
+  
+  _updateUser = (ret) => {
+    this.state.uu = ret;
+  };
 
   render() {
-
+   
 	  //helpers._getPermissionAsync();
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -40,11 +52,13 @@ export default class App extends React.Component {
         />
       );
     } else {
-		const AppContainer = createAppContainer(AppNavigator);
+		let mnav = this.state.uu == {} ? GuestNavigator : AppNavigator;
+		const AppContainer = createAppContainer(mnav);
+		
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppContainer />
+		 <AppContainer />
           <FlashMessage position="bottom" />
         </View>
       );

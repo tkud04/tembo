@@ -9,29 +9,19 @@ import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 
 import SubscribeStack from './SubscribeStack';
-import SupportStack from './SupportStack';
 import AppStack from './AppStack';
 import AuthStack from './AuthStack';
-import ProfileStack from './ProfileStack';
 
 /////////////////////////////////////////////////
 
 let user = {};
 helpers.getLoggedInUser((u) => {user = u});
 
-let userMenu = {};
-
-userMenu = {
+let userMenu = {
     Dashboard: {
 		screen: AppStack,
 		navigationOptions:{
 			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardArea)} w={40} h={20}/>    
-		}
-	},
-	Profile: {
-		screen: ProfileStack,
-		navigationOptions:{
-			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardUsers)} w={40} h={20}/>    
 		}
 	},
 	Subscribe: {
@@ -40,21 +30,15 @@ userMenu = {
 			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardWallet)} w={40} h={20}/>    
 		}
 	},
-	'Sign out': {
+	'Sign in': {
 		screen: AuthStack,
 		navigationOptions:{
 			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardUsers)} w={40} h={20}/>    
 		}
-	},
-	Support: {
-		screen: SupportStack,
-		navigationOptions:{
-			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardLightbulb)} w={40} h={20}/>    
-		}
-	},
-  }
+	}
+  }	
 
-const AppNavigator = createDrawerNavigator(
+const GuestNavigator = createDrawerNavigator(
   userMenu,
   {
 	  initialRouteName: 'Dashboard',
@@ -68,4 +52,4 @@ const AppNavigator = createDrawerNavigator(
   }
 );
 
-export default AppNavigator;
+export default GuestNavigator;
