@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Tips from '../components/Tips';
-import AppHeader from '../components/AppHeader';
+import AppImageHeader from '../components/AppImageHeader';
 import HeaderMenuButton from '../components/HeaderMenuButton';
 import Product from '../components/Product';
 import * as helpers from '../Helpers';
@@ -55,13 +55,8 @@ export default class ProductsScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.headerStore} title="Products"/>,
+	   headerTitle: () => <AppImageHeader xml={AppStyles.svg.headerStore} param = "goToAddProduct" navv = {navigation} title="Products"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => (
-	    <MenuButton onPress={navigation.getParam('goToAddProduct')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerPlus} w={30} h={30} ss={{marginRight: 10}}/>
-		</MenuButton>
-		),
 	   headerTitleStyle: {
 		   
        }

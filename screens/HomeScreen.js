@@ -9,6 +9,7 @@ import Card from '../components/Card';
 import Tips from '../components/Tips';
 import SvgIcon from '../components/SvgIcon';
 import AppHeader from '../components/AppHeader';
+import AppHomeHeader from '../components/AppHomeHeader';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -33,20 +34,15 @@ export default class HomeScreen extends React.Component {
   }
 
 static navigationOptions = ({navigation}) => {
-	
+	 
 	  return {
        drawerLabel: 'Home',
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="20px" xml={AppStyles.svg.chartBar} title="Daily Sales Report"/>,
+	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report"/>,
 	   headerTintColor: AppStyles.headerColor,
-	  headerLeft: () => (
-	    <MenuButton onPress={navigation.getParam('launchDrawer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10}}/>
-		</MenuButton>
-		),
 	   headerTitleStyle: {
 		   
 	   }
@@ -162,6 +158,3 @@ const Column = styled.View`
 
 const NavButton = styled.Button``;
 
-const MenuButton = styled.TouchableOpacity`
-
-`;
