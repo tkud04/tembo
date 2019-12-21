@@ -25,40 +25,53 @@ const ret = createStackNavigator(
 		screen: HomeScreen
 	},
 	Products: {
-		screen: ProductsScreen
+		screen: ProductsScreen,
+		headerLeft: null,
+
 	},
 	AddProduct: {
-		screen: AddProductScreen
+		screen: AddProductScreen,
+		headerLeft: null,
 	},
 	EditProduct: {
-		screen: EditProductScreen
+		screen: EditProductScreen,
+		headerLeft: null,
 	},
 	Customers: {
-		screen: CustomersScreen
+		screen: CustomersScreen,
+		headerLeft: null,
 	},
 	AddCustomer: {
-		screen: AddCustomerScreen
+		screen: AddCustomerScreen,
+		headerLeft: null,
 	},
 	EditCustomer: {
-		screen: EditCustomerScreen
+		screen: EditCustomerScreen,
+		headerLeft: null,
 	},
 	Sales: {
-		screen: SalesScreen
+		screen: SalesScreen,
+		headerLeft: null,
 	},
 	AddSale: {
-		screen: AddSaleScreen
+		screen: AddSaleScreen,
+		headerLeft: null,
 	},
 	SelectProduct: {
-		screen: SelectProductScreen
+		screen: SelectProductScreen,
+		headerLeft: null,
 	},
 	SelectCustomer: {
-		screen: SelectCustomerScreen
+		screen: SelectCustomerScreen,
+		headerLeft: null,
 	},
 	EditSale: {
-		screen: EditSaleScreen
+		screen: EditSaleScreen,
+		headerLeft: null,
 	},
 	Reports: {
-		screen: ReportsScreen
+		screen: ReportsScreen,
+		headerLeft: null,
 	}
   },
 );

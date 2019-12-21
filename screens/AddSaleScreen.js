@@ -1,10 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
-import Tips from '../components/Tips';
-import AppInputHeader from '../components/AppInputHeader';
+import CButton from '../components/CButton';
 import Table from '../components/Table';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import * as Permissions from 'expo-permissions';
@@ -22,6 +20,7 @@ export default class AddSaleScreen extends React.Component {
   constructor(props) {
     super(props);
 	//helpers._getPermissionAsync('camera roll');
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	this.props = props;
 	
     this.state = { inputBorderBottomColor: '#ccc',
@@ -103,14 +102,21 @@ export default class AddSaleScreen extends React.Component {
 	//console.log(this.state.customers);
   }
   
-  static navigationOptions = {
-	  headerStyle: {
+  static navigationOptions = ({navigation}) => {
+	   return {
+	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
+		   height: AppStyles.headerHeight
 	   },
-	  headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerWallet} title="Add sale"/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerWallet}  leftParam = "goBack" navv = {navigation} title="Add Sale" subtitle="Add a new sale"  sml={40}/>,
 	   headerTintColor: AppStyles.headerColor,
-	  };
+	   headerTitleStyle: {
+		   
+       },
+	   headerLeft: null,
+	   }
+   
+    };
 	  
 	  
   _renderTypes = (src) => {
@@ -239,9 +245,8 @@ _addSale = () => {
 	         <BackgroundImage source={require('../assets/images/bg.jpg')}>
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
                    
-				   <Row>				   
+				   <Row style={{marginTop: 10}}>				   
 				   <Logo>
 				    <AddedBy>Added by myself</AddedBy>
 				   </Logo>
@@ -385,9 +390,11 @@ _addSale = () => {
 					</ProductInputWrapper>
 				   </BottomInputs>
                   <SubmitButton
-				  onPress={() => this._addSale()}
-				  title="Submit"				  
-				  />			  
+				       onPress={() => {this._addSale()}}
+				       title="Submit"
+                    >
+                        <CButton title="Submit" background="green" color="#fff" />					   
+				    </SubmitButton>	
 			  </ScrollView>
 			</Container>
 			</BackgroundImage>
@@ -440,14 +447,8 @@ const TestButton = styled.Button`
   margin-top: 40px;
 `;
 
-const SubmitButton = styled.Button`
-  background-color: green;
-  color: #fff;
-  border-radius: 5;
-  margin-top: 40px;
-   margin-bottom: 20px;
-  width: 50%;
-  align-items: center;
+const SubmitButton = styled.TouchableOpacity`
+
 `;
 
 const ProductUpload = styled.TouchableOpacity`

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Tips from '../components/Tips';
 import AppImageHeader from '../components/AppImageHeader';
 import HeaderMenuButton from '../components/HeaderMenuButton';
 import Product from '../components/Product';
@@ -17,6 +16,7 @@ export default class ProductsScreen extends React.Component {
    constructor(props) {
     super(props);
 	this.props.navigation.setParams({goToAddProduct: this.goToAddProduct});
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
     this.state = { 
 	    text: '',
 	    loading: false,
@@ -35,11 +35,11 @@ export default class ProductsScreen extends React.Component {
   }
 
   goToProduct = () => {
-	showMessage({
+	/**showMessage({
 			 message: `Going to product screen with sku ${this.p.sku}`,
 			 type: 'info'
 		 });
-	
+	**/
 	this.navv.navigate('EditProduct',{
 		p: this.p,
 	});  
@@ -55,12 +55,12 @@ export default class ProductsScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppImageHeader xml={AppStyles.svg.headerStore} param = "goToAddProduct" navv = {navigation} title="Products"/>,
+	   headerTitle: () => <AppImageHeader xml={AppStyles.svg.headerStore}  leftParam = "goBack" rightParam = "goToAddProduct" navv = {navigation} title="Products" subtitle="Manage your products"/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
-       }
-	   
+       },
+	   headerLeft: null,
 	   }
    
     };

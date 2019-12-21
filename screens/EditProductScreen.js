@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
-import Tips from '../components/Tips';
-import AppInputHeader from '../components/AppInputHeader';
+import CButton from '../components/CButton';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import * as Permissions from 'expo-permissions';
@@ -21,6 +20,8 @@ export default class EditProductScreen extends React.Component {
     super(props);
 	 helpers._getPermissionAsync('camera roll');
 	 	this.p = props.navigation.state.params.p;
+			this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
+
 		
     this.state = { inputBorderBottomColor: '#ccc',
                    inputBorderBottomWidth: 1,
@@ -69,17 +70,25 @@ export default class EditProductScreen extends React.Component {
 	
 		if(!isNaN(this.state.productImg)) this.state.productImg = require("../assets/images/pic-11.jpg");
 	  console.log(this.p);
+	  this.subtitle = `Edit ${this.p.name}`;
   }
 
    
-   static navigationOptions = {
-	  headerStyle: {
+   static navigationOptions = ({navigation}) => {
+	   return {
+	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
+		   height: AppStyles.headerHeight
 	   },
-	  headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerStore} title="Edit product"/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerStore}  leftParam = "goBack" navv = {navigation} title="Edit Product" subtitle="Edit this product" sml={60}/>,
 	   headerTintColor: AppStyles.headerColor,
-	  };
+	   headerTitleStyle: {
+		   
+       },
+	   headerLeft: null,
+	   }
+   
+    };
 	  
   _renderQuantityTypes = (src) => {
       
@@ -178,9 +187,8 @@ export default class EditProductScreen extends React.Component {
 	       <BackgroundImage source={require('../assets/images/bg.jpg')}>
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
                    
-				   <Row>
+				   <Row style={{marginTop: 10}}>
 				   <ImageUpload
 				    onPress={() => this.addImage()}
 				   >
@@ -307,10 +315,12 @@ export default class EditProductScreen extends React.Component {
 					/>
 					</ProductInputWrapper>
 				   </BottomInputs>
-                  <SubmitButton
-				  onPress={() => this._updateProduct()}
-				  title="Submit"				  
-				  />			  
+                 <SubmitButton
+				       onPress={() => {this._updateProduct()}}
+				       title="Submit"
+                    >
+                        <CButton title="Submit" background="green" color="#fff" />					   
+				    </SubmitButton>
 			  </ScrollView>
 			</Container>
 			</BackgroundImage>
@@ -355,14 +365,8 @@ const TestButton = styled.Button`
   margin-top: 40px;
 `;
 
-const SubmitButton = styled.Button`
-  background-color: green;
-  color: #fff;
-  border-radius: 5;
-  margin-top: 40px;
-   margin-bottom: 20px;
-  width: 50%;
-  align-items: center;
+const SubmitButton = styled.TouchableOpacity`
+
 `;
 
 const ImageUpload = styled.TouchableOpacity`

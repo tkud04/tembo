@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
-import Tips from '../components/Tips';
-import AppHeader from '../components/AppHeader';
+import AppImageHeader from '../components/AppImageHeader';
 import HeaderMenuButton from '../components/HeaderMenuButton';
 import Sale from '../components/Sale';
 import * as helpers from '../Helpers';
@@ -20,6 +17,7 @@ export default class SalesScreen extends React.Component {
   constructor(props) {
     super(props);
 	this.props.navigation.setParams({goToAddSale: this.goToAddSale});
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
     this.state = { text: '', loading: false,sales: []};	
     this.navv = null;
     this.s = null;	
@@ -51,17 +49,12 @@ export default class SalesScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="60px" xml={AppStyles.svg.headerWallet} title="Sales"/>,
+	   headerTitle: () => <AppImageHeader xml={AppStyles.svg.headerWallet}  leftParam = "goBack" rightParam = "goToAddSale" navv = {navigation} title="Sales" subtitle="Manage your sales"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => (
-	    <MenuButton onPress={navigation.getParam('goToAddSale')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerPlus} w={30} h={30} ss={{marginRight: 10}}/>
-		</MenuButton>
-		),
 	   headerTitleStyle: {
 		   
-       }
-	   
+       },
+	   headerLeft: null,
 	   }
    
     };

@@ -9,25 +9,25 @@ import * as helpers from '../Helpers';
 const AppImageHeader = props => {
 return (
 <Container>
-<BackgroundImage source={require('../assets/images/bg.jpg')}>
+<BackgroundImage source={require('../assets/images/header.jpg')}>
 </BackgroundImage>
 <OverlayView pointerEvents="none"></OverlayView>
 <HeaderView>
   <ButtonsView>
-  <MenuButton onPress={props.navv.getParam('launchDrawer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10, alignSelf: 'flex-start'}}/>
+  <MenuButton onPress={props.navv.getParam(props.leftParam)} style={{marginLeft: 15}}>
+		  <HeaderMenuButton xml={AppStyles.svg.headerBack} w={30} h={30} ss={{marginLeft: 10, alignSelf: 'flex-start'}}/>
 		</MenuButton>
 	<SvgView>
-     <SvgIcon xml={helpers.insertAppStyle(props.xml)} w={40} h={40}/>
+     <SvgIcon xml={helpers.insertAppStyle(props.xml)} w={60} h={40}/>
 	   <Title style={{fontSize: 12}}>{props.title}</Title>
   </SvgView>
-    <MenuButton onPress={props.navv.getParam(props.param)}>
+    <MenuButton onPress={props.navv.getParam(props.rightParam)}>
 		  <HeaderMenuButton xml={AppStyles.svg.headerPlus} w={30} h={30} ss={{marginRight: 40, alignSelf: 'flex-start'}}/>
 		</MenuButton>
   </ButtonsView>
   
   <TitleView>
-  <Title>{props.title}</Title>
+  <Title>{props.subtitle}</Title>
   </TitleView>
 </HeaderView>  
 
@@ -83,7 +83,7 @@ const TitleView = styled.View`
 margin-top: 100px;
 align-items: center;
 justify-content: center;
-margin-left: 40px;
+margin-left: 20;
 margin-bottom: 5px;
  
 `;

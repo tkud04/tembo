@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
-import Tips from '../components/Tips';
-import AppHeader from '../components/AppHeader';
+import AppImageHeader from '../components/AppImageHeader';
 import HeaderMenuButton from '../components/HeaderMenuButton';
 import Customer from '../components/Customer';
 import * as helpers from '../Helpers';
@@ -20,6 +17,7 @@ export default class CustomersScreen extends React.Component {
    constructor(props) {
     super(props);
 	this.props.navigation.setParams({goToAddCustomer: this.goToAddCustomer});
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
     this.state = { text: '', loading: false,customers: []};	
     this.navv = null;
     this.c = null;	
@@ -31,11 +29,11 @@ export default class CustomersScreen extends React.Component {
   
   
    goToCustomer = () => {
-	showMessage({
+	/**showMessage({
 			 message: `Going to customer screen with id ${this.c.id}`,
 			 type: 'info'
 		 });
-	
+	**/
 	this.navv.navigate('EditCustomer',{
 		c: this.c,
 	});  
@@ -51,17 +49,12 @@ export default class CustomersScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%"  ml="30px" xml={AppStyles.svg.headerUsers} title="Customers"/>,
+	   headerTitle: () => <AppImageHeader xml={AppStyles.svg.headerUsers}  leftParam = "goBack" rightParam = "goToAddCustomer" navv = {navigation} title="Customers" subtitle="Manage your customers"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => (
-	    <MenuButton onPress={navigation.getParam('goToAddCustomer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerPlus} w={30} h={30} ss={{marginRight: 10}}/>
-		</MenuButton>
-		),
 	   headerTitleStyle: {
 		   
-       }
-	   
+       },
+	   headerLeft: null,
 	   }
    
     };

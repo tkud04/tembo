@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
-import Tips from '../components/Tips';
+import Table from '../components/Table';
 import AppInputHeader from '../components/AppInputHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';

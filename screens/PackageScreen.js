@@ -4,7 +4,7 @@ import { Text, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import HeaderMenuButton from '../components/HeaderMenuButton';
 import SubscribeCard from '../components/SubscribeCard';
-import AppHeader from '../components/AppHeader';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import util from 'react-native-util';
@@ -22,6 +22,7 @@ export default class PackageScreen extends React.Component {
  constructor(props) {
     super(props);
 	this.pkg = props.navigation.state.params.pkg;
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	
     this.state = { text: '',
                    loading: false,
@@ -40,25 +41,20 @@ export default class PackageScreen extends React.Component {
   }
 
 static navigationOptions = ({navigation}) => {
-	
-	  return {
-       headerStyle: {
+	   return {
+	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2  		   
+		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.chartBar} title="Subscribe"/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.chartBar}  leftParam = "goBack" navv = {navigation} title="Choose package" subtitle="Choose a package" sml={60}/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerLeft: () => (
-	    <MenuButton onPress={navigation.getParam('launchDrawer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10}}/>
-		</MenuButton>
-		),
 	   headerTitleStyle: {
 		   
+       },
+	   headerLeft: null,
 	   }
-	  }
-	  
-	  };
+   
+    };
 
   render() {
 	  let navv = this.props.navigation;

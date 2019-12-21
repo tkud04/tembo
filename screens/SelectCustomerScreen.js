@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
-import Tips from '../components/Tips';
-import AppInputHeader from '../components/AppInputHeader';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import Customer from '../components/Customer';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
@@ -19,6 +16,7 @@ export default class SelectCustomerScreen extends React.Component {
    constructor(props) {
     super(props);
 	this.props.navigation.setParams({goToAddCustomer: this.goToAddCustomer});
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
     this.state = { text: '', loading: false,customers: []};	
     this.navv = null;
     this.c = null;	
@@ -48,14 +46,14 @@ export default class SelectCustomerScreen extends React.Component {
 	   return {
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
+		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerUsers} title="Customers"/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerUsers}  leftParam = "goBack" navv = {navigation} title="Add sale" subtitle="Choose a customer" sml={60}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
-       }
-	   
+       },
+	   headerLeft: null,
 	   }
    
     };
@@ -66,7 +64,6 @@ export default class SelectCustomerScreen extends React.Component {
     return (
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
                   <SearchInput
 				    placeholder="Customer name, email or phone number"
 				    onChangeText={text => {

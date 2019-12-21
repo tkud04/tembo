@@ -1,12 +1,8 @@
 import React from 'react';
 import {ScrollView, Button} from 'react-native';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
-import HeaderMenuButton from '../components/HeaderMenuButton';
 import Categories from '../components/Categories';
 import Card from '../components/Card';
-import Tips from '../components/Tips';
 import SvgIcon from '../components/SvgIcon';
 import AppHeader from '../components/AppHeader';
 import AppHomeHeader from '../components/AppHomeHeader';
@@ -41,7 +37,7 @@ static navigationOptions = ({navigation}) => {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report"/>,
+	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report" subtitle="Dashboard"/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   

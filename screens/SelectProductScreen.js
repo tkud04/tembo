@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Tips from '../components/Tips';
-import AppInputHeader from '../components/AppInputHeader';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import Product from '../components/Product';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
@@ -16,6 +15,7 @@ export default class SelectProductScreen extends React.Component {
    constructor(props) {
     super(props);
 	this.props.navigation.setParams({goToAddProduct: this.goToAddProduct});
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
     this.state = { 
 	    text: '',
 	    loading: false,
@@ -48,18 +48,18 @@ export default class SelectProductScreen extends React.Component {
 	this.navv.navigate('AddProduct');  
   }
   
-   static navigationOptions = ({navigation}) => {
+     static navigationOptions = ({navigation}) => {
 	   return {
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
+		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerStore} title="Select a product"/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerUsers}  leftParam = "goBack" navv = {navigation} title="Add sale" subtitle="Choose a product" sml={60}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
-       }
-	   
+       },
+	   headerLeft: null,
 	   }
    
     };
@@ -72,7 +72,7 @@ export default class SelectProductScreen extends React.Component {
     return (
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
+
                   <SearchInput
 				    placeholder="Product name or SKU"
 				    onChangeText={text => {

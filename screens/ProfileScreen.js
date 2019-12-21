@@ -4,7 +4,7 @@ import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import Tips from '../components/Tips';
 import SvgIcon from '../components/SvgIcon';
-import AppHeader from '../components/AppHeader';
+import AppHomeHeader from '../components/AppHomeHeader';
 import HeaderMenuButton from '../components/HeaderMenuButton';
 import CButton from '../components/CButton';
 import * as helpers from '../Helpers';
@@ -50,26 +50,22 @@ export default class ProfileScreen extends React.Component {
 	
 
    static navigationOptions = ({navigation}) => {
-	   return {
+	 
+	  return {
+       drawerLabel: 'Subscribe',
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
+		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.headerUsers} title="Profile"/>,
-	   headerLeft: () => (
-	    <MenuButton onPress={navigation.getParam('launchDrawer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10}}/>
-		</MenuButton>
-		),
+	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report" subtitle="Pofile"/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
-       },
-	   
 	   }
-   
-    };
-	
+	  }
+	  
+	  };
+	  
 	addImage = async () => {
 	  let ret = await ImagePicker.launchImageLibraryAsync({
 		  mediaTypes: ImagePicker.MediaTypeOptions.All,

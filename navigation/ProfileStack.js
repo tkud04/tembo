@@ -10,7 +10,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 const ret = createStackNavigator(
   {
     Profile: {
-		screen: ProfileScreen
+		screen: ProfileScreen,
+		headerLeft: null,
 	}
   },
 );

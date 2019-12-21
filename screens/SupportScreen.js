@@ -2,7 +2,7 @@ import React from 'react';
 import {ScrollView, Button} from 'react-native';
 import styled from 'styled-components';
 import HeaderMenuButton from '../components/HeaderMenuButton';
-import AppHeader from '../components/AppHeader';
+import AppHomeHeader from '../components/AppHomeHeader';
 import TitleHeader from '../components/TitleHeader';
 import CButton from '../components/CButton';
 import * as helpers from '../Helpers';
@@ -35,7 +35,7 @@ helpers.getLoggedInUser((u) => {this.user = u});
 				   notes: ""	
 				 };	
 				    
-		
+		this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 					
 	this.navv = null;
 	
@@ -47,19 +47,15 @@ helpers.getLoggedInUser((u) => {this.user = u});
   }
 
 static navigationOptions = ({navigation}) => {
-	
+	 
 	  return {
-       headerStyle: {
+       drawerLabel: 'Support',
+	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2  		   
+		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.headerLightbulb} title="Support"/>,
+	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report" subtitle="Support"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerLeft: () => (
-	    <MenuButton onPress={navigation.getParam('launchDrawer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10}}/>
-		</MenuButton>
-		),
 	   headerTitleStyle: {
 		   
 	   }

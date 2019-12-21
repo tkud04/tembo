@@ -10,10 +10,12 @@ import PackageScreen from '../screens/PackageScreen';
 const ret = createStackNavigator(
   {
     Subscribe: {
-		screen: SubscribeScreen
+		screen: SubscribeScreen,
+		headerLeft: null,
 	},
 	Package: {
-		screen: PackageScreen
+		screen: PackageScreen,
+		headerLeft: null,
 	},
   },
 );

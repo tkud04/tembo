@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
-import Tips from '../components/Tips';
-import AppInputHeader from '../components/AppInputHeader';
+import CButton from '../components/CButton';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import * as Permissions from 'expo-permissions';
@@ -21,6 +19,7 @@ export default class AddCustomerScreen extends React.Component {
     super(props);
 	helpers._getPermissionAsync('camera roll');
 	helpers._getPermissionAsync('contacts');
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	
     this.state = { inputBorderBottomColor: '#ccc',
                    inputBorderBottomWidth: 1,
@@ -47,14 +46,21 @@ export default class AddCustomerScreen extends React.Component {
     
   }
 
-  static navigationOptions = {
-	  headerStyle: {
+  static navigationOptions = ({navigation}) => {
+	   return {
+	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
+		   height: AppStyles.headerHeight
 	   },
-	  headerTitle: () => <AppInputHeader w="80%" h="80%" xml={AppStyles.svg.headerUsers} title="Add customer"/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerUsers}  leftParam = "goBack" navv = {navigation} title="Add Customer" subtitle="Add a new customer"  sml={40}/>,
 	   headerTintColor: AppStyles.headerColor,
-	  };
+	   headerTitleStyle: {
+		   
+       },
+	   headerLeft: null,
+	   }
+   
+    };
 	  
   
   addImage = async () => {
@@ -182,9 +188,8 @@ export default class AddCustomerScreen extends React.Component {
 	       <BackgroundImage source={require('../assets/images/bg.jpg')}>
 	        <Container>
 			  <ScrollView>		     
-				  <Tips/>
-                   
-				   <Row>
+
+				   <Row style={{marginTop: 10}}>
 				   <ImageUpload
 				    onPress={() => this.addImage()}
 				   >
@@ -192,15 +197,6 @@ export default class AddCustomerScreen extends React.Component {
 				   <Logo source={{uri: this.state.customerImg}}/>
 				   </ImageUpload>
 				   <TopRightInputs>
-					<ProductInputWrapper>
-					  <ContactUpload
-					     onPress={() => this.addContact()}
-					  >
-					  <ContactView>
-					    <ContactText>Click here to select from your contacts</ContactText>
-					  </ContactView>				  
-					  </ContactUpload>
-					</ProductInputWrapper>
 					<ProductInputWrapper>
 					 <ProductDescription>Select customer type</ProductDescription>
 					  <CustomerSelect
@@ -333,10 +329,12 @@ export default class AddCustomerScreen extends React.Component {
 					/>
 					</ProductInputWrapper>
 				   </BottomInputs>
-                  <SubmitButton
-				  onPress={() => this._addCustomer()}
-				  title="Submit"				  
-				  />			  
+                   <SubmitButton
+				       onPress={() => {this._addCustomer()}}
+				       title="Submit"
+                    >
+                        <CButton title="Submit" background="green" color="#fff" />					   
+				    </SubmitButton>			  
 			  </ScrollView>
 			</Container>
 			</BackgroundImage>
@@ -381,14 +379,8 @@ const TestButton = styled.Button`
   margin-top: 40px;
 `;
 
-const SubmitButton = styled.Button`
-  background-color: green;
-  color: #fff;
-  border-radius: 5;
-  margin-top: 40px;
-   margin-bottom: 20px;
-  width: 50%;
-  align-items: center;
+const SubmitButton = styled.TouchableOpacity`
+
 `;
 
 const ImageUpload = styled.TouchableOpacity`

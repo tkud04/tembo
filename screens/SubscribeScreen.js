@@ -1,12 +1,9 @@
 import React from 'react';
 import {ScrollView, Button} from 'react-native';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import HeaderMenuButton from '../components/HeaderMenuButton';
 import Categories from '../components/Categories';
 import SubscribeCard from '../components/SubscribeCard';
-import Tips from '../components/Tips';
-import AppHeader from '../components/AppHeader';
+import AppHomeHeader from '../components/AppHomeHeader';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -69,19 +66,15 @@ export default class SubscribeScreen extends React.Component {
   }
 
 static navigationOptions = ({navigation}) => {
-	
+	 
 	  return {
-       headerStyle: {
+       drawerLabel: 'Subscribe',
+	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2  		   
+		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.chartBar} title="Subscribe"/>,
+	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report" subtitle="Subscribe"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerLeft: () => (
-	    <MenuButton onPress={navigation.getParam('launchDrawer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10}}/>
-		</MenuButton>
-		),
 	   headerTitleStyle: {
 		   
 	   }
