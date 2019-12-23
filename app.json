@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Tecno Inventory App",
-    "description": "Inventory app for Tecno Android phones",
-    "slug": "inventory-app",
+    "name": "Tembo",
+    "description": "Daily sales/inventory app for Tecno Mobile",
+    "slug": "tembo-app",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -14,7 +14,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#6faa8a"
+      "backgroundColor": "#80ff80"
     },
     "notification": {
       "icon": "./assets/images/notification.png"
@@ -26,7 +26,7 @@
       "assets/**/*"
     ],
     "android": {
-      "package": "com.tecno.inventory",
+      "package": "com.tecno.tembo",
       "permissions": [
         "NOTIFICATIONS"
       ]

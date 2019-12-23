@@ -148,7 +148,7 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
 export async function signup(pm, callback) {
-	const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com/app-signup';
+	const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com/app/signup';
 	//const PUSH_ENDPOINT = encodeURIComponent(`https://www.eschoolng.net/mobileapp/expo_url.php?ppp=n`);
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS
@@ -203,7 +203,7 @@ export async function signup(pm, callback) {
 
 export async function login(data,callback)
 {
-	const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com/app-login';
+	const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com/app/login';
 	 const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS
   );
@@ -227,12 +227,12 @@ export async function login(data,callback)
   let token = await Notifications.getExpoPushTokenAsync();
 
   // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = PUSH_ENDPOINT + "?tk=" + token + "&username=" + pm.username + "&password=" + pm.password;
+  let upu = PUSH_ENDPOINT + "?tk=" + token + "&username=" + data.username + "&password=" + data.password;
   return fetch(upu, {
     method: 'GET'
   })
   .then(response => {
-	    console.log(response);
+	    //console.log(response);
          if(response.status === 200){
 			   //console.log(response);
 			   
@@ -247,7 +247,9 @@ export async function login(data,callback)
            return {status: "error:", message: "Couldn't fetch login URL [HARD FAIL]"};		   
 	   })
 	   .then(res => {
-		   console.log(res); 
+		   //console.log('Test', JSON.stringify(res));
+		   
+		   saveData(res);
 		   /**if(res.status == "ok"){
 			   
 		   }
@@ -268,7 +270,9 @@ export async function logout() {
 	  await AsyncStorage.removeItem('sales');
 }
 
-
+export async function saveData(dt){
+	console.log(dt);
+}
 
 export function getData(callback){
 	let req = "http://peaceful-scrubland-30200.herokuapp.com/flowers";
@@ -539,7 +543,7 @@ export function goToAddProduct(){
 export async function getLoggedInUser(callback){
 
 	let ret = {};
-	/**
+
 	try{
 		let uuu = await AsyncStorage.getItem('ivtry_user');
 		//console.log(customers);
@@ -552,13 +556,14 @@ export async function getLoggedInUser(callback){
 	catch(error){
 		console.log(error);
 	}
-	**/
-	ret = {
+
+	/**ret = {
 		id: 345,
 		name: "Tobi Kudayisi",
 		email: "kudayisitobi@gmail.com",
 		phone: "07054291601"
 	};
+	**/
 	callback(ret);
 }
 

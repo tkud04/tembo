@@ -353,14 +353,8 @@ const TestButton = styled.Button`
   margin-top: 40px;
 `;
 
-const SubmitButton = styled.Button`
-  background-color: green;
-  color: #fff;
-  border-radius: 5;
-  margin-top: 40px;
-   margin-bottom: 20px;
-  width: 50%;
-  align-items: center;
+const SubmitButton = styled.TouchableOpacity`
+
 `;
 
 const ImageUpload = styled.TouchableOpacity`

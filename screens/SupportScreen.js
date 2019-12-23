@@ -54,7 +54,7 @@ static navigationOptions = ({navigation}) => {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report" subtitle="Support"/>,
+	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Tembo" subtitle="Support"/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   

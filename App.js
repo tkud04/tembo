@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler';
+
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { SplashScreen, AppLoading } from 'expo';
@@ -22,7 +24,7 @@ constructor(props){
 	uu: {}
   };
   
-    helpers.getLoggedInUser((u) => {console.log(u); this._updateUser(u)});
+    helpers.getLoggedInUser((u) => {this._updateUser(u)});
 
 }
   
@@ -52,7 +54,10 @@ constructor(props){
         />
       );
     } else {
-		let mnav = this.state.uu == {} ? GuestNavigator : AppNavigator;
+		helpers.getLoggedInUser((u) => {this._updateUser(u)});
+		console.log('User',this.state.uu);
+		//console.log('Object count',Object.keys(this.state.uu).length);
+		let mnav = (Object.keys(this.state.uu).length === 0) ? GuestNavigator : AppNavigator;
 		const AppContainer = createAppContainer(mnav);
 		
       return (

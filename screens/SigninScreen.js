@@ -63,6 +63,25 @@ export default class SigninScreen extends React.Component {
 	   }
    
     };
+	
+	_updateSigninButton = () => {
+	if(this.state.loading){
+		           return (
+					  <CButton title="Processing.." background="green" color="#fff" />
+					  );
+						
+					  }
+					  else{
+						 return (
+					  <SubmitButton
+				       onPress={() => {this._signin()}}
+				       title="Submit"
+                    >
+                        <CButton title="Submit" background="green" color="#fff" />					   
+				    </SubmitButton>				  
+					  );
+					  }
+	}
 	  
   _signin = () => {
 	  //form validation
@@ -86,6 +105,7 @@ export default class SigninScreen extends React.Component {
 	}
 	
 	else{
+		this.state.loading = true;
 	  const dt = {
 				   username: this.state.username,
 				   password: this.state.password
@@ -100,6 +120,7 @@ export default class SigninScreen extends React.Component {
 		 
      //Log user in
 		        helpers.login(dt,(res) => {
+					
 					if(res.status == "ok"){
                         showMessage({
 			              message: `Welcome back ${res.name}! Fetching your dashboard..`,
@@ -113,6 +134,7 @@ export default class SigninScreen extends React.Component {
 			              type: 'danger'
 		                });
 					}
+					this.state.loading = false;
 				});	
 	}
 	 
@@ -184,12 +206,10 @@ export default class SigninScreen extends React.Component {
 					</ProductInputWrapper>
 					
 				   </BottomInputs>
-                 <SubmitButton
-				       onPress={() => {this._signin()}}
-				       title="Submit"
-                    >
-                        <CButton title="Submit" background="green" color="#fff" />					   
-				    </SubmitButton>
+                  {
+					 this._updateSigninButton()
+				  }
+					
 			  </ScrollView>
 			</Container>
 			</KeyboardAvoidingView>
