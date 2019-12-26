@@ -11,13 +11,12 @@ import * as helpers from '../Helpers';
 import SubscribeStack from './SubscribeStack';
 import SupportStack from './SupportStack';
 import AppStack from './AppStack';
-import AuthStack from './AuthStack';
 import ProfileStack from './ProfileStack';
+import SignoutStack from './SignoutStack';
 
 /////////////////////////////////////////////////
 
 let user = {};
-helpers.getLoggedInUser((u) => {user = u});
 
 let userMenu = {};
 
@@ -41,7 +40,7 @@ userMenu = {
 		}
 	},
 	'Sign out': {
-		screen: AuthStack,
+		screen: SignoutStack,
 		navigationOptions:{
 			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardUsers)} w={40} h={20}/>    
 		}

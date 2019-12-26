@@ -5,8 +5,8 @@ import AppStyles from '../styles/AppStyles';
 
 
 const TitleHeader = props => (
-<TitleBar>
-    <Title>{props.title}</Title>			             				         
+<TitleBar bc={props.bc}>
+    <Title tc={props.tc}>{props.title}</Title>			             				         
 </TitleBar>
 );
 
@@ -18,7 +18,8 @@ const TitleBar = styled.View`
 					 margin-bottom: 20px;
 					 margin-left: 3px;
 					 flex-direction: row;
-					 background-color: green;	
+					 border-color: ${props => props.bc};	
+					 border-width: 1;	
                      border-radius: 5px;					 
 					 padding: 7px;
 					 align-items: center;
@@ -30,6 +31,6 @@ const TitleBar = styled.View`
 const Title = styled.Text`
                      font-size: 16;					 
 					 margin: 5px;
-					 color: #fff;
+					 color: ${props => props.tc};
 					 font-style: ${AppStyles.fontStyle};
 `;

@@ -1,16 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
 import CButton from '../components/CButton';
-import AppHeader from '../components/AppHeader';
-import HeaderMenuButton from '../components/HeaderMenuButton';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
-import {ScrollView,Button,KeyboardAvoidingView} from 'react-native';
+import {ThemeContext,UserContext} from '../MyContexts';
+import {ScrollView,KeyboardAvoidingView} from 'react-native';
 import {showMessage, hideMessage} from 'react-native-flash-message';
-
 
 import { Notifications } from 'expo';
 
@@ -19,7 +15,8 @@ import { Notifications } from 'expo';
 export default class SignupScreen extends React.Component { 
    constructor(props) {
     super(props);
-	helpers._getPermissionAsync('camera roll');
+     this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
+	 
     this.state = { inputBorderBottomColor: '#ccc',
                    inputBorderBottomWidth: 1,
 				   nameBorderBottomColor: '#ccc',				   
@@ -43,38 +40,47 @@ export default class SignupScreen extends React.Component {
   }
 
    
-   static navigationOptions = {
-	  headerStyle: {
+    static navigationOptions = ({navigation}) => {
+	   return {
+	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
+		   height: AppStyles.headerHeight
 	   },
-	  headerTitle: () =>  <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.headerUsers} title="Sign up"/>, 
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerStore}  leftParam = "goBack" navv = {navigation} title="Sign up" subtitle="Create a new account"  sml={40}/>,
 	   headerTintColor: AppStyles.headerColor,
-	  };
+	   headerTitleStyle: {
+		   
+       },
+	   headerLeft: null,
+	   }
+   
+    };
 	  
   
-  addImage = async () => {
-	  let ret = await ImagePicker.launchImageLibraryAsync({
-		  mediaTypes: ImagePicker.MediaTypeOptions.All,
-		  allowsEditing: true,
-		  aspect: [4,4],
-		  quality: 1
-	  });
-	  
-	  console.log(ret);
-	  
-	  if(!ret.cancelled){
-		  this.setState({customerImg: {uri: ret.uri}});
-		  this.customerImg = {uri: ret.uri};
-		  
-		  showMessage({
-			 message: "Image uploaded!",
-			 type: 'success'
-		 });
-	  }
-  }
+  _updateSignupButton = () => {
+	if(this.state.loading){
+		           return (
+					  <CButton title="Processing.." background="green" color="#fff" />
+					  );
+						
+					  }
+					  else{
+						 return (
+					  <UserContext.Consumer>
+					  {({user,up}) => (<SubmitButton
+					  style={{marginBottom: 30}} 
+				       onPress={() => {this._signup(user, up)}}
+				       title="Submit"
+                    >
+                        <CButton title="Sign me up" background="green" color="#fff" />					   
+				    </SubmitButton>			
+					  )}
+					   </UserContext.Consumer>		
+					  );
+	}
+	}
   
-  _signup = () => {
+  _signup = (uu,upp) => {
 	  //form validation
 	 	  
   let validationErrors = (this.state.name.length < 4 || this.state.email.length < 6 ||  this.state.password.length < 6 || this.state.password != this.state.confirmPassword || this.state.phone.length < 6);
@@ -122,19 +128,38 @@ export default class SignupScreen extends React.Component {
 	 };  
 	 
 	 console.log(dt); 
+	 showMessage({
+			 message: "Signing you up..",
+			 type: 'info'
+		 });
+		 
      helpers.signup(dt,(res) => {
 		 if(res.status == "ok"){
 			    showMessage({
-			      message: "Signup successful! Fetching your dashboard..",
+			      message: "Signup successful! Signing you in..",
 			      type: 'success'
 		        });
 		        dt.tk = res.token;
 				
 		        //Log user in
 		        helpers.login(dt,(res) => {
-					if(res.status == "ok"){						
-						this.navv.navigate("Dashboard");
+					if(res.status == "ok"){
+                        showMessage({
+			              message: `Welcome back ${res.user.name}! Fetching your dashboard..`,
+			              type: 'success'
+		                });	
+                         
+                        upp(res.user);
+                        						
+						//this.navv.navigate("Dashboard");
 					}
+					else{
+						showMessage({
+			              message: `Username or password incorrect, please try again.`,
+			              type: 'danger'
+		                });
+					}
+					this.state.loading = false;
 				});   
 		   }
 		   else{
@@ -265,12 +290,9 @@ export default class SignupScreen extends React.Component {
 					/>
 					</ProductInputWrapper>
 				   </BottomInputs>
-                  <SubmitButton
-				       onPress={() => {this._signup()}}
-				       title="Submit"
-                    >
-                        <CButton title="Submit" background="green" color="#fff" />					   
-				    </SubmitButton>
+                  {
+					 this._updateSignupButton()
+				  }
 			  </ScrollView>
 			</Container>
 			</KeyboardAvoidingView>

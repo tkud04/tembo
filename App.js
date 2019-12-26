@@ -8,23 +8,33 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as helpers from './Helpers';
-import AppNavigator from './navigation/AppNavigator';
-import GuestNavigator from './navigation/GuestNavigator';
+import CustomContainer from './navigation/CustomContainer';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
 import { Notifications } from 'expo';
-import { createAppContainer } from 'react-navigation';
 import FlashMessage from 'react-native-flash-message';
+import {ThemeContext,UserContext} from './MyContexts.js';
+
 
 export default class App extends React.Component {
 constructor(props){
 	super(props);
+	this.uuu = {};
+	
 	this.state = {
     isLoadingComplete: false,
-	uu: {}
+	uu: {
+		user:  this.uuu,
+		up: this._updateUser
+	},
+	
+	
   };
   
-    helpers.getLoggedInUser((u) => {this._updateUser(u)});
+  	  helpers.getLoggedInUser2()
+	  .then((u) => {
+		  this._updateUser(u);
+		}); 
 
 }
   
@@ -39,12 +49,11 @@ constructor(props){
   };
   
   _updateUser = (ret) => {
-    this.state.uu = ret;
+    this.state.uu.user = ret;
   };
 
   render() {
    
-	  //helpers._getPermissionAsync();
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -54,21 +63,23 @@ constructor(props){
         />
       );
     } else {
-		helpers.getLoggedInUser((u) => {this._updateUser(u)});
-		console.log('User',this.state.uu);
-		//console.log('Object count',Object.keys(this.state.uu).length);
-		let mnav = (Object.keys(this.state.uu).length === 0) ? GuestNavigator : AppNavigator;
-		const AppContainer = createAppContainer(mnav);
+		//helpers.getLoggedInUser((u) => {this._updateUser(u)});
+		console.log('User from app js',this.state.uu);		
 		
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-		 <AppContainer />
+		  <ThemeContext.Provider>
+		     <UserContext.Provider value={this.state.uu}>
+		       <CustomContainer />
+		     </UserContext.Provider>
+		  </ThemeContext.Provider>
           <FlashMessage position="bottom" />
         </View>
       );
     }
   }
+ 
 
   _loadResourcesAsync = async () => {
     return Promise.all([

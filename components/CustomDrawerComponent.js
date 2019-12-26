@@ -5,17 +5,28 @@ import AppStyles from '../styles/AppStyles';
 import SvgIcon from './SvgIcon';
 import * as helpers from '../Helpers';
 import { DrawerItems } from 'react-navigation-drawer';
+import {ThemeContext,UserContext} from '../MyContexts';
 
 let user = {};
 helpers.getLoggedInUser((u) => {user = u});
 
 let username = "Guest",email = "guest@yahoo.com";
-
-if(user.id){
+console.log("user in cdc: ",user);
+if(user.tk){
 	username = user.name;
 	email = user.email;
 }
 
+_getUsername = (u) =>{
+	let r = "Guest";
+	if(u.name) r = u.name;
+	return r;
+}
+_getEmail = (u) =>{
+	let r = "Sign in";
+	if(u.email) r = u.email;
+	return r;
+}
 const ripple = TouchableNativeFeedback.Ripple('#adacac', false);
 const CustomDrawerComponent = props => (
   <View style={{ flex: 1 }}>
@@ -25,13 +36,22 @@ const CustomDrawerComponent = props => (
             style={{flex: 1}}
             forceInset={{ top: 'always', horizontal: 'never' }}
           >
+		    
+			<ThemeContext.Consumer>
+             {theme => (
+               <UserContext.Consumer>
+			   {({user,up}) => (
             <View style={{ backgroundColor: AppStyles.headerBackground }}>
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
 			    <Logo source={require('../assets/images/bg.jpg')}/>
-				<Username style={{ color: '#f9f9f9', marginTop: '3%', fontFamily: 'sans-serif-condensed' }}>{`Hi ${username}`}</Username>
-                <Email style={{ color: '#f9f9f9', fontFamily: 'sans-serif-condensed' }}>{`${email}`}</Email>
+				<Username style={{ color: '#f9f9f9', marginTop: '3%', fontFamily: 'sans-serif-condensed' }}>{`Hi ${_getUsername(user)}`}</Username>
+                <Email style={{ color: '#f9f9f9', fontFamily: 'sans-serif-condensed' }}>{`${_getEmail(user)}`}</Email>
               </View>
             </View>
+			  )}
+              </UserContext.Consumer>
+              )}
+             </ThemeContext.Consumer>		
 
             <DrawerItems {...props} />
 

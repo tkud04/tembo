@@ -127,7 +127,7 @@ static navigationOptions = ({navigation}) => {
 				      <Logo source={require('../assets/images/bg.jpg')}/>
 				   </Row>
 			  
-				  <TitleHeader title="Reach out to us for any complaints,requests or suggestions"/>
+				  <TitleHeader bc="green" tc="green" title="Reach out to us for any complaints,requests or suggestions"/>
                    
 				   <BottomInputs>
 				    <ProductInputWrapper>

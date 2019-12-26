@@ -1,24 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
 import CButton from '../components/CButton';
-import AppHeader from '../components/AppHeader';
-import HeaderMenuButton from '../components/HeaderMenuButton';
+import AppHomeHeader from '../components/AppHomeHeader';
+import TitleHeader from '../components/TitleHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
 import {ThemeContext,UserContext} from '../MyContexts';
 import {ScrollView,Button,KeyboardAvoidingView} from 'react-native';
 import {showMessage, hideMessage} from 'react-native-flash-message';
-import {NavigationEvents} from 'react-navigation';
 
 
 import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class SigninScreen extends React.Component { 
+export default class SignoutScreen extends React.Component { 
    constructor(props) {
     super(props);
 	this.props.navigation.setParams({launchDrawer: this.launchDrawer});
@@ -35,7 +31,6 @@ export default class SigninScreen extends React.Component {
 				     
 	this.navv = null;
 	
-	//This screen is only visible when signed out. So clear all user data here
   }
 
 
@@ -43,28 +38,24 @@ export default class SigninScreen extends React.Component {
 	this.navv.toggleDrawer();  
   }
    
-      static navigationOptions = ({navigation}) => {
-	   return {
+     static navigationOptions = ({navigation}) => {
+	 
+	  return {
+       drawerLabel: 'Sign out',
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
+		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.headerUsers} title="Sign in"/>,
-	   headerLeft: () => (
-	    <MenuButton onPress={navigation.getParam('launchDrawer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10}}/>
-		</MenuButton>
-		),
+	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Tembo" subtitle="Sign out?"/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
-       },
-	   
 	   }
-   
-    };
+	  }
+	 };	  
+	  
 	
-	_updateSigninButton = () => {
+	_updateSignoutButton = () => {
 	if(this.state.loading){
 		           return (
 					  <CButton title="Processing.." background="green" color="#fff" />
@@ -75,10 +66,11 @@ export default class SigninScreen extends React.Component {
 						 return (
 					  <UserContext.Consumer>
 					  {({user,up}) => (<SubmitButton
-				       onPress={() => {this._signin(user, up)}}
+					  style={{marginBottom: 30}} 
+				       onPress={() => {this._signout(user, up)}}
 				       title="Submit"
                     >
-                        <CButton title="Submit" background="green" color="#fff" />					   
+                        <CButton title="Sign me out" background="green" color="#fff" />					   
 				    </SubmitButton>			
 					  )}
 					   </UserContext.Consumer>		
@@ -86,51 +78,22 @@ export default class SigninScreen extends React.Component {
 	}
 	}
 	  
-  _signin = (uu,upp) => {
-	  //form validation
-	 	  
-  let validationErrors = (this.state.username.length < 6 || this.state.password.length < 6);
-	  if(validationErrors){
+  _signout = (uu,upp) => {
 
-	 if(this.state.username.length < 6){
-		 showMessage({
-			 message: "Please input a valid email address or phone number",
-			 type: 'danger'
-		 });
-	 }
-	 if(this.state.password.length < 6){
-		 showMessage({
-			 message: "Password must be at least 6 characters",
-			 type: 'danger'
-		 });
-	 }
-	 
-	}
-	
-	else{
 		this.state.loading = true;
-	  const dt = {
-				   username: this.state.username,
-				   password: this.state.password
-	 };  
 	 
 	 //console.log(dt);
 	 
 	 showMessage({
-			 message: "Signing you in..",
+			 message: "Signing you out..",
 			 type: 'info'
 		 });
 		 
      //Log user in
-		        helpers.login(dt,(res) => {
+		        helpers.logout((res) => {
 					
-					if(res.status == "ok"){
-                        showMessage({
-			              message: `Welcome back ${res.user.name}! Fetching your dashboard..`,
-			              type: 'success'
-		                });	
-                         
-                        upp(res.user);
+					if(res.status == "ok"){                                
+                        upp({});
                         						
 						//this.navv.navigate("Dashboard");
 					}
@@ -142,7 +105,6 @@ export default class SigninScreen extends React.Component {
 					}
 					this.state.loading = false;
 				});	
-	}
 	 
   }
   
@@ -155,65 +117,15 @@ export default class SigninScreen extends React.Component {
 		   <KeyboardAvoidingView>
 	        <Container>
 			  <ScrollView>		     
-				   <Row style={{justifyContent: 'center',alignItems: 'center'}}>			   
-				   <Logo source={require('../assets/images/bg.jpg')}/>			   
+				   <Row style={{justifyContent: 'center',alignItems: 'center',flexDirection: 'column',marginTop: 20}}>			   
+				   <Logo source={require('../assets/images/bg.jpg')}/>	
+                    <TitleHeader bc="red" tc="red" title="NOTE: Make sure you sync your data with our servers so as to avoid permanent loss of your data when you sign out."/>									   
 				   </Row>
-				   <BottomInputs>
-				    <ProductInputWrapper>
-					 <ProductDescription>Email address or phone number</ProductDescription>
-				    <ProductInput
-					style={{borderColor: this.state.usernameBorderBottomColor}}
-				     placeholder="Email or phone number"
-				     onChangeText={text => {
-						this.setState({username: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({usernameBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({usernameBorderBottomColor: "#ccc"});
-					 }}
-					/>
-					</ProductInputWrapper>
-					
 				   
-					<ProductInputWrapper>
-					 <ProductDescription>Password</ProductDescription>
-				    <ProductInput
-					style={{borderColor: this.state.passwordBorderBottomColor}}
-				     placeholder="Password"
-				     onChangeText={text => {
-						this.setState({password: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({passwordBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({passwordBorderBottomColor: "#ccc"});
-					 }}
-					 secureTextEntry={true}
-					/>
-					</ProductInputWrapper>
-					
-					<ProductInputWrapper style={{flexDirection:"row", marginVertical: 10}}>
-					  <ProductDescription style={{alignItems:"center", justifyContent: "center", marginTop: 10}}>New user?</ProductDescription>
-				      <RegisterButton
-				       onPress={() => {this.navv.navigate('Sign up')}}
-				       title="Submit"
-                       >
-                        <RegisterButtonView>
-						  <RegisterButtonText>Sign up</RegisterButtonText>
-						</RegisterButtonView>					   
-				      </RegisterButton>
-					</ProductInputWrapper>
-					
-				   </BottomInputs>
+				   
+				    
                   {
-					 this._updateSigninButton()
+					 this._updateSignoutButton()
 				  }
 					
 			  </ScrollView>

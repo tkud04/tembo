@@ -178,7 +178,7 @@ export async function signup(pm, callback) {
     method: 'GET'
   })
   .then(response => {
-	    console.log(response);
+	    //console.log(response);
          if(response.status === 200){
 			   //console.log(response);
 			   
@@ -263,15 +263,35 @@ export async function login(data,callback)
 	   });   
 }
 
-export async function logout() {
+export async function logout(callback) {
+	let ret = {status: "Unknown"};
+	 try{
 	  await AsyncStorage.removeItem('ivtry_user');
 	  await AsyncStorage.removeItem('products');
 	  await AsyncStorage.removeItem('customers');
 	  await AsyncStorage.removeItem('sales');
+	  
+	  ret = {status: "ok"};
+	 }
+	 catch(err){
+		 ret = {status: "error",message: err};
+	 }
+	 
+	 callback(ret);
 }
 
 export async function saveData(dt){
 	console.log(dt);
+	
+	
+	await AsyncStorage.setItem('ivtry_user',JSON.stringify(dt.user))
+	                  .then(() => {
+						  console.log("user profile saved");
+					  })
+					  .catch((error) => {
+						  console.log("Error saving user profile",error);
+					  });
+  
 }
 
 export function getData(callback){
@@ -542,15 +562,14 @@ export function goToAddProduct(){
 
 export async function getLoggedInUser(callback){
 
-	let ret = {};
+	let ret = {id: 0, name: "Guest"};
 
 	try{
 		let uuu = await AsyncStorage.getItem('ivtry_user');
 		//console.log(customers);
 		if(uuu !== null){
 			let ret = JSON.parse(uuu);
-			console.log(ret);
-			callback(ret);
+			console.log("logged in user: ",ret);
 		}
 	}
 	catch(error){
@@ -567,6 +586,32 @@ export async function getLoggedInUser(callback){
 	callback(ret);
 }
 
+
+export async function getLoggedInUser2(callback){
+
+	let ret = {id: 0, name: "Guest"};
+
+	try{
+		let uuu = await AsyncStorage.getItem('ivtry_user');
+		//console.log(customers);
+		if(uuu !== null){
+			let ret = JSON.parse(uuu);
+			console.log("logged in user: ",ret);
+		}
+	}
+	catch(error){
+		console.log(error);
+	}
+
+	/**ret = {
+		id: 345,
+		name: "Tobi Kudayisi",
+		email: "kudayisitobi@gmail.com",
+		phone: "07054291601"
+	};
+	**/
+	return ret;
+}
 
 
 

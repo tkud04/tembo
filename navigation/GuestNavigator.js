@@ -15,7 +15,7 @@ import AuthStack from './AuthStack';
 /////////////////////////////////////////////////
 
 let user = {};
-helpers.getLoggedInUser((u) => {user = u});
+
 
 let userMenu = {
     Dashboard: {
