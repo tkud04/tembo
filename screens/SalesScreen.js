@@ -21,6 +21,7 @@ export default class SalesScreen extends React.Component {
     this.state = { text: '', loading: false,sales: []};	
     this.navv = null;
     this.s = null;	
+	this.counter = 0;
 	
 	helpers.getSales((ss => {
 		this.state.sales = ss;
@@ -29,10 +30,11 @@ export default class SalesScreen extends React.Component {
   
   
    goToSale = () => {
-	showMessage({
+	/**showMessage({
 			 message: `Going to sale screen with id ${this.s.id}`,
 			 type: 'info'
 		 });
+	**/
 	
 	this.navv.navigate('EditSale',{
 		s: this.s,
@@ -58,10 +60,20 @@ export default class SalesScreen extends React.Component {
 	   }
    
     };
+	
+	xxx = (n) => {
+		helpers.logout((r) =>{
+			console.log("r",r);
+			if(r.status === "ok"){
+				n.navigate('Home');
+			}
+		});
+	}
 
   render() {
 	  let navv = this.props.navigation;
 	  this.navv = navv;
+	  //this.xxx(this.navv);
     return (
 	        <Container>
 			  <ScrollView>		     
@@ -74,8 +86,10 @@ export default class SalesScreen extends React.Component {
 				  
 				   {
 					  this.state.sales.map((s) => {
-						  //console.log(s);							  
-						  return  <SalesButton key={s['id']} onPress={() => {this.s = s; this.goToSale()}}><Sale data={s}/></SalesButton>
+						  console.log(s);				
+                          let ctr = "sale-" + this.counter;
+                          ++this.counter;						  
+						  return  <SalesButton key={ctr} onPress={() => {this.s = s; this.goToSale()}}><Sale data={s}/></SalesButton>
 					  })
 				  }
 				  

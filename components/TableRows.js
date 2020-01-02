@@ -10,13 +10,14 @@ let rowCount = 0;
  
 const TableRows = props => {
 	rowCount = props.data.length;
-	console.log(props.data);
+	props.data.push(props.st);
+	console.log("props data: ",props.data);
 	           return (
 							<RowsView>
 							{
-							 props.data.map((i) => {
-						       ++rc;
-						      return <RowItem key={"row_item_" + rc}>{i}</RowItem>
+							  props.data.map((val) => {
+                                  ++rc;								  
+								  return <RowItem key={"row_item_" + rc}>{val}</RowItem>
 					          })
 							}
 				           </RowsView> 

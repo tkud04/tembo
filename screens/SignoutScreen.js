@@ -65,7 +65,7 @@ export default class SignoutScreen extends React.Component {
 					  else{
 						 return (
 					  <UserContext.Consumer>
-					  {({user,up}) => (<SubmitButton
+					  {({user,up,loggedIn}) => (<SubmitButton
 					  style={{marginBottom: 30}} 
 				       onPress={() => {this._signout(user, up)}}
 				       title="Submit"
@@ -78,7 +78,7 @@ export default class SignoutScreen extends React.Component {
 	}
 	}
 	  
-  _signout = (uu,upp) => {
+  _signout = (uu,upp,lli) => {
 
 		this.state.loading = true;
 	 
@@ -92,10 +92,11 @@ export default class SignoutScreen extends React.Component {
      //Log user in
 		        helpers.logout((res) => {
 					
-					if(res.status == "ok"){                                
-                        upp({});
+					if(res.status == "ok"){
+                        lli = false;						
+                        upp([{},lli]);
                         						
-						//this.navv.navigate("Dashboard");
+						this.navv.navigate("Dashboard");
 					}
 					else{
 						showMessage({

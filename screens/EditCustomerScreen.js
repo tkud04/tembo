@@ -105,14 +105,8 @@ export default class EditCustomerScreen extends React.Component {
   _updateCustomer = () => {
 	  //form validation
 	 	  
-  let validationErrors = (this.state.customerID.length < 4 || this.state.customerName.length < 6 || this.state.customerType ==  "none" || this.state.gender ==  "none" || this.state.customerEmail.length < 6 || this.state.customerPhone.length < 6  || this.state.sa.length < 6);
+  let validationErrors = (this.state.customerName.length < 6 || this.state.customerType ==  "none" || this.state.gender ==  "none" || this.state.customerEmail.length < 6 || this.state.customerPhone.length < 6  || this.state.sa.length < 6);
 	  if(validationErrors){
-	 if(this.state.customerID.length < 4){
-		 showMessage({
-			 message: "Customer ID must be at least 4 characters",
-			 type: 'danger'
-		 });
-	 }
 	 if(this.state.customerName.length < 6){
 		 showMessage({
 			 message: "Customer name must be at least 6 characters",
@@ -154,6 +148,7 @@ export default class EditCustomerScreen extends React.Component {
 	
 	else{
 	  const dt = {
+		  id: this.c.id,
 		  customerImg: this.state.customerImg,
 				   customerName: this.state.customerName,
 				   customerType: this.state.customerType,
@@ -161,8 +156,7 @@ export default class EditCustomerScreen extends React.Component {
 				   customerPhone: this.state.customerPhone,
 				   sa: this.state.sa,
 				   notes: this.state.notes,
-				   gender: this.state.gender,
-				   id: this.state.customerID
+				   gender: this.state.gender
 	 };  
 	 
 	 console.log(dt);

@@ -29,7 +29,7 @@ export default class SelectCustomerScreen extends React.Component {
   
   selectCustomer = () => {
 	showMessage({
-			 message: `Going back to add sale screen with customer ${this.c.id}`,
+			 message: `Customer ${this.c.id} selected`,
 			 type: 'info'
 		 });
 	

@@ -74,8 +74,8 @@ export default class SigninScreen extends React.Component {
 					  else{
 						 return (
 					  <UserContext.Consumer>
-					  {({user,up}) => (<SubmitButton
-				       onPress={() => {this._signin(user, up)}}
+					  {({user,up,loggedIn}) => (<SubmitButton
+				       onPress={() => {this._signin(user, up, loggedIn)}}
 				       title="Submit"
                     >
                         <CButton title="Submit" background="green" color="#fff" />					   
@@ -86,7 +86,7 @@ export default class SigninScreen extends React.Component {
 	}
 	}
 	  
-  _signin = (uu,upp) => {
+  _signin = (uu,upp,lli) => {
 	  //form validation
 	 	  
   let validationErrors = (this.state.username.length < 6 || this.state.password.length < 6);
@@ -129,10 +129,10 @@ export default class SigninScreen extends React.Component {
 			              message: `Welcome back ${res.user.name}! Fetching your dashboard..`,
 			              type: 'success'
 		                });	
-                         
-                        upp(res.user);
+                         lli = true;
+                        upp([res.user,lli]);
                         						
-						//this.navv.navigate("Dashboard");
+						this.navv.navigate("Dashboard");
 					}
 					else{
 						showMessage({

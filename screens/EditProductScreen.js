@@ -354,7 +354,7 @@ const ProductInput = styled.TextInput`
 					 padding: 10px;
 					 margin-top: 5px;
 					 margin-bottom: 20px;
-					 color: #ccc;
+					 color: #000;
 `;
 
 

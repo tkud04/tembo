@@ -13,6 +13,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SalesScreen from '../screens/SalesScreen';
 import AddSaleScreen from '../screens/AddSaleScreen';
 import SelectProductScreen from '../screens/SelectProductScreen';
+import SelectProductFinalScreen from '../screens/SelectProductFinalScreen';
 import SelectCustomerScreen from '../screens/SelectCustomerScreen';
 import EditSaleScreen from '../screens/EditSaleScreen';
 import ReportsScreen from '../screens/ReportsScreen';
@@ -59,6 +60,10 @@ const ret = createStackNavigator(
 	},
 	SelectProduct: {
 		screen: SelectProductScreen,
+		headerLeft: null,
+	},
+	SelectProductFinal: {
+		screen: SelectProductFinalScreen,
 		headerLeft: null,
 	},
 	SelectCustomer: {

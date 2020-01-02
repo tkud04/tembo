@@ -4,25 +4,34 @@ import AppStyles from '../styles/AppStyles';
 import SvgIcon from './SvgIcon';
 import * as helpers from '../Helpers';
 
+/**
+[{"customers":[{"customerImg":"","customerName":"Rita Okere","customerType":"individual","customerEmail":"ritaoker3@gmail.com","customerPhone":"08094625805","sa":"50 trans amadi layout, Port Harcourt Rivers state","notes":"","gender":"female","id":"customer_518738"}],"products":[{"name":"Green Tea","quantityType":"piece","sku":"SKU347178","costPrice":"500","sellingPrice":"1000","stock":"150","notes":"","productImg":"../assets/images/pic-11.jpg","categories":""}],"taxType":"flat","discountType":"flat","shipping":0,"tax":0,"discount":0}]
+**/
+
 
 const Sale = props => {
 	            let src = (props.data.customerImg == "" || !isNaN(props.data.customerImg)) ? require("../assets/images/pic-11.jpg") : {uri: props.data.customerImg};
+				let customers = props.data.customers, products = props.data.products;
+				let itemText = products.length == 1 ? 'item' : 'items';
 				return (
                             <Row>
 				             <CustomerName>
 				               <Logo source={src}/>
 					         <CustomerBio>
-					           <Name>{props.data.customerName}</Name>
-					           <Email>{props.data.customerEmail}</Email>
-					           <Phone>Phone: {props.data.customerPhone}</Phone>
+					          
+					           <Name>{customers[0].customerName}</Name>
+					           <Email>{`date here `}</Email>
+					           <Phone>Added by: Me</Phone>
 					         </CustomerBio>
                             </CustomerName>				  
 				            <CustomerInfo>
-				             <PriceView>
-					          <Price>Debit</Price>
-				        	 </PriceView>
+				             <StatusView>
+					          <StatusWrapper bc="green">
+					            <Status color="white">Paid</Status>
+				        	  </StatusWrapper>
+				        	 </StatusView>
 					         <StockView>
-					          <Stock>{props.data.customerType}</Stock>
+					          <Stock> {`${products.length} ${itemText}`}</Stock>
 					         </StockView>
 				            </CustomerInfo>
 				           </Row> 
@@ -45,7 +54,7 @@ const Row = styled.View`
    marginVertical: 20px;
    width: 100%;
    border-bottom-width: 1;
-   border-bottom-color: #000;
+   border-bottom-color: green;
    flex-direction: row;
 `;
 
@@ -53,7 +62,7 @@ const CustomerName = styled.View`
    margin-left: 4px;
    margin-right: 5px;
    border-right-width: 1;
-   border-right-color: #000;
+   border-right-color: green;
    width: 70%;
    flex-direction: row;
 `;
@@ -62,6 +71,14 @@ const CustomerBio = styled.View`
 `;
 const CustomerInfo = styled.View`
    width: 30%;
+`;
+
+const ItemCount = styled.Text`
+  font-size: 15;
+  font-weight: 300;
+  margin-left: 6px;
+  margin-top: 10px;
+  align-items: center;
 `;
 
 const Name = styled.Text`
@@ -89,22 +106,31 @@ const Phone = styled.Text`
   align-items: center;
 `;
 
-const PriceView = styled.View`
+const StatusView = styled.View`
    width: 100%;
    border-bottom-width: 1;
    border-bottom-color: #ccc;
+`;
+
+const StatusWrapper = styled.View`
+   width: 80%;
+   height: 40;
+   padding: 5px;
+   background-color: ${props => props.bc};
+     align-items: center;
+	 justify-content: center;
 `;
 
 const StockView = styled.View`
    width: 100%;
 `;
 
-const Price = styled.Text`
+const Status = styled.Text`
   font-size: 15;
   font-weight: 300;
   margin-horizontal: 5px;
   margin-vertical: 10px;
-  align-items: center;
+  color: ${props => props.color};
 `;
 
 const Stock = styled.Text`

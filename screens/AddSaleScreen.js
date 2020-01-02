@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import CButton from '../components/CButton';
-import Table from '../components/Table';
+import SaleTable from '../components/SaleTable';
 import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
@@ -57,7 +57,8 @@ export default class AddSaleScreen extends React.Component {
 	                },
 					productsTable: {
 		               headers:["Product","Qty","price(N)","Subtotal(N)"],
-		               rows:[]
+		               rows:[],
+					   total: 0
 	                }
 				 };	
     this.p = {};
@@ -66,20 +67,48 @@ export default class AddSaleScreen extends React.Component {
 	this.populateProducts();
 	this.populateCustomers();
 	
+	this.navv = null;
+  }
+  
+    getTotal = (products) => {
+	let ret = 0;
+	
+	for(let i = 0; i < products.length; i++){
+		let p = products[i];
+		console.log("p: ",p);
+		ret += (parseInt(p[2]) * parseInt(p[3]));
+	}
+    console.log("ret: ",ret);
+    this.state.productsTable.total = ret;	
   }
   
   populateProducts = () => {
 	  try{
 	       this.p = this.props.navigation.state.params.p;
-         if(this.p != this.state.formerP){
+		   console.log("p: ",this.p);
+		   let canAddThisProduct = false;
+		   
+		 if(this.state.products.length < 1){
+			 canAddThisProduct = true;
+		 }
+		 else{
+			 console.log("state products: ",this.state.products);
+           if(!this.state.products.some(p => p.sku === this.p.sku)){
+			  console.log("inside if");
+		      canAddThisProduct = true;
+		    }
+		 }
+		 if(canAddThisProduct && this.p){
 		   this.state.formerP = this.p;
 		   this.state.products.push(this.p);
-		   let qty = 1;
-		   let subtotal = this.p.sellingPrice * qty;
-		   this.state.productsTable.rows.push([this.p.name,qty,this.p.sellingPrice,subtotal]);
+		    let subtotal = parseInt(this.p.sellingPrice) * this.p.qty;
+		  this.state.productsTable.rows.push([this.p.sku,this.p.name,this.p.qty,this.p.sellingPrice]);
+		   
+		   this.getTotal(this.state.productsTable.rows);
 		 }
 	}
 	catch(err){
+		console.log(err);
 		console.log('no product has been selected');
 	} 
 	//console.log("Products\n");
@@ -138,7 +167,9 @@ export default class AddSaleScreen extends React.Component {
   }
   
    goToSelectProduct = () => {
-	this.navv.navigate('SelectProduct');  
+	this.navv.navigate('SelectProduct',{
+		from: "AddSale",
+	});  
   }  
   goToSelectCustomer = () => {
 	this.navv.navigate('SelectCustomer');  
@@ -174,7 +205,7 @@ _addSale = () => {
 	  if(isNaN(tax)) tax = 0;
 	  if(isNaN(discount)) discount = 0;
 	  
-  let validationErrors = (this.state.customers.length < 1 || this.state.products.length < 1 || this.state.taxType == "none" || this.state.discountType ==  "none" || shipping < 1 || tax < 0 || discount < 0);
+  let validationErrors = (this.state.customers.length < 1 || this.state.products.length < 1 || this.state.taxType == "none" || this.state.discountType ==  "none" || tax < 0 || discount < 0);
 	  if(validationErrors){
 	 if(this.state.customers.length < 1){
 		 showMessage({
@@ -197,12 +228,6 @@ _addSale = () => {
 	 if(this.state.discountType ==  "none"){
 		 showMessage({
 			 message: "Please select a valid discount type",
-			 type: 'danger'
-		 });
-	 }
-	 if(shipping < 1){
-		 showMessage({
-			 message: "Please add a valid shipping fee",
 			 type: 'danger'
 		 });
 	 }
@@ -231,7 +256,7 @@ _addSale = () => {
 		};
 		
 		console.log(dt);
-		
+		helpers.addSale(dt,this.navv);
 	}
 }
   
@@ -270,11 +295,11 @@ _addSale = () => {
 				   </TopRightInputs>
 				   </Row>
 				   <TableDiv>
-				   <Table data={this.state.productsTable}/>
+				   <SaleTable data={this.state.productsTable}/>
 				   </TableDiv>
 				   <BottomInputs>
 				   <ProductInputWrapper>
-					 <ProductDescription>Shipping fee(N)</ProductDescription>
+					 <ProductDescription>Shipping(N)</ProductDescription>
 				    <ProductInput
 					style={{borderColor: this.state.shippingBorderBottomColor}}
 				     placeholder="Shipping fee"
@@ -436,7 +461,7 @@ const ProductInput = styled.TextInput`
 					 padding: 10px;
 					 margin-top: 5px;
 					 margin-bottom: 20px;
-					 color: #ccc;
+					 color: #000;
 `;
 
 

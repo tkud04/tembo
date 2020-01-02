@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import HeaderMenuButton from '../components/HeaderMenuButton';
-import Tips from '../components/Tips';
-import AppHeader from '../components/AppHeader';
-import Sale from '../components/Sale';
+import AppImageHeader from '../components/AppImageHeader';
+import ReportsCard from '../components/ReportsCard';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
 import {ScrollView, Button} from 'react-native';
+import { WebView } from 'react-native-webview';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
@@ -19,8 +17,21 @@ export default class ReportsScreen extends React.Component {
    constructor(props) {
     super(props);
 	this.props.navigation.setParams({goToCharts: this.goToCharts});
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
     this.state = { text: '', loading: false,sales: []};	
     this.navv = null;
+    
+	this.dt = {
+		title: "Business Report",
+		type: "doughnut",
+		dp: `
+				{ label: "apple",  y: 10  },
+				{ label: "orange", y: 15  },
+				{ label: "banana", y: 25  },
+				{ label: "mango",  y: 30  },
+				{ label: "grape",  y: 28  }	
+		`
+	};
   }
 
   goToCharts = () => {
@@ -29,9 +40,9 @@ export default class ReportsScreen extends React.Component {
 			 type: 'info'
 		 });
 	
-	//this.navv.navigate('EditSale',{
-	//	s: this.s,
-	//});  
+	this.navv.navigate('Charts',{
+		dt: this.dt,
+	});  
   }
 
   static navigationOptions = ({navigation}) => {
@@ -40,131 +51,64 @@ export default class ReportsScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppHeader w="90%" h="80%" ml="40px" xml={AppStyles.svg.headerClipboard} title="Reports"/>,
+	   headerTitle: () => <AppImageHeader xml={AppStyles.svg.headerClipboard}  leftParam = "goBack" rightParam = "goToCharts" navv = {navigation} title="Products" subtitle="Manage your products"/>,
 	   headerTintColor: AppStyles.headerColor,
-	   headerRight: () => (
-	    <MenuButton onPress={navigation.getParam('goToCharts')}>
-		  <HeaderMenuButton xml={AppStyles.svg.chartArea} w={30} h={30} ss={{marginRight: 10}}/>
-		</MenuButton>
-		),
 	   headerTitleStyle: {
 		   
-       }
-	   
+       },
+	   headerLeft: null,
 	   }
    
     };
 
-  render() {
+ render() {
+	  let items = [];
 	  let navv = this.props.navigation;
+	  this.navv = navv;
+		 //console.log(items);
+		 
     return (
 	        <Container>
-			  <ScrollView>		     
-				  <SearchInput
-				    placeholder="Customer or product name"
-				    onChangeText={text => {
-						console.log(`Current text: ${text}`);
-					}}
-                  />
-				  
-				  <Row>
-				   
-				   </Row>
-				  			  
-			  </ScrollView>
+			    <ScrollView>
+					<ItemsLayout>
+						    <Column key={365}>
+					          <ReportsCard dt={this.dt} title="Business Reports" navv={navv}/>
+					          <ReportsCard dt={this.dt} title="Stock Reports" navv={navv}/>
+					        </Column>  		
+					</ItemsLayout>
+			    </ScrollView>
 			</Container>
     );
   }
   
+      handleNavStateChange = newNavState => {
+	 const { url } = newNavState;
+	 	 if (!url) return;
+	// console.log("url: " + url);
+	 if(url.includes("admin/assignment")){
+		 this.webview.stopLoading();
+		 console.log("url: " + url);
+	 }
+
+  };
 }
+
 
 const Container = styled.View`
                      flex: 1;
-					 background-color: #fff;
-					 justify-content: center;
-					 align-items: center;
+					 background-color: white;	
+                     border-radius: 20px;					 
 `;
-					 
-const SearchInput = styled.TextInput`
-					 align-items: center;
-					 border-radius: 5;
-					 margin-top: 10px;
-					 border: 1px solid #bbb;
-					 padding: 10px;
-					 margin-bottom: 20px;
-					 color: #ccc;
-`;
-
-const Logo = styled.Image`
-           width: 55px;
-		   height: 55px;
-		   background: black;
-		   border-radius: 30px;
-		   margin-left: 2px;
-		   margin-bottom: 8px;
-`;
-
-const Row = styled.View`
-   marginVertical: 20px;
-   width: 100%;
-   border-bottom-width: 1;
-   border-bottom-color: #000;
-   flex-direction: row;
-`;
-
-const ProductName = styled.View`
-   margin-left: 4px;
-   margin-right: 5px;
-   border-right-width: 1;
-   border-right-color: #000;
-   width: 60%;
-   flex-direction: row;
-`;
-const ProductInfo = styled.View`
-   width: 40%;
-`;
-
-const Name = styled.Text`
-  font-size: 15;
-  font-weight: 300;
-  margin-left: 6px;
-  margin-top: 10px;
-  align-items: center;
-`;
-
-const PriceView = styled.View`
-   width: 100%;
-   border-bottom-width: 1;
-   border-bottom-color: #ccc;
-`;
-
-const StockView = styled.View`
-   width: 100%;
-`;
-
-const Price = styled.Text`
-  font-size: 15;
-  font-weight: 300;
-  margin-horizontal: 5px;
-  margin-vertical: 10px;
-  align-items: center;
-`;
-
-const Stock = styled.Text`
-  font-size: 15;
-  font-weight: 300;
-  margin-horizontal: 5px;
-  margin-vertical: 10px;
-  align-items: center;
-`;
-
-const TestButton = styled.Button`
-  background-color: blue;
-  color: #fff;
-  border-radius: 5;
-`;
-
 const MenuButton = styled.TouchableOpacity`
 
 `;
 
+const ItemsLayout = styled.View`
+                     flex-direction: row;
+					 flex: 1;					 
+`;
+
+const Column = styled.View`
+                   width: 50%;
+				   align-items: center;
+`;

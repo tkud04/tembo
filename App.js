@@ -8,7 +8,7 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as helpers from './Helpers';
-import CustomContainer from './navigation/CustomContainer';
+import CustomContainerComponent from './navigation/CustomContainerComponent';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
 import { Notifications } from 'expo';
@@ -20,23 +20,26 @@ export default class App extends React.Component {
 constructor(props){
 	super(props);
 	this.uuu = {};
+    //this.hu = helpers.getLoggedInUser();	
 	
 	this.state = {
     isLoadingComplete: false,
-	uu: {
-		user:  this.uuu,
-		up: this._updateUser
-	},
-	
-	
+	user:  {},
+	up: this._updateUser,
+	loggedIn: false
+ 	
   };
   
-  	  helpers.getLoggedInUser2()
-	  .then((u) => {
-		  this._updateUser(u);
-		}); 
-
+	
+  //this.resolve(this.hu);
 }
+
+resolve = async (pr) => {
+	let rr = await pr;
+	console.log("rr",rr);
+	this._updateUser(rr);
+}
+
   
   _notificationSubscription = null;
   
@@ -49,7 +52,9 @@ constructor(props){
   };
   
   _updateUser = (ret) => {
-    this.state.uu.user = ret;
+    this.state.user = ret[0];
+    this.state.loggedIn = (Object.keys(this.state.user).length === 5);
+	console.log("user context updated with ",[ret,this.state.loggedIn]);
   };
 
   render() {
@@ -64,19 +69,24 @@ constructor(props){
       );
     } else {
 		//helpers.getLoggedInUser((u) => {this._updateUser(u)});
-		console.log('User from app js',this.state.uu);		
 		
-      return (
+		  helpers.getLoggedInUser().then((dt) => {
+			  this.state.user = dt;					  
+			  console.log("uu",this.state.user);
+			  this.state.up([this.state.user]);
+			 
+		 });
+		  return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
 		  <ThemeContext.Provider>
-		     <UserContext.Provider value={this.state.uu}>
-		       <CustomContainer />
+		     <UserContext.Provider value={this.state}>
+		       <CustomContainerComponent />
 		     </UserContext.Provider>
 		  </ThemeContext.Provider>
           <FlashMessage position="bottom" />
         </View>
-      );
+      );	
     }
   }
  

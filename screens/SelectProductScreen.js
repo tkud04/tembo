@@ -16,6 +16,10 @@ export default class SelectProductScreen extends React.Component {
     super(props);
 	this.props.navigation.setParams({goToAddProduct: this.goToAddProduct});
 	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
+	
+	this.from = props.navigation.state.params.from;
+	this.n = props.navigation.state.params.n;
+	
     this.state = { 
 	    text: '',
 	    loading: false,
@@ -34,14 +38,11 @@ export default class SelectProductScreen extends React.Component {
   }
 
   selectProduct = () => {
-	showMessage({
-			 message: `Going back to add sale screen with product sku ${this.p.sku}`,
-			 type: 'info'
-		 });
-	
-	this.navv.navigate('AddSale',{
+	  this.navv.navigate('SelectProductFinal',{
+		from: this.from,
 		p: this.p,
-	});  
+		n: this.n
+	});   
   }
   
   goToAddProduct = () => {
@@ -54,7 +55,7 @@ export default class SelectProductScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerUsers}  leftParam = "goBack" navv = {navigation} title="Add sale" subtitle="Choose a product" sml={60}/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerWallet}  leftParam = "goBack" navv = {navigation} title="Add product" subtitle="Choose a product" sml={60}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   

@@ -10,5 +10,6 @@ const user = {
 
 export const UserContext = createContext({
 	user: user,
-	up: () => {}
+	up: () => {},
+	loggedIn: false
 });

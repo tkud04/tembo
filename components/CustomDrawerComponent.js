@@ -7,15 +7,9 @@ import * as helpers from '../Helpers';
 import { DrawerItems } from 'react-navigation-drawer';
 import {ThemeContext,UserContext} from '../MyContexts';
 
-let user = {};
-helpers.getLoggedInUser((u) => {user = u});
 
-let username = "Guest",email = "guest@yahoo.com";
-console.log("user in cdc: ",user);
-if(user.tk){
-	username = user.name;
-	email = user.email;
-}
+
+let uu = {};
 
 _getUsername = (u) =>{
 	let r = "Guest";
@@ -24,7 +18,7 @@ _getUsername = (u) =>{
 }
 _getEmail = (u) =>{
 	let r = "Sign in";
-	if(u.email) r = u.email;
+	if(u.email) r = u.email; 
 	return r;
 }
 const ripple = TouchableNativeFeedback.Ripple('#adacac', false);
@@ -40,7 +34,17 @@ const CustomDrawerComponent = props => (
 			<ThemeContext.Consumer>
              {theme => (
                <UserContext.Consumer>
-			   {({user,up}) => (
+			   {({user,up,loggedIn}) => {
+				   //console.log("user in cdc: ",user);
+				   //console.log("cdc items: ",props.items);
+				   helpers.getLoggedInUser().then((dt) => {
+			  uu = dt;
+			  //console.log("updating context from cdc async");
+			  //up([uu,loggedIn]);
+			  //console.log('User inside cdc async function',uu);
+		 });
+				   return (
+		     <View>
             <View style={{ backgroundColor: AppStyles.headerBackground }}>
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
 			    <Logo source={require('../assets/images/bg.jpg')}/>
@@ -48,16 +52,19 @@ const CustomDrawerComponent = props => (
                 <Email style={{ color: '#f9f9f9', fontFamily: 'sans-serif-condensed' }}>{`${_getEmail(user)}`}</Email>
               </View>
             </View>
-			  )}
+			             
+			</View>
+
+			  )
+			   }}
               </UserContext.Consumer>
               )}
              </ThemeContext.Consumer>		
-
-            <DrawerItems {...props} />
-
+            <View>
+			            <DrawerItems {...props} />
+						 </View>
           </SafeAreaView>
         </ScrollView>
-
         <View elevation={6} style={{ backgroundColor: '#ffffff' }}>
           <TouchableNativeFeedback background={ripple}>
             <FooterItem>

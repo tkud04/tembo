@@ -417,6 +417,7 @@ export async function getProducts(callback)
 
 export async function addCustomer(data,n)
 {
+	data.id = generateID('customer');
 	let customers = await AsyncStorage.getItem('customers');
 	let newCustomers = JSON.parse(customers);
 	
@@ -468,7 +469,7 @@ export async function updateCustomer(data,n)
 	
 	else{
 	    updatedCustomers = newCustomers.map((c) =>{
-			if(c.customerEmail == data.customerEmail){
+			if(c.id == data.id){
 				console.log('found you');
 				c = data;
 			}
@@ -493,17 +494,40 @@ export async function updateCustomer(data,n)
 					  
 }
 
+export async function addSale(data,n)
+{
+	data.id = generateID('sale');
+	data.status = "ok";
+	let sales = await AsyncStorage.getItem('sales');
+	let newSale = JSON.parse(sales);
+	
+	if(!newSale) newSale = [];
+	newSale.push(data);
+
+	await AsyncStorage.setItem('sales',JSON.stringify(newSale))
+	                  .then(() => {
+						  showMessage({
+			               message: `Sale recorded!`,
+			               type: 'success'
+		                 });
+						 n.navigate("Home");
+					  })
+					  .catch((error) => {
+						  showMessage({
+			               message: `Error: ${error.message}`,
+			               type: 'success'
+		                 });
+					  });
+					  
+}
 
 export async function getSales(callback)
 {
 	try{
-		let sales = {};
-		//let customers = await AsyncStorage.getItem('customers');
-		//console.log(customers);
+		let sales =  await AsyncStorage.getItem('sales');
+		//console.log(sales);
 		if(sales !== null){
-			//let ret = JSON.parse(customers);
-			let ret = [];
-			//console.log(ret);
+			let ret = JSON.parse(sales);
 			callback(ret);
 		}
 	}
@@ -513,11 +537,92 @@ export async function getSales(callback)
 	
 }
 
+export async function updateSale(data,n)
+{
+	let sales = await AsyncStorage.getItem('sales');
+	let newSale = JSON.parse(sales);
+	let updatedSales = [];
+	
+	if(!newSale){
+	  updatedSales.push(data);
+	} 
+	
+	else{
+	    updatedSales = newSale.map((s) =>{
+			if(s.id == data.id){
+				console.log('found you');
+				s = data;
+			}
+			return s;
+		});
+	}
+	
+	await AsyncStorage.setItem('sales',JSON.stringify(updatedSales))
+	                  .then(() => {
+						  showMessage({
+			               message: `Sale updated!`,
+			               type: 'success'
+		                 });
+						 n.navigate("Home");
+					  })
+					  .catch((error) => {
+						  showMessage({
+			               message: `Error: ${error.message}`,
+			               type: 'danger'
+		                 });
+					  });
+					  
+}
+
+
+export async function deleteSale(data,n)
+{
+	let sales = await AsyncStorage.getItem('sales');
+	let newSale = JSON.parse(sales);
+	let updatedSales = [];
+	
+	if(!newSale){
+		
+	} 
+	
+	else{
+	    updatedSales = newSale.map((s) =>{
+			if(s.id == data.id){
+				console.log('found you');
+				s.status = "deleted";
+			}
+			
+			return s;
+			
+		});
+	}
+	
+	await AsyncStorage.setItem('sales',JSON.stringify(updatedSales))
+	                  .then(() => {
+						  showMessage({
+			               message: `Sale deleted!`,
+			               type: 'success'
+		                 });
+						 n.navigate("Home");
+					  })
+					  .catch((error) => {
+						  showMessage({
+			               message: `Error: ${error.message}`,
+			               type: 'danger'
+		                 });
+					  });
+					  
+}
 
 
 export function generateSKU()
 {
 	return `SKU${Math.floor(Math.random() * Math.floor(999999))}`;
+}
+
+export function generateID(txt)
+{
+	return `${txt}-${Math.floor(Math.random() * Math.floor(999999))}`;
 }
 
 export function getUniqueID(txt)
@@ -560,30 +665,23 @@ export function goToAddProduct(){
 	this.navigate('AddProduct');
 }
 
-export async function getLoggedInUser(callback){
+export async function getLoggedInUser(){
 
-	let ret = {id: 0, name: "Guest"};
+	let ret = {};
 
 	try{
 		let uuu = await AsyncStorage.getItem('ivtry_user');
 		//console.log(customers);
 		if(uuu !== null){
 			let ret = JSON.parse(uuu);
-			console.log("logged in user: ",ret);
+			return ret;
 		}
 	}
 	catch(error){
 		console.log(error);
 	}
-
-	/**ret = {
-		id: 345,
-		name: "Tobi Kudayisi",
-		email: "kudayisitobi@gmail.com",
-		phone: "07054291601"
-	};
-	**/
-	callback(ret);
+    
+	return ret;
 }
 
 
@@ -659,3 +757,9 @@ export async function getPackage(id,callback){
 		});
 	callback(rret);
 }
+
+export function getDate(){
+	
+	
+}
+
