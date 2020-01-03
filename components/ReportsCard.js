@@ -13,8 +13,8 @@ return(
 <SubmitButton
 onPress={() =>{
 			let navv = props.navv;
-			navv.navigate('Tables',{
-		     dt : props.dt
+			navv.navigate('ReportsDatePicker',{
+		     reportsType : props.rt
 	        });  
 		}}
       >

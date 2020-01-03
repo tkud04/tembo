@@ -17,6 +17,7 @@ import SelectProductFinalScreen from '../screens/SelectProductFinalScreen';
 import SelectCustomerScreen from '../screens/SelectCustomerScreen';
 import EditSaleScreen from '../screens/EditSaleScreen';
 import ReportsScreen from '../screens/ReportsScreen';
+import ReportsDatePickerScreen from '../screens/ReportsDatePickerScreen';
 import TablesScreen from '../screens/TablesScreen';
 import ChartsScreen from '../screens/ChartsScreen';
 
@@ -78,6 +79,10 @@ const ret = createStackNavigator(
 	},
 	Reports: {
 		screen: ReportsScreen,
+		headerLeft: null,
+	},
+	ReportsDatePicker: {
+		screen: ReportsDatePickerScreen,
 		headerLeft: null,
 	},
 	Tables: {

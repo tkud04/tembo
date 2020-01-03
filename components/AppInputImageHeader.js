@@ -58,6 +58,7 @@ const Title = styled.Text`
 const HeaderView = styled.View`
 flex-direction: column;
 margin-left: 10;
+margin-top: 10;
  justify-content: flex-start;
  align-items: flex-start;
 `;

@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import AppInputImageHeader from '../components/AppInputImageHeader';
-import ReportsCard from '../components/ReportsCard';
 import TitleHeader from '../components/TitleHeader';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
-import {ScrollView, Button} from 'react-native';
-import { WebView } from 'react-native-webview';
+import {SafeAreaView, Button} from 'react-native';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
@@ -14,35 +12,39 @@ import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class ReportsScreen extends React.Component { 
+export default class ReportsDatePickerScreen extends React.Component { 
    constructor(props) {
     super(props);
+	this.reportsType = props.navigation.state.params.reportsType;
 	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
     this.state = { text: '', loading: false,sales: []};	
     this.navv = null;
     
-	this.dt = {
-		title: "Business Report",
-		type: "doughnut",
-		dp: `
-				{ label: "apple",  y: 10  },
-				{ label: "orange", y: 15  },
-				{ label: "banana", y: 25  },
-				{ label: "mango",  y: 30  },
-				{ label: "grape",  y: 28  }	
-		`
-	};
+	this.dt = [{key: '1',title:"Today",value:"today"},
+	           {key: '2',title:"Yesterday",value:"yesterday"},
+	           {key: '3',title:"Last 7 days",value:"7-days"},
+	           {key: '4',title:"Last 30 days",value:"30-days"},
+	           {key: '5',title:"Previous month",value:"prev-month"},
+	           {key: '6',title:"Current month",value:"current-month"},
+	           {key: '7',title:"All",value:"all"},
+	];
+	
+	console.log("reports type: ",this.reportsType);
   }
 
-  goToCharts = () => {
+  pickDate = (dt) => {
+	/**
 	showMessage({
 			 message: `Takes you the the Charts screen.. coming soon`,
 			 type: 'info'
 		 });
-	
-	this.navv.navigate('Charts',{
+	**/
+	console.log("date picked: ",dt);
+	/**
+	this.navv.navigate('Tables',{
 		dt: this.dt,
-	});  
+	}); 
+    **/	
   }
 
   static navigationOptions = ({navigation}) => {
@@ -60,6 +62,23 @@ export default class ReportsScreen extends React.Component {
 	   }
    
     };
+	
+	DateType = (dt) => {
+	  console.log("dt: ",dt);
+	  return(
+	  <DateView style={{width: '100%', padding: 5,borderBottomWidth: 1, borderColor: '#ccc',}}>
+	  <DateButton
+	  onPress={() =>{
+			this.pickDate(dt); 
+		}}
+	  >
+	  
+	    <DateText style={{ padding: 10}}>{dt.title}</DateText>
+	  
+	  </DateButton>
+	  </DateView>
+	);
+	}
 
  render() {
 	  let items = [];
@@ -69,20 +88,15 @@ export default class ReportsScreen extends React.Component {
 		 
     return (
 	        <Container>
-			    <ScrollView>
 				  <Row>	
-				   <TitleHeader bc="green" tc="green" title="Total sales and total profit at a quick glance!"/>
-				  </Row>
-					<ItemsLayout>
-						    <Column key={365}>
-					          <ReportsCard rt="business" title="Business reports" navv={navv}/>					          
-					        </Column>  	
-							<Column key={2020}>
-					          <ReportsCard rt="stock" title="Stock reports" navv={navv}/>				          
-					        </Column>  		
-							
-					</ItemsLayout>
-			    </ScrollView>
+				  <SafeAreaView style={{width: '100%'}}>
+				   <DateTypes
+				   data={this.dt} 
+				   renderItem={(item) => this.DateType(item.item)}
+				   keyExtractor={item => item.key}
+				   />
+				   </SafeAreaView>
+				  </Row>			    
 			</Container>
     );
   }
@@ -102,10 +116,10 @@ export default class ReportsScreen extends React.Component {
 
 const Container = styled.View`
                      flex: 1;
-					 background-color: white;	
-                     border-radius: 20px;					 
+                     border-radius: 20px;
+                     width: 100%;					 
 `;
-const MenuButton = styled.TouchableOpacity`
+const DateButton = styled.TouchableOpacity`
 
 `;
 
@@ -121,7 +135,19 @@ const Column = styled.View`
 `;
 
 const Row = styled.View`
-    justify-content: center;
-    align-items: center;
+   width: 100%;
     margin-top: 20px;	
+`;
+
+const DateTypes = styled.FlatList`
+   width: 100%;
+`;
+
+const DateView = styled.View`
+
+`;
+
+const DateText = styled.Text`
+font-size: 20;
+color: green;
 `;
