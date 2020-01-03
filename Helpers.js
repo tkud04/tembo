@@ -266,9 +266,11 @@ export async function login(data,callback)
 export async function logout(callback) {
 	let ret = {status: "Unknown"};
 	 try{
-	  await AsyncStorage.removeItem('ivtry_user');
+	 //**
+	 await AsyncStorage.removeItem('ivtry_user');
 	  await AsyncStorage.removeItem('products');
 	  await AsyncStorage.removeItem('customers');
+	  //**/
 	  await AsyncStorage.removeItem('sales');
 	  
 	  ret = {status: "ok"};
@@ -497,7 +499,8 @@ export async function updateCustomer(data,n)
 export async function addSale(data,n)
 {
 	data.id = generateID('sale');
-	data.status = "ok";
+	data.status = "ok"; 
+	data.date = getDate();
 	let sales = await AsyncStorage.getItem('sales');
 	let newSale = JSON.parse(sales);
 	
@@ -760,6 +763,16 @@ export async function getPackage(id,callback){
 
 export function getDate(){
 	
+	let options = {
+		weekday: 'long',
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit'
+	};
 	
+	let today = new Date();
+	return today.toLocaleDateString();
 }
 

@@ -249,6 +249,8 @@ _updateSale = () => {
 	else{
 		let dt = {
 			id: this.s.id,
+			date: this.s.date,
+			status: this.s.status,
 			customers: this.state.customers,
 			products: this.state.products,
 			taxType: this.state.taxType,

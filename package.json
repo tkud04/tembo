@@ -16,6 +16,7 @@
     "@expo/samples": "2.1.1",
     "expo": "^36.0.2",
     "expo-asset": "~8.0.0",
+    "expo-asset-utils": "^1.2.0",
     "expo-constants": "~8.0.0",
     "expo-contacts": "~8.0.0",
     "expo-file-system": "~8.0.0",

@@ -14,7 +14,7 @@ export default class CustomContainer extends React.Component {
 	    uuu: {}
 	  };
 
-      this.that = this;
+      this.that = this; 
 	
 	setTimeout(() => {
 		helpers.getLoggedInUser().then((dt) => {

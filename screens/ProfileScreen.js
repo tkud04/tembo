@@ -11,6 +11,7 @@ import * as helpers from '../Helpers';
 import * as ImagePicker from 'expo-image-picker';
 import AppStyles from '../styles/AppStyles';
 import {ScrollView, Button} from 'react-native';
+import {ThemeContext,UserContext} from '../MyContexts';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
@@ -23,6 +24,7 @@ export default class ProfileScreen extends React.Component {
     super(props);
 		 helpers._getPermissionAsync('camera roll');
 		 this.props.navigation.setParams({launchDrawer: this.launchDrawer});
+		 
 		 
        this.state = { inputBorderBottomColor: '#ccc',
                    inputBorderBottomWidth: 1,
@@ -40,6 +42,8 @@ export default class ProfileScreen extends React.Component {
 				   confirmPassword: "",				   
 				   password: ""				   
 				 };	
+				 
+		
 				     
 	this.navv = null;
   }
@@ -85,16 +89,41 @@ export default class ProfileScreen extends React.Component {
 		 });
 	  }
   }
+  
+  updateState = (dt) => {
+			 console.log("user: ",dt);
+			  this.state.name = dt.name;
+			  this.state.email = dt.email;
+			  this.state.phone = dt.phone;
+  }
 	
 	 _update = () => {
 	  //form validation
+	  
+	  if(this.state.password.length > 0){
+		  if(this.state.password.length < 6 || this.state.password != this.state.confirmPassword){
+			   if(this.state.password.length < 6){
+		 showMessage({
+			 message: "Password must be at least 6 characters",
+			 type: 'danger'
+		 });
+	 }if(this.state.password != this.state.confirmPassword){
+		 showMessage({
+			 message: "Passwords must match",
+			 type: 'danger'
+		 });
+	 }
+		  }
+	  }
+	  
+	  else{
 		 
-  let validationErrors = (this.state.name.length < 6 || this.state.phone.length < 6 || this.state.email.length < 6 || this.state.password.length < 6 || this.state.password != this.state.confirmPassword);
+  let validationErrors = (this.state.name.length < 2 || this.state.phone.length < 6 || this.state.email.length < 6);
 	  if(validationErrors){
 
-	 if(this.state.name.length < 6){
+	 if(this.state.name.length < 2){
 		 showMessage({
-			 message: "Name must be at least 6 characters",
+			 message: "Name must be at least 2 characters",
 			 type: 'danger'
 		 });
 	 }
@@ -109,43 +138,42 @@ export default class ProfileScreen extends React.Component {
 			 type: 'danger'
 		 });
 	 }
-	 if(this.state.password.length < 6){
-		 showMessage({
-			 message: "Password must be at least 6 characters",
-			 type: 'danger'
-		 });
-	 }if(this.state.password != this.state.confirmPassword){
-		 showMessage({
-			 message: "Passwords must match",
-			 type: 'danger'
-		 });
-	 }
 	 
 	}
 	
 	else{
 	  const dt = {
 		  img: this.state.img,
-				   username: this.state.username,
+				   name: this.state.name,
+				   email: this.state.email,
+				   phone: this.state.phone,
 				   password: this.state.password
 	 };  
 	 
 	 console.log(dt);
      //helpers.updateCustomer(dt,this.navv);	
 	}
+	
+	  }
 	 
   }
 
   render() {
 	  	  let navv = this.props.navigation;
 	  this.navv = navv;
-	  
+
     return (
+	<ThemeContext.Consumer>
+ {theme => (
+   <UserContext.Consumer>
+   {({user,up,loggedIn}) => {
+	   this.updateState(user);
+	   return (
 	        <Container>
 			  <ScrollView>
 			     <TitleBar>
 			             <Title>Welcome back,</Title>
-			             <Name>Tobi Kudayisi</Name>
+			             <Name>{this.state.name}</Name>
 				        
 			        </TitleBar>
 					<ImageRow style={{justifyContent: 'center',alignItems: 'center'}}>
@@ -162,6 +190,7 @@ export default class ProfileScreen extends React.Component {
 				    <ProductInput
 					style={{borderColor: this.state.nameBorderBottomColor}}
 				     placeholder="Name"
+					 value={this.state.name}
 				     onChangeText={text => {
 						this.setState({name: text});
 					 }}
@@ -181,6 +210,7 @@ export default class ProfileScreen extends React.Component {
 				    <ProductInput
 					style={{borderColor: this.state.emailBorderBottomColor}}
 				     placeholder="Email adress"
+					 value={this.state.email}
 				     onChangeText={text => {
 						this.setState({email: text});
 					 }}
@@ -199,6 +229,7 @@ export default class ProfileScreen extends React.Component {
 				    <ProductInput
 					style={{borderColor: this.state.phoneBorderBottomColor}}
 				     placeholder="Phone number"
+					 value={this.state.phone}
 				     onChangeText={text => {
 						this.setState({phone: text});
 					 }}
@@ -264,6 +295,11 @@ export default class ProfileScreen extends React.Component {
 				   		    
 			  </ScrollView>
 			</Container>
+			);
+	 }}
+   </UserContext.Consumer>
+ )}
+</ThemeContext.Consumer>	
     );
   }
   
@@ -317,7 +353,7 @@ const ProductInputWrapper = styled.View`
 `;
 
 const ProductDescription = styled.Text` 
-                   color: #999;
+                   color: #777;
 				   margin-bottom: 2px;
 				   font-size: 14px;
 `;
@@ -328,7 +364,7 @@ const ProductInput = styled.TextInput`
 					 padding: 5px;
 					 margin-top: 5px;
 					 margin-bottom: 10px;
-					 color: #ccc;
+					 color: #000;
 `;
 
 const SubmitButton = styled.TouchableOpacity`

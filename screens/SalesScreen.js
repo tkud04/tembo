@@ -63,7 +63,7 @@ export default class SalesScreen extends React.Component {
 	
 	xxx = (n) => {
 		helpers.logout((r) =>{
-			console.log("r",r);
+			//console.log("r",r);
 			if(r.status === "ok"){
 				n.navigate('Home');
 			}
@@ -86,7 +86,7 @@ export default class SalesScreen extends React.Component {
 				  
 				   {
 					  this.state.sales.map((s) => {
-						  console.log(s);				
+						  //console.log(s);				
                           let ctr = "sale-" + this.counter;
                           ++this.counter;						  
 						  return  <SalesButton key={ctr} onPress={() => {this.s = s; this.goToSale()}}><Sale data={s}/></SalesButton>

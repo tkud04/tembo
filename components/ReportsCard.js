@@ -10,21 +10,21 @@ let ml = "20px";
 
 const ReportsCard = props => {
 return(
-<Container>
-   
-   <Row style={{borderBottomWidth: 1,borderColor: '#adacac'}}>  
-      <SubmitButton
-		onPress={() =>{
+<SubmitButton
+onPress={() =>{
 			let navv = props.navv;
-			navv.navigate('Charts',{
+			navv.navigate('Tables',{
 		     dt : props.dt
 	        });  
 		}}
       >
+<Container>
+   
+   <Row style={{}}>  
        <DaysText>{props.title}</DaysText>					   
-	  </SubmitButton>
 	</Row>
 </Container>
+</SubmitButton>
 );
 }
 
@@ -40,6 +40,7 @@ const Container = styled.View`
 				  shadow-offset: 5px 10px;
 				  shadow-opacity: 0.8;
 				  shadow-radius: 10px;
+				  background-color: green
 				  justify-content: center;
 				  align-items: center;
 				  padding-bottom: 5px;
@@ -53,7 +54,7 @@ const SubmitButton = styled.TouchableOpacity`
 `;
 
 const DaysText = styled.Text`
-             color: green;
+             color: #fff;
 			 font-weight: 500;
 			 font-family: sans-serif;
 			 font-size: 20px;

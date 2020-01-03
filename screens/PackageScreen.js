@@ -8,6 +8,7 @@ import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import util from 'react-native-util';
+import AssetUtils from 'expo-asset-utils';
 import * as FileSystem from 'expo-file-system';
 import * as WebBrowser from 'expo-web-browser';
 import * as Permissions from 'expo-permissions';
@@ -34,6 +35,16 @@ export default class PackageScreen extends React.Component {
     this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 	this.navv = null;
 	console.log(this.state);
+	
+		this.html = "";
+		this.getHtml();
+  }
+  
+  getHtml = async () => {
+	  //Webview local html
+	let file = await AssetUtils.resolveAsync(require('../html/charts.html'));
+	let fileContents = await FileSystem.readAsStringAsync(file.localUri);
+	this.html = fileContents;
   }
   
   launchDrawer = () => {
@@ -63,7 +74,8 @@ static navigationOptions = ({navigation}) => {
 	       <Container>
            <WebView 
 		    useWebKit={true}
-		    source={{ uri: 'http://www.disenado.com.ng' }} 
+		    source={{ html: this.html }} 
+			originWhitelist={['*']}
 		    style={{flex: 1}}
 			startInLoadingState={true}
             allowUniversalAccessFromFileURLs={true}

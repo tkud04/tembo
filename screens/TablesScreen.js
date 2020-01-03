@@ -1,64 +1,79 @@
 import React from 'react';
-import styled from 'styled-components';
-import AppInputImageHeader from '../components/AppInputImageHeader';
-import Sale from '../components/Sale';
-import * as helpers from '../Helpers';
-import * as wvhelpers from '../WebViews/Helper';
-import AppStyles from '../styles/AppStyles';
-import {ScrollView, Button} from 'react-native';
+import { View, ScrollView, StyleSheet, Platform, StatusBar, CameraRoll} from 'react-native';
+import { Text, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
+import AppInputImageHeader from '../components/AppInputImageHeader';
+import AppStyles from '../styles/AppStyles';
+import * as helpers from '../Helpers';
+import AssetUtils from 'expo-asset-utils';
+import * as FileSystem from 'expo-file-system';
+import { Notifications } from 'expo';
+import styled from 'styled-components';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
-import { Notifications } from 'expo';
-
 //var RNFS = require('react-native-fs');
 
-export default class ReportsScreen extends React.Component { 
-   constructor(props) {
+export default class TablesScreen extends React.Component { 
+ constructor(props) {
     super(props);
-	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	this.dt = props.navigation.state.params.dt;
-    this.state = { text: '', loading: false,sales: []};	
-    this.navv = null;
-    this.html = "";
-    this.getHtml();
+	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
+	this.props.navigation.setParams({goToCharts: () => {this.goToCharts()}});
+	
+    this.state = { text: '',
+                   dt: this.dt
+				 };
+    this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
+	this.navv = null;
+	console.log(this.state);
+	
+		this.html = "";
+		this.getHtml();
   }
   
   getHtml = async () => {
 	  //Webview local html
-	let file = await AssetUtils.resolveAsync(require('../html/charts.html'));
+	let file = await AssetUtils.resolveAsync(require('../html/tables.html'));
 	let fileContents = await FileSystem.readAsStringAsync(file.localUri);
 	this.html = fileContents;
   }
+  
+    goToCharts = () => {
+	this.navv.navigate('Charts',{
+		dt: this.dt
+	});  
+  }
+  
+  launchDrawer = () => {
+	this.navv.toggleDrawer();  
+  }
 
-
-  static navigationOptions = ({navigation}) => {
-	 
-	  return {
-       drawerLabel: 'Reports',
+static navigationOptions = ({navigation}) => {
+	   return {
 	   headerStyle: {
 		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight    		   
+		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.chartArea} leftParam = "goBack" navv = {navigation} title="Reports" subtitle="View reports" sml={40}/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerClipboard}  leftParam = "goBack" navv = {navigation} title="Reports" subtitle="View reports" sml={40}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
-	   },
-	    headerLeft: null,
-	  }
-	 };	 
+       },
+	   headerLeft: null,
+	   }
+   
+    };
 
- render() {
+  render() {
 	  let navv = this.props.navigation;
 	  this.navv = navv;
     return (
 	       <Container>
            <WebView 
 		    useWebKit={true}
-			source={{ html: this.html }} 
-			originWhitelist={['*']} 
+		    source={{ html: this.html }} 
+			originWhitelist={['*']}
 		    style={{flex: 1}}
 			startInLoadingState={true}
             allowUniversalAccessFromFileURLs={true}

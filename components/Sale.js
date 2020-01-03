@@ -20,7 +20,7 @@ const Sale = props => {
 					         <CustomerBio>
 					          
 					           <Name>{customers[0].customerName}</Name>
-					           <Email>{`date here `}</Email>
+					           <Email>{props.data.date}</Email>
 					           <Phone>Added by: Me</Phone>
 					         </CustomerBio>
                             </CustomerName>				  

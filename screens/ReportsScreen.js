@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import AppImageHeader from '../components/AppImageHeader';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import ReportsCard from '../components/ReportsCard';
+import TitleHeader from '../components/TitleHeader';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
 import {ScrollView, Button} from 'react-native';
@@ -16,7 +17,6 @@ import { Notifications } from 'expo';
 export default class ReportsScreen extends React.Component { 
    constructor(props) {
     super(props);
-	this.props.navigation.setParams({goToCharts: this.goToCharts});
 	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
     this.state = { text: '', loading: false,sales: []};	
     this.navv = null;
@@ -51,7 +51,7 @@ export default class ReportsScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppImageHeader xml={AppStyles.svg.headerClipboard}  leftParam = "goBack" rightParam = "goToCharts" navv = {navigation} title="Products" subtitle="Manage your products"/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerClipboard}  leftParam = "goBack" navv = {navigation} title="Reports" subtitle="View business/stock reports" sml={40}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
@@ -70,11 +70,17 @@ export default class ReportsScreen extends React.Component {
     return (
 	        <Container>
 			    <ScrollView>
+				  <Row>	
+				   <TitleHeader bc="green" tc="green" title="Total sales and total profit at a quick glance!"/>
+				  </Row>
 					<ItemsLayout>
 						    <Column key={365}>
-					          <ReportsCard dt={this.dt} title="Business Reports" navv={navv}/>
-					          <ReportsCard dt={this.dt} title="Stock Reports" navv={navv}/>
+					          <ReportsCard dt={this.dt} title="Business Reports" navv={navv}/>					          
+					        </Column>  	
+							<Column key={2020}>
+					          <ReportsCard dt={this.dt} title="Stock Reports" navv={navv}/>				          
 					        </Column>  		
+							
 					</ItemsLayout>
 			    </ScrollView>
 			</Container>
@@ -105,10 +111,17 @@ const MenuButton = styled.TouchableOpacity`
 
 const ItemsLayout = styled.View`
                      flex-direction: row;
-					 flex: 1;					 
+					 flex: 1;
+                     margin-top: 30;					 
 `;
 
 const Column = styled.View`
                    width: 50%;
 				   align-items: center;
+`;
+
+const Row = styled.View`
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;	
 `;
