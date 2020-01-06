@@ -8,7 +8,7 @@ import {NavigationEvents} from 'react-navigation';
 
 
 export default class CustomContainer extends React.Component {
-	constructor(props) {
+	constructor(props) { 
       super(props);
 	  this.state = {
 	    uuu: {}
@@ -19,7 +19,7 @@ export default class CustomContainer extends React.Component {
 	setTimeout(() => {
 		helpers.getLoggedInUser().then((dt) => {
 			  this.state.uuu = dt;
-			  //up(user);
+			  //up(user); 
 			  //console.log('User inside async timeout function',this.state.uuu);
 			   
 		 });

@@ -29,7 +29,7 @@ export default class ReportsDatePickerScreen extends React.Component {
 	           {key: '7',title:"All",value:"all"},
 	];
 	
-	console.log("reports type: ",this.reportsType);
+	//console.log("reports type: ",this.reportsType);
   }
 
   pickDate = (dt) => {
@@ -39,12 +39,24 @@ export default class ReportsDatePickerScreen extends React.Component {
 			 type: 'info'
 		 });
 	**/
-	console.log("date picked: ",dt);
-	/**
-	this.navv.navigate('Tables',{
-		dt: this.dt,
-	}); 
-    **/	
+	
+	let today = helpers.getDate();
+    
+	helpers.getSales((sales) => {
+		//console.log("sales: ",sales);
+		let result = sales;
+		
+		if(dt.value !== "all"){
+		   let d2 = helpers.getDateInterval(dt.value);
+		   let result = sales.filter(s => helpers.compareDates(s.date,d2,dt.value));
+		}
+		console.log("result: ",result);
+		this.navv.navigate('Tables',{
+		   dt: result,
+	    });
+	});
+    
+
   }
 
   static navigationOptions = ({navigation}) => {
@@ -64,7 +76,7 @@ export default class ReportsDatePickerScreen extends React.Component {
     };
 	
 	DateType = (dt) => {
-	  console.log("dt: ",dt);
+	  //console.log("dt: ",dt);
 	  return(
 	  <DateView style={{width: '100%', padding: 5,borderBottomWidth: 1, borderColor: '#ccc',}}>
 	  <DateButton

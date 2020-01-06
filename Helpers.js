@@ -776,3 +776,151 @@ export function getDate(){
 	return today.toLocaleDateString();
 }
 
+export function setDate(str){
+	let d = new Date(str);
+	return d;
+}
+
+
+ Date.prototype.diff = function(y,m,d){
+        var cleanDate = function(x){
+            x.setHours(0);
+            x.setMinutes(0);
+            x.setSeconds(0);
+            return x;
+        }
+
+        var dateToCompare = new Date(y,m,d),
+            date = cleanDate(this),
+            daysCount = [31,28,31,30,31,30,31,31,30,31,30,31],
+            d = (date > dateToCompare ? date : dateToCompare),
+            d1 = (date < dateToCompare ? date : dateToCompare),
+            days = 0,
+            months = 0,
+            years = 0;
+
+        var yearDiff = function(){
+           years = d.getFullYear() - (d1.getFullYear() + 1);
+           years = years < 0 ? 0 : years;
+        }
+
+        var monthDiff = function(){
+            months = d.getFullYear() == d1.getFullYear() ? (d.getMonth() - 1) - d1.getMonth() : d.getMonth() + (12 - (d1.getMonth() + 1));
+            if(months >= 12){
+                years = years + Math.floor(months / 12)
+                months = months % 12;
+            }
+        }
+
+        var getAdjustedDays = function(){
+            var adjustedDays = 0, i=0;
+            for(i = (d1.getMonth() + 1); i <= 12; i++){
+                if(daysCount[i] == 31){
+                    adjustedDays++;
+                }
+            }
+            return adjustedDays;
+        }
+
+        var dayDiff = function(){
+             var month = d1.getMonth();
+            if(month == 1 && months == 0 && years == 0){
+                 days = d.getDate() - d1.getDate();
+            }else if(month == 1){
+                days = (isLeapYear(d1.getFullYear()) ? 29 - d1.getDate() : 28 - d1.getDate()) + d.getDate() + (d1.getDate() == d.getDate() ? 1 : 2);
+                days = Math.ceil(days - (getAdjustedDays() / 2));
+           }else{
+                days = (daysCount[month] - d1.getDate()) + d.getDate() + (d1.getMonth() == d.getMonth() ? 2 : 1);
+               days = Math.ceil(days - (getAdjustedDays() / 2));
+           } 
+           getAdjustedDays();
+           if(days >= 30){
+               months = months + Math.floor(days / 30); //averge are 30 days
+               days = days % 30;
+           }
+       }  
+
+       var isLeapYear = function(year) {
+           return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+       }
+
+       yearDiff();
+       monthDiff();
+       dayDiff();
+
+       return {"years" : years, "months" : months, "days" : days};
+    }
+
+
+    
+    //console.log(new Date().diff(2005, 8, 25));
+    //console.log(new Date().diff(2018, 8, 25));
+
+
+export function getDateInterval(dd){
+	let d = new Date(), ret = null;
+	
+	switch(dd){
+		case "today":
+		ret = d.getDate();
+		break;
+		
+		case "yesterday":
+		ret = d.getDate() - 1;
+		break;
+		
+		case "7-days":
+		ret = d.getDate() - 7;
+		break;
+		
+		case "30-days":
+		ret = d.getDate() - 30;
+		break;
+		
+		case "prev-month":
+		let rr = d.toLocaleDateString('en-US',{month:"short"});
+		ret = d.getMonth() - 30;
+		break;
+		
+		case "current-month":
+		ret = d.getMonth() + 1;
+		break;
+    }
+	
+	d.setDate(ret);
+	return d;
+}
+
+export function compareDates(str1, str2,type){
+	let today = new Date();
+	s1 = setDate(str1), s2 = setDate(str2);
+	console.log(`s1: ${s1}, s2: ${s2}, type: ${type}`);
+	console.log(`s2 getyear: ${s2.getYear()}, s2.getmonth: ${s2.getMonth()}, s2.getdate: ${s2.getDate()}`);
+	let diff = s1.diff(s2.getYear(), s2.getMonth(), s2.getDate());
+	console.log("diff: ",diff);
+	let x = false;
+	/**
+		           {key: '2',title:"Yesterday",value:"yesterday"},
+	           {key: '3',title:"Last 7 days",value:"7-days"},
+	           {key: '4',title:"Last 30 days",value:"30-days"},
+	           {key: '5',title:"Previous month",value:"prev-month"},
+	           {key: '6',title:"Current month",value:"current-month"},
+	**/
+	switch(type){
+		case 'today':
+		  x = s1.getTime() === s2.getTime();
+		break;
+		case 'yesterday':
+		case '7-days':
+		case '30-days':
+		  x = s1.getTime() >= s2.getTime();
+		break;
+		case 'previous-month':
+		  x = s1.getMonth() === s2.getMonth()-1;
+		break;
+		case 'current-month':
+		  x = s1.getMonth() === s2.getMonth();
+		break;
+   }
+ return x;
+}

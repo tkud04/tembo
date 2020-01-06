@@ -22,7 +22,8 @@ export default class TablesScreen extends React.Component {
 	this.props.navigation.setParams({goToCharts: () => {this.goToCharts()}});
 	
     this.state = { text: '',
-                   dt: this.dt
+                   dt: this.dt,
+				   run: `let dt = '${JSON.stringify(this.dt)}';`
 				 };
     this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 	this.navv = null;
@@ -30,6 +31,8 @@ export default class TablesScreen extends React.Component {
 	
 		this.html = "";
 		this.getHtml();
+		this.webview = null;
+		
   }
   
   getHtml = async () => {
@@ -47,6 +50,13 @@ export default class TablesScreen extends React.Component {
   
   launchDrawer = () => {
 	this.navv.toggleDrawer();  
+  }
+  
+  sendData = () => {
+	  //console.log("webview: ",this.webview);
+	  if(this.webview !== null){
+	   this.webview.postMessage(this.state.run);
+	  }
   }
 
 static navigationOptions = ({navigation}) => {
@@ -68,6 +78,7 @@ static navigationOptions = ({navigation}) => {
   render() {
 	  let navv = this.props.navigation;
 	  this.navv = navv;
+
     return (
 	       <Container>
            <WebView 
@@ -82,7 +93,9 @@ static navigationOptions = ({navigation}) => {
 			onMessage={event => {
                helpers.handlePostMessageAsync(event.nativeEvent.data);
             }}
+			onLoadEnd={() => {this.sendData()}}
             onNavigationStateChange={this.handleNavStateChange}
+			ref={r => {this.webview = r;}}
 		   />
 		   </Container>
     );
