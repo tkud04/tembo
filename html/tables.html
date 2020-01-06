@@ -417,10 +417,7 @@ a=d.title;"function"===typeof a&&(a=a());-1!==a.indexOf("*")&&(a=a.replace("*",f
 <!--------- datatables/js/datatables-init.js ---------->
 <script>
 $(document).ready(function() {
-	   let tables = ['.data-table'];
-	   for(var i=0; i<tables.length;i++){
-          $(tables[i]).DataTable();
-        }
+	  
     });
     $('#example23').DataTable({
         dom: 'Bfrtip',
@@ -443,12 +440,41 @@ $(document).ready(function() {
 window.onload = function () {
 
 }
+function populateTable(arr){
+let ret = "";
+
+for(let i = 0; i < arr.length; i++){
+let s = arr[i], totalProfit = 0, ppString = "",totalAmount = 0;
+
+for(let pp = 0; pp < s.products.length; pp++){
+let p = s.products[pp];
+ppString += p.name + " (x" + p.qty + ")<br>";
+totalProfit += parseInt(p.profit); 
+totalAmount += (parseInt(p.sellingPrice) * parseInt(p.qty)); 
+}
+  let temp = "<tr><td>" + s.date + "</td><td>" + ppString + "</td><td>" + totalAmount + "</td><td>" + totalProfit + "</td><td>" + s.status + "</td></tr>";
+  ret += temp;
+}
+
+return ret;
+}
 
 document.addEventListener("message", function(data){
-  alert(data.data);
+  //alert(data.data);
+  let dtt = data.data;
+  let dt = JSON.parse(dtt);
+  //alert(dt.length);
+  let htmlString = populateTable(dt);
+  //alert(htmlString);
+  $('#reports-table tbody').html(htmlString);
+  
+   let tables = ['.data-table'];
+	   for(var i=0; i<tables.length;i++){
+          $(tables[i]).DataTable();
+        }
 });
 
-//alert(dt);
+
 </script>
 </head>
 <body>
@@ -464,10 +490,11 @@ document.addEventListener("message", function(data){
                 	   <table  id="reports-table" class="display nowrap table data-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                 	     <thead>
                                             <tr>
-                                                <th>Type</th>
-                                                <th>Description</th>
-                                                <th>Amount</th>
                                                 <th>Date</th>
+                                                <th>Items</th> <!-- Product name - Qty -->
+                                                <th>Amount (N)</th>
+                                                <th>Profit (N)</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>

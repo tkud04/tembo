@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, Platform, StatusBar, CameraRoll} from 're
 import { Text, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import AppInputImageHeader from '../components/AppInputImageHeader';
+import CButton from '../components/CButton';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import AssetUtils from 'expo-asset-utils';
@@ -23,11 +24,11 @@ export default class TablesScreen extends React.Component {
 	
     this.state = { text: '',
                    dt: this.dt,
-				   run: `let dt = '${JSON.stringify(this.dt)}';`
+				   run: `${JSON.stringify(this.dt)}`
 				 };
     this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 	this.navv = null;
-	console.log(this.state);
+	//console.log(this.state);
 	
 		this.html = "";
 		this.getHtml();
@@ -81,6 +82,14 @@ static navigationOptions = ({navigation}) => {
 
     return (
 	       <Container>
+		    <Row>
+			<SubmitButton
+				onPress={() => {this.goToCharts()}}
+				title="Submit"
+            >
+		    <CButton title="View chart" background="green" color="#fff" />
+			</SubmitButton>
+			</Row>
            <WebView 
 		    useWebKit={true}
 		    source={{ html: this.html }} 
@@ -121,4 +130,11 @@ const Container = styled.View`
 `;
 const MenuButton = styled.TouchableOpacity`
 
+`;
+const SubmitButton = styled.TouchableOpacity`
+
+`;
+
+const Row = styled.View`
+   margin-top: 10px;
 `;

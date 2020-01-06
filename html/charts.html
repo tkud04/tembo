@@ -923,6 +923,11 @@ d.arcTo=function(){};d.createPattern=function(a,b){return new I(a,b)};w.prototyp
 
 
 <script type="text/javascript">
+ document.addEventListener("message", function(data){
+  let dtt = data.data;
+  let dt = JSON.parse(dtt);
+  alert(dt.length);
+});
  
 window.onload = function () {
 	var chart = new CanvasJS.Chart("chartContainer", {
