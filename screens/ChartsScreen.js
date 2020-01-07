@@ -19,7 +19,7 @@ import { Notifications } from 'expo';
 export default class ChartsScreen extends React.Component { 
  constructor(props) {
     super(props);
-	this.dt = props.navigation.state.params.dt;
+	this.dt = props.navigation.state.params.dtt;
 	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	this.props.navigation.setParams({goToCharts: () => {this.goToCharts()}});
 	

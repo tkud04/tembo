@@ -48,9 +48,9 @@ export default class ReportsDatePickerScreen extends React.Component {
 		
 		if(dt.value !== "all"){
 		   let d2 = helpers.getDateInterval(dt.value);
-		   let result = sales.filter(s => helpers.compareDates(s.date,d2,dt.value));
+		   result = sales.filter(s => helpers.compareDates(s.date,d2,dt.value));
 		}
-		console.log("result: ",result);
+		//console.log("result: ",result);
 		this.navv.navigate('Tables',{
 		   dt: result,
 	    });

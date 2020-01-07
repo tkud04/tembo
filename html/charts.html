@@ -922,22 +922,20 @@ d.arcTo=function(){};d.createPattern=function(a,b){return new I(a,b)};w.prototyp
 <!-------- END OF CANVASJS SCRIPT ------->
 
 
+
+</head>
+<body>
+<div id="chartContainer" style="height: 100%; width: 100%;"></div>
+</body>
 <script type="text/javascript">
- document.addEventListener("message", function(data){
-  let dtt = data.data;
-  let dt = JSON.parse(dtt);
-  alert(dt.length);
-});
- 
-window.onload = function () {
-	var chart = new CanvasJS.Chart("chartContainer", {
-		title:{
-			text: "Daily Report"              
-		},
-		data: [              
+function populateChart(dtt){
+let dt = dtt.dt;
+
+let ret = [              
 		{
+		   
 			// Change type to "doughnut", "line", "splineArea", etc.
-			type: "line",
+			type: dtt.type,
 			dataPoints: [
 				{ label: "apple",  y: 10  },
 				{ label: "orange", y: 15  },
@@ -946,13 +944,28 @@ window.onload = function () {
 				{ label: "grape",  y: 28  }
 			]
 		}
-		]
+		];
+		
+return ret;
+}
+
+ document.addEventListener("message", function(data){
+  let dtt = data.data;
+  let dt = JSON.parse(dtt);
+  let chartData = populateChart(dt);
+  
+  let chart = new CanvasJS.Chart("chartContainer", {
+		title:{
+			text: "Sales Report"              
+		},
+		data:  chartData,              
 	});
 	chart.render();
+});
+ 
+window.onload = function () {
+	
 }
 </script>
-</head>
-<body>
-<div id="chartContainer" style="height: 100%; width: 100%;"></div>
-</body>
+
 </html>

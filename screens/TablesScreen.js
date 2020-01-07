@@ -43,9 +43,11 @@ export default class TablesScreen extends React.Component {
 	this.html = fileContents;
   }
   
-    goToCharts = () => {
+    goToCharts = (type) => {
+		let dtt = {dt: this.dt, type:type};
+		console.log("dtt: ",dtt);
 	this.navv.navigate('Charts',{
-		dt: this.dt
+		dtt: dtt,
 	});  
   }
   
@@ -84,10 +86,28 @@ static navigationOptions = ({navigation}) => {
 	       <Container>
 		    <Row>
 			<SubmitButton
-				onPress={() => {this.goToCharts()}}
+				onPress={() => {this.goToCharts("line")}}
 				title="Submit"
             >
-		    <CButton title="View chart" background="green" color="#fff" />
+		    <CButton title="Line" background="green" color="#fff" />
+			</SubmitButton>
+			<SubmitButton
+				onPress={() => {this.goToCharts("bar")}}
+				title="Submit"
+            >
+		    <CButton title="Bar" background="green" color="#fff" />
+			</SubmitButton>
+			<SubmitButton
+				onPress={() => {this.goToCharts("area")}}
+				title="Submit"
+            >
+		    <CButton title="Area" background="green" color="#fff" />
+			</SubmitButton>
+			<SubmitButton
+				onPress={() => {this.goToCharts("doughnut")}}
+				title="Submit"
+            >
+		    <CButton title="Doughnut" background="green" color="#fff" />
 			</SubmitButton>
 			</Row>
            <WebView 
@@ -137,4 +157,6 @@ const SubmitButton = styled.TouchableOpacity`
 
 const Row = styled.View`
    margin-top: 10px;
+   width: 100%;
+   flex-direction: row;
 `;

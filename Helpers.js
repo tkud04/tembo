@@ -893,34 +893,35 @@ export function getDateInterval(dd){
 
 export function compareDates(str1, str2,type){
 	let today = new Date();
-	s1 = setDate(str1), s2 = setDate(str2);
+	let s2 = setDate(today), s1 = setDate(str1);
+	let y1 = s1.getFullYear(), m1 = s1.getMonth(), d1 = s1.getDate();
+	let y2 = s2.getFullYear(), m2 = s2.getMonth(), d2 = s2.getDate();
 	console.log(`s1: ${s1}, s2: ${s2}, type: ${type}`);
-	console.log(`s2 getyear: ${s2.getYear()}, s2.getmonth: ${s2.getMonth()}, s2.getdate: ${s2.getDate()}`);
-	let diff = s1.diff(s2.getYear(), s2.getMonth(), s2.getDate());
-	console.log("diff: ",diff);
+	console.log(`y1: ${y1}, m1: ${m1}, d1: ${d1}`);
+	console.log(`y2: ${y2}, m2: ${m2}, d2: ${d2}`);
+	
 	let x = false;
-	/**
-		           {key: '2',title:"Yesterday",value:"yesterday"},
-	           {key: '3',title:"Last 7 days",value:"7-days"},
-	           {key: '4',title:"Last 30 days",value:"30-days"},
-	           {key: '5',title:"Previous month",value:"prev-month"},
-	           {key: '6',title:"Current month",value:"current-month"},
-	**/
+	
 	switch(type){
 		case 'today':
-		  x = s1.getTime() === s2.getTime();
+		  x = y1 === y2 && m1 === m2 && d1 === d2;
 		break;
 		case 'yesterday':
+		  x = y1 <= y2 && m1 <= m2 && (d2 - d1 <= 1);
+		break;
 		case '7-days':
+		  x = y1 <= y2 && m1 <= m2 && (d2 - d1 <= 7);
+		break;
 		case '30-days':
-		  x = s1.getTime() >= s2.getTime();
+		   x = y1 <= y2 && (m2 - m1 <= 2 || m2 - m1 === 11) && (d2 - d1 <= 30);
 		break;
 		case 'previous-month':
-		  x = s1.getMonth() === s2.getMonth()-1;
+		  x = y1 <= y2 && (m2 - m1 === 1 || m2 - m1 === 11);
 		break;
 		case 'current-month':
-		  x = s1.getMonth() === s2.getMonth();
+		  x = y1 === y2 && m2 - m1 === 1;
 		break;
    }
+   console.log("x: ",x);
  return x;
 }
