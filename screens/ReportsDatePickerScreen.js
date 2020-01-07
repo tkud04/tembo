@@ -41,7 +41,9 @@ export default class ReportsDatePickerScreen extends React.Component {
 	**/
 	
 	let today = helpers.getDate();
-    
+    //console.log("rt from pick date: ",this.reportsType);
+	switch(this.reportsType){
+	case "business":
 	helpers.getSales((sales) => {
 		//console.log("sales: ",sales);
 		let result = sales;
@@ -50,12 +52,28 @@ export default class ReportsDatePickerScreen extends React.Component {
 		   let d2 = helpers.getDateInterval(dt.value);
 		   result = sales.filter(s => helpers.compareDates(s.date,d2,dt.value));
 		}
+		let dtt = {dt: result,type: this.reportsType};
 		//console.log("result: ",result);
 		this.navv.navigate('Tables',{
-		   dt: result,
+		   dt: dtt
 	    });
 	});
-    
+	break;
+	
+	case "stock":
+	helpers.getProducts((products) => {
+
+		let result = products;
+		
+		let dtt = {dt: result,type: this.reportsType};
+		//console.log("result: ",dtt);
+		this.navv.navigate('Tables',{
+		   dt: dtt
+	    });
+	});
+	break;
+	
+    }
 
   }
 

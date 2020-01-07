@@ -19,13 +19,15 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 export default class TablesScreen extends React.Component { 
  constructor(props) {
     super(props);
-	this.dt = props.navigation.state.params.dt;
+	this.dtt = props.navigation.state.params.dt;
+    this.reportsType = this.dtt.type;
+	this.dt = this.dtt.dt;
 	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	this.props.navigation.setParams({goToCharts: () => {this.goToCharts()}});
 	
     this.state = { text: '',
-                   dt: this.dt,
-				   run: `${JSON.stringify(this.dt)}`
+                   dt: this.dtt,
+				   run: `${JSON.stringify(this.dtt)}`
 				 };
     this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 	this.navv = null;
@@ -95,7 +97,7 @@ static navigationOptions = ({navigation}) => {
             </SvgView>
 			</SubmitButton>
 			<SubmitButton
-				onPress={() => {this.goToCharts("bar")}}
+				onPress={() => {this.goToCharts("column")}}
 				title="Submit"
             >
 		    <SvgView>
@@ -111,7 +113,7 @@ static navigationOptions = ({navigation}) => {
             </SvgView>
 			</SubmitButton>
 			<SubmitButton
-				onPress={() => {this.goToCharts("doughnut")}}
+				onPress={() => {this.goToCharts("pie")}}
 				title="Submit"
             >
 		    <SvgView>

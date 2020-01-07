@@ -928,21 +928,44 @@ d.arcTo=function(){};d.createPattern=function(a,b){return new I(a,b)};w.prototyp
 <div id="chartContainer" style="height: 100%; width: 100%;"></div>
 </body>
 <script type="text/javascript">
+function getDataPoints(arr){
+let rt = [];
+  //alert(arr.length);
+  //label: id (date), y: profit
+  for(let i = 0; i < arr.length; i++){
+    let p = arr[i].products, totalProfit = 0;
+
+	let lbl = arr[i].id + " (" + arr[i].date + ")";
+	
+	for(let j = 0; j < p.length; j++){
+	   let pp = p[j];
+	   totalProfit += pp.profit;
+	}
+	
+	//alert("lbl: " + lbl + ", totalProfit: " + totalProfit);
+	rt.push({label: lbl,y: parseInt(totalProfit)});
+  }
+  return rt;
+}
 function populateChart(dtt){
 let dt = dtt.dt;
-
-let ret = [              
-		{
-		   
-			// Change type to "doughnut", "line", "splineArea", etc.
-			type: dtt.type,
-			dataPoints: [
+let defaultDpoints = [
 				{ label: "apple",  y: 10  },
 				{ label: "orange", y: 15  },
 				{ label: "banana", y: 25  },
 				{ label: "mango",  y: 30  },
 				{ label: "grape",  y: 28  }
-			]
+			];
+			
+let dpoints = getDataPoints(dt);
+alert(JSON.stringify(dpoints));
+alert(dtt.type);
+let ret = [              
+		{
+		   
+			// Change type to "doughnut", "line", "splineArea", etc.
+			type: dtt.type,
+			dataPoints: dpoints
 		}
 		];
 		

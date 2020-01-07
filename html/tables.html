@@ -440,9 +440,10 @@ $(document).ready(function() {
 window.onload = function () {
 
 }
-function populateTable(arr){
-let ret = "";
+function populateTable(arrr){
+let ret = "", arr = arrr.dt;
 
+if(arrr.type === "business"){
 for(let i = 0; i < arr.length; i++){
 let s = arr[i], totalProfit = 0, ppString = "",totalAmount = 0;
 
@@ -452,20 +453,48 @@ ppString += p.name + " (x" + p.qty + ")<br>";
 totalProfit += parseInt(p.profit); 
 totalAmount += (parseInt(p.sellingPrice) * parseInt(p.qty)); 
 }
-  let temp = "<tr><td>" + s.date + "</td><td>" + ppString + "</td><td>" + totalAmount + "</td><td>" + totalProfit + "</td><td>" + s.status + "</td></tr>";
+  let temp = "<tr><td>" + s.id + "</td><td>" + ppString + "</td><td>" + totalAmount + "</td><td>" + totalProfit + "</td><td>" + s.date + "</td><td>" + s.status + "</td></tr>";
   ret += temp;
+}
+}
+
+else if(arrr.type === "stock"){
+for(let i = 0; i < arr.length; i++){
+ let p = arr[i];
+  let temp = "<tr><td>" + p.name + "</td><td>" + p.sku + "</td><td>" + p.costPrice + "</td><td>" + p.sellingPrice + "</td><td>" + p.stock + "</td></tr>";
+  ret += temp;
+}
 }
 
 return ret;
+}
+
+function getHeaders(arr){
+  rett = "";
+  
+  switch(arr.type){
+    case "business":
+	  rett = "<tr><th>ID</th><th>Items</th><th>Amount</th><th>Profit</th><th>Date</th><th>Status</th></tr>";
+	break;
+    case "stock":
+	  rett = "<tr><th>Name</th><th>SKU</th><th>Cost price (N)</th><th>Selling Price (N)</th><th>Stock</th></tr>";
+	break;
+  
+  }
+  
+  return rett;
 }
 
 document.addEventListener("message", function(data){
   //alert(data.data);
   let dtt = data.data;
   let dt = JSON.parse(dtt);
-  //alert(dt.length);
+  
   let htmlString = populateTable(dt);
-  //alert(htmlString);
+ // alert(htmlString);
+  let headerString = getHeaders(dt);
+  //alert(headerString);
+  $('#reports-table thead').html(headerString);
   $('#reports-table tbody').html(htmlString);
   
    let tables = ['.data-table'];
@@ -489,13 +518,7 @@ document.addEventListener("message", function(data){
                 	<div class="table-responsive m-t-40">
                 	   <table  id="reports-table" class="display nowrap table data-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                 	     <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Items</th> <!-- Product name - Qty -->
-                                                <th>Amount (N)</th>
-                                                <th>Profit (N)</th>
-                                                <th>Status</th>
-                                            </tr>
+                                        
                                         </thead>
                                         <tbody>
                                         	
