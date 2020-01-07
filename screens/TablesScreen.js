@@ -8,6 +8,7 @@ import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import AssetUtils from 'expo-asset-utils';
 import * as FileSystem from 'expo-file-system';
+import SvgIcon from '../components/SvgIcon';
 import { Notifications } from 'expo';
 import styled from 'styled-components';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -89,25 +90,33 @@ static navigationOptions = ({navigation}) => {
 				onPress={() => {this.goToCharts("line")}}
 				title="Submit"
             >
-		    <CButton title="Line" background="green" color="#fff" />
+		    <SvgView>
+             <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.chartLine)} w={60} h={40}/>
+            </SvgView>
 			</SubmitButton>
 			<SubmitButton
 				onPress={() => {this.goToCharts("bar")}}
 				title="Submit"
             >
-		    <CButton title="Bar" background="green" color="#fff" />
+		    <SvgView>
+             <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.chartBar)} w={60} h={40}/>
+            </SvgView>
 			</SubmitButton>
 			<SubmitButton
 				onPress={() => {this.goToCharts("area")}}
 				title="Submit"
             >
-		    <CButton title="Area" background="green" color="#fff" />
+		    <SvgView>
+             <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.chartArea)} w={60} h={40}/>
+            </SvgView>
 			</SubmitButton>
 			<SubmitButton
 				onPress={() => {this.goToCharts("doughnut")}}
 				title="Submit"
             >
-		    <CButton title="Doughnut" background="green" color="#fff" />
+		    <SvgView>
+             <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.chartPie)} w={60} h={40}/>
+            </SvgView>
 			</SubmitButton>
 			</Row>
            <WebView 
@@ -159,4 +168,17 @@ const Row = styled.View`
    margin-top: 10px;
    width: 100%;
    flex-direction: row;
+   justify-content: space-evenly;
+`;
+
+const Title = styled.Text`
+ font-size: 24;
+ color: ${AppStyles.headerColor};
+`;
+
+const SvgView = styled.View`
+ width: 100%;
+ background-color: green;
+align-items: center;
+padding-vertical: 10;
 `;
