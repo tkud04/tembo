@@ -11,7 +11,7 @@ const Customer = props => {
 				return (
                             <Row>
 				             <CustomerName>
-				               <Logo source={src}/>
+				               <Logo source={{uri: "data:image/png;base64," + props.data.customerImg}}/>
 					         <CustomerBio>
 					           <Name>{props.data.customerName}</Name>
 					           <Email>{props.data.customerEmail}</Email>

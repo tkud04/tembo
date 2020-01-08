@@ -4,6 +4,7 @@ import CButton from '../components/CButton';
 import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
+import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import * as Contacts from 'expo-contacts';
 import * as ImagePicker from 'expo-image-picker';
@@ -67,15 +68,16 @@ export default class AddCustomerScreen extends React.Component {
 	  let ret = await ImagePicker.launchImageLibraryAsync({
 		  mediaTypes: ImagePicker.MediaTypeOptions.All,
 		  allowsEditing: true,
-		  aspect: [4,3],
+		  aspect: [4,4],
 		  quality: 1
 	  });
 	  
 	  console.log(ret);
 	  
 	  if(!ret.cancelled){
-		  this.setState({customerImg: ret.uri});
-		  this.productImg = ret.uri;
+		  let fileContents = await FileSystem.readAsStringAsync(ret.uri, {encoding: FileSystem.EncodingType.Base64});
+		  //console.log("fileContents: ",fileContents);
+		  this.setState({customerImg: fileContents});
 		  
 		  showMessage({
 			 message: "Image uploaded!",
@@ -194,7 +196,7 @@ export default class AddCustomerScreen extends React.Component {
 				    onPress={() => this.addImage()}
 				   >
 				   
-				   <Logo source={{uri: this.state.customerImg}}/>
+				   <Logo source={{uri: "data:image/png;base64," + this.state.customerImg}}/>
 				   </ImageUpload>
 				   <TopRightInputs>
 					<ProductInputWrapper>

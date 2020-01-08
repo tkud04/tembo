@@ -112,7 +112,7 @@ export default class EditProductScreen extends React.Component {
 	  
 	  if(!ret.cancelled){
 		  let fileContents = await FileSystem.readAsStringAsync(ret.uri, {encoding: FileSystem.EncodingType.Base64});
-		  console.log("fileContents: ",fileContents);
+		  //console.log("fileContents: ",fileContents);
 		  this.setState({productImg: fileContents});
 		  
 		  showMessage({
