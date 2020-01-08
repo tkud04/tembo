@@ -122,11 +122,11 @@ export default class ProductsScreen extends React.Component {
 	  if(isNaN(sp)) sp = 0;
 	  if(isNaN(stk)) stk = 0;
 	  
-  let validationErrors = (this.state.productName.length < 6 || this.state.quantityType ==  "none" || cp < 1 || sp < 1 || stk < 1);
+  let validationErrors = (this.state.productName.length < 1 || this.state.quantityType ==  "none" || cp < 1 || sp < 1 || stk < 1);
 	  if(validationErrors){
-	 if(this.state.productName.length < 6){
+	 if(this.state.productName.length < 1){
 		 showMessage({
-			 message: "Product name must be at least 6 characters",
+			 message: "Product name must be at least 1 character",
 			 type: 'danger'
 		 });
 	 }
@@ -333,7 +333,7 @@ const ProductInputWrapper = styled.View`
 `;
 
 const ProductDescription = styled.Text` 
-                   color: #999;
+                   color: #555;
 				   margin-bottom: 2px;
 				   font-size: 14px;
 `;
@@ -344,7 +344,7 @@ const ProductInput = styled.TextInput`
 					 padding: 10px;
 					 margin-top: 5px;
 					 margin-bottom: 20px;
-					 color: #ccc;
+					 color: #000;
 `;
 
 
@@ -386,7 +386,7 @@ const TopRightInputs = styled.View`
 const ProductSelect = styled.Picker`
     width: 90%;
 	height: 50;
-	color: #ccc;
+	color: #000;
 	margin-bottom: 20px;
 `;
 

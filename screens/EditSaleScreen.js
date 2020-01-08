@@ -456,7 +456,7 @@ const SmallInputWrapper = styled.View`
 `;
 
 const ProductDescription = styled.Text` 
-                   color: #999;
+                   color: #555;
 				   margin-bottom: 2px;
 				   font-size: 14px;
 `;
@@ -554,7 +554,7 @@ const TopRightInputs = styled.View`
 const ProductSelect = styled.Picker`
     width: 90%;
 	height: 50;
-	color: #ccc;
+	color: #000;
 	margin-bottom: 20px;
 `;
 
@@ -576,6 +576,6 @@ const TableDiv = styled.View`
 const CustomSelect = styled.Picker`
     width: 90%;
 	height: 50;
-	color: #ccc;
+	color: #000;
 	margin-bottom: 20px;
 `;

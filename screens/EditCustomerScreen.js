@@ -107,11 +107,11 @@ export default class EditCustomerScreen extends React.Component {
   _updateCustomer = () => {
 	  //form validation
 	 	  
-  let validationErrors = (this.state.customerName.length < 6 || this.state.customerType ==  "none" || this.state.gender ==  "none" || this.state.customerEmail.length < 6 || this.state.customerPhone.length < 6  || this.state.sa.length < 6);
+  let validationErrors = (this.state.customerName.length < 1 || this.state.customerType ==  "none" || this.state.gender ==  "none" || this.state.customerEmail.length < 6 || this.state.customerPhone.length < 6  || this.state.sa.length < 6);
 	  if(validationErrors){
-	 if(this.state.customerName.length < 6){
+	 if(this.state.customerName.length < 1){
 		 showMessage({
-			 message: "Customer name must be at least 6 characters",
+			 message: "Customer name must be at least 1 character",
 			 type: 'danger'
 		 });
 	 }
@@ -345,7 +345,7 @@ const ProductInputWrapper = styled.View`
 `;
 
 const ProductDescription = styled.Text` 
-                   color: #999;
+                   color: #555;
 				   margin-bottom: 2px;
 				   font-size: 14px;
 `;
@@ -356,7 +356,7 @@ const ProductInput = styled.TextInput`
 					 padding: 10px;
 					 margin-top: 5px;
 					 margin-bottom: 20px;
-					 color: #ccc;
+					 color: #000;
 `;
 
 
@@ -398,7 +398,7 @@ const TopRightInputs = styled.View`
 const CustomerSelect = styled.Picker`
     width: 90%;
 	height: 50;
-	color: #ccc;
+	color: #000;
 	margin-bottom: 20px;
 `;
 
