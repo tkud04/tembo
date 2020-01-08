@@ -36,7 +36,7 @@ const Product = props => {
 				return (
                             <Row>
 				             <ProductName>
-				               <Logo source={src}/>
+				               <Logo source={{uri: "data:image/png;base64," + props.data.productImg}}/>
 					           <Name>{props.data.name}</Name>
                              </ProductName>				  
 				             <ProductInfo>

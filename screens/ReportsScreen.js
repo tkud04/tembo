@@ -32,6 +32,7 @@ export default class ReportsScreen extends React.Component {
 				{ label: "grape",  y: 28  }	
 		`
 	};
+
   }
 
   goToCharts = () => {

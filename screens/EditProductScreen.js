@@ -6,6 +6,7 @@ import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import * as Permissions from 'expo-permissions';
+import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import {ScrollView} from 'react-native';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -110,8 +111,9 @@ export default class EditProductScreen extends React.Component {
 	  console.log(ret);
 	  
 	  if(!ret.cancelled){
-		  this.setState({productImg: {uri: ret.uri}});
-		  this.productImg = {uri: ret.uri};
+		  let fileContents = await FileSystem.readAsStringAsync(ret.uri, {encoding: FileSystem.EncodingType.Base64});
+		  console.log("fileContents: ",fileContents);
+		  this.setState({productImg: fileContents});
 		  
 		  showMessage({
 			 message: "Image uploaded!",
@@ -193,7 +195,7 @@ export default class EditProductScreen extends React.Component {
 				    onPress={() => this.addImage()}
 				   >
 				   
-				   <Logo source={this.state.productImg}/>
+				   <Logo source={{uri: "data:image/png;base64," + this.state.productImg}}/>
 				   </ImageUpload>
 				   <TopRightInputs>
 					<ProductInputWrapper>
