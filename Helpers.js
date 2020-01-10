@@ -361,7 +361,7 @@ export async function addProduct(data,n)
 					  });
 }
 
-export async function updateProduct(data,n)
+export async function updateProduct(data,n) 
 {
 	let products = await AsyncStorage.getItem('products');
 	let newProduct = JSON.parse(products);

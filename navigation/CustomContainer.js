@@ -13,24 +13,21 @@ export default class CustomContainer extends React.Component {
 	  this.state = {
 	    uuu: {}
 	  };
-
-      this.that = this; 
-	
-	setTimeout(() => {
-		helpers.getLoggedInUser().then((dt) => {
+		
+	  helpers.getLoggedInUser().then((dt) => {
 			  this.state.uuu = dt;
-			  //up(user); 
+			  let llli = (Object.keys(dt).length === 0);
+			  if(!llli) upp([dt,llli]);
 			  //console.log('User inside async timeout function',this.state.uuu);
-			   
 		 });
-	},2000);	  
     }
 	
 	
 	_getContainer = (uu,upp,lli) => {
 		
 		
-		//console.log('User from custom container',this.state.uuu);
+
+			    //console.log('User from custom container',this.state.uuu);
 			  //let mnav = (Object.keys(uu).length === 0) ? GuestNavigator : AppNavigator;
 			  let mnav = null;
 			  mnav = (lli) ? AppNavigator: GuestNavigator;
@@ -39,7 +36,8 @@ export default class CustomContainer extends React.Component {
 		      const AppContainer = createAppContainer(mnav);
 		     return (
 		       <AppContainer/>
-		     );
+		     );	 
+		
 		
    }
 	
@@ -49,10 +47,7 @@ export default class CustomContainer extends React.Component {
  {theme => (
    <UserContext.Consumer>
    {({user,up,loggedIn}) => {
-	    //up([user,loggedIn]);
-	    console.log('User from custom container',user);
-	    console.log('loggedIn from custom container',loggedIn);
-	     return this._getContainer(user,up,loggedIn);
+	       return this._getContainer(user,up,loggedIn);
    }}
    </UserContext.Consumer>
  )}
