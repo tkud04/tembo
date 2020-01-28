@@ -1,0 +1,28 @@
+1) Subscription : it’s not working yet
+
+2)The image on mobile app homepage header should not be in other pages. DONE
+
+3)Customer page
+When looking at customers we should also see;
+Date added
+last purchase date
+
+4)Products
+When looking at customers we should also see;
+Date added
+last stock update
+
+5)Sales
+a) Sales can be made without adding a client,select "walk in" option
+ b) + -- sign to add and reduce quantity is needed.
+Sales Page
+c) Sale Amount & Profit should show on each sale quick view
+d) Option to view sale quick view in portrait is needed
+
+6) Reports : your reports should all come in one page; this gives a more holistic view of purchases and trends (Refer to sales app)
+
+stock view
+Sales chart
+Profit Chart
+Inventory Chart
+Hot items chart

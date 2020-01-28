@@ -52,7 +52,7 @@ export default class ReportsScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerClipboard}  leftParam = "goBack" navv = {navigation} title="Reports" subtitle="View business/stock reports" sml={40}/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerClipboard}  leftParam = "goBack" navv = {navigation} title="Reports" subtitle="View reports" sml={40}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   

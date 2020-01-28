@@ -9,7 +9,7 @@ import * as helpers from '../Helpers';
 const AppImageHeader = props => {
 return (
 <Container>
-<BackgroundImage source={require('../assets/images/header.jpg')}>
+<BackgroundImage source={require('../assets/images/header-2.jpg')}>
 </BackgroundImage>
 <OverlayView pointerEvents="none"></OverlayView>
 <HeaderView>

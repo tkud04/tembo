@@ -31,7 +31,7 @@ export default class ProductsScreen extends React.Component {
 		this.setState({products: pp});
 		}));
 
-	//console.log(this.state.products);
+	
   }
 
   goToProduct = () => {
@@ -82,6 +82,8 @@ export default class ProductsScreen extends React.Component {
 				  
 				  {
 					  this.state.products.map((p) => {
+						  console.log(this.state.products)
+					  
 						  //console.log(p);					  
 						  return  <ProductButton key={p['sku']} onPress={() => {this.p = p; this.goToProduct()}}><Product data={p}/></ProductButton>
 					  })

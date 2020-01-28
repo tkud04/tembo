@@ -16,15 +16,14 @@ const Customer = props => {
 					           <Name>{props.data.customerName}</Name>
 					           <Email>{props.data.customerEmail}</Email>
 					           <Phone>Phone: {props.data.customerPhone}</Phone>
+					           <CusType>Type: {props.data.customerType}</CusType>
 					         </CustomerBio>
                             </CustomerName>				  
 				            <CustomerInfo>
-				             <PriceView>
-					          <Price>Debit</Price>
-				        	 </PriceView>
-					         <StockView>
-					          <Stock>{props.data.customerType}</Stock>
-					         </StockView>
+				             <DateView>
+					            <DateText color='blue'>{`Added on: ${props.data.createdAt}`}</DateText>
+					            <DateText color='green'>{`Last purchased: ${props.data.updatedAt}`}</DateText>
+					           </DateView>
 				            </CustomerInfo>
 				           </Row> 
 					    );
@@ -55,14 +54,14 @@ const CustomerName = styled.View`
    margin-right: 5px;
    border-right-width: 1;
    border-right-color: #000;
-   width: 70%;
+   width: 65%;
    flex-direction: row;
 `;
 const CustomerBio = styled.View`
   
 `;
 const CustomerInfo = styled.View`
-   width: 30%;
+   width: 35%;
 `;
 
 const Name = styled.Text`
@@ -83,6 +82,14 @@ const Email = styled.Text`
 `;
 
 const Phone = styled.Text`
+  font-size: 12;
+  font-weight: 300;
+  margin-left: 6px;
+  margin-top: 10px;
+  align-items: center;
+`;
+
+const CusType = styled.Text`
   font-size: 12;
   font-weight: 300;
   margin-left: 6px;
@@ -111,6 +118,21 @@ const Price = styled.Text`
 const Stock = styled.Text`
   font-size: 15;
   font-weight: 300;
+  margin-horizontal: 5px;
+  margin-vertical: 10px;
+  align-items: center;
+`;
+
+
+const DateView = styled.View`
+   width: 100%;
+`;
+
+const DateText = styled.Text`
+  font-size: 15;
+  font-weight: 300;
+  color: ${props => props.color};;
+  font-family: ${AppStyles.fontFamily};
   margin-horizontal: 5px;
   margin-vertical: 10px;
   align-items: center;

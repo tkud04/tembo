@@ -34,18 +34,23 @@ const Product = props => {
 	            let src = require("../assets/images/pic-11.jpg");
 				//console.log(src);
 				return (
-                            <Row>
+                            <Row>						 
 				             <ProductName>
-				               <Logo source={{uri: "data:image/png;base64," + props.data.productImg}}/>
-					           <Name>{props.data.name}</Name>
-                             </ProductName>				  
-				             <ProductInfo>
-				               <PriceView>
+							   <NameView>
+				                 <Logo source={{uri: "data:image/png;base64," + props.data.productImg}}/>
+					             <Name>{props.data.name}</Name>
+							   </NameView>
+							   <PriceView>
 					            <Price>N{props.data.sellingPrice}</Price>
-					           </PriceView>
-					           <StockView>
-					            <Stock>{`${props.data.stock}${quantityTypes[props.data.quantityType]}`}</Stock>
-					           </StockView>
+								<Stock>{`${props.data.stock}${quantityTypes[props.data.quantityType]}`}</Stock>
+					           </PriceView>	
+                             </ProductName>		                             						 
+				             <ProductInfo>
+				               
+					           <DateView>
+					            <DateText color='blue'>{`Added on: ${props.data.createdAt}`}</DateText>
+					            <DateText color='green'>{`Last stock update: ${props.data.updatedAt}`}</DateText>
+					           </DateView>
 				             </ProductInfo>
 				            </Row> 
 					    );
@@ -77,10 +82,15 @@ const ProductName = styled.View`
    border-right-width: 1;
    border-right-color: #000;
    width: 60%;
-   flex-direction: row;
+   
 `;
 const ProductInfo = styled.View`
    width: 40%;
+`;
+const NameView = styled.View`
+   flex-direction: row;
+   border-bottom-width: 1;
+   border-bottom-color: #ccc;
 `;
 
 const Name = styled.Text`
@@ -94,11 +104,11 @@ const Name = styled.Text`
 
 const PriceView = styled.View`
    width: 100%;
-   border-bottom-width: 1;
-   border-bottom-color: #ccc;
+   justify-content: center;
+   margin-top: 10;
 `;
 
-const StockView = styled.View`
+const DateView = styled.View`
    width: 100%;
 `;
 
@@ -107,13 +117,23 @@ const Price = styled.Text`
   font-weight: 300;
   font-family: ${AppStyles.fontFamily};
   margin-horizontal: 5px;
-  margin-vertical: 10px;
+  margin-vertical: 2px;
   align-items: center;
 `;
 
 const Stock = styled.Text`
   font-size: 15;
   font-weight: 300;
+  font-family: ${AppStyles.fontFamily};
+  margin-horizontal: 5px;
+  margin-vertical: 1px;
+  align-items: center;
+`;
+
+const DateText = styled.Text`
+  font-size: 15;
+  font-weight: 300;
+  color: ${props => props.color};;
   font-family: ${AppStyles.fontFamily};
   margin-horizontal: 5px;
   margin-vertical: 10px;

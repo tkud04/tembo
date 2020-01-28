@@ -339,6 +339,9 @@ export function getList(callback){
 
 export async function addProduct(data,n)
 {
+	data.createdAt = getDate();
+	data.updatedAt = getDate();
+	
 	let products = await AsyncStorage.getItem('products');
 	let newProduct = JSON.parse(products);
 	
@@ -363,6 +366,7 @@ export async function addProduct(data,n)
 
 export async function updateProduct(data,n) 
 {
+	data.updatedAt = getDate();
 	let products = await AsyncStorage.getItem('products');
 	let newProduct = JSON.parse(products);
 	let updatedProducts = [];
@@ -420,6 +424,9 @@ export async function getProducts(callback)
 export async function addCustomer(data,n)
 {
 	data.id = generateID('customer');
+	data.createdAt = getDate();
+	data.updatedAt = getDate();
+	
 	let customers = await AsyncStorage.getItem('customers');
 	let newCustomers = JSON.parse(customers);
 	
@@ -461,6 +468,7 @@ export async function getCustomers(callback)
 
 export async function updateCustomer(data,n)
 {
+	data.updatedAt = getDate();
 	let customers = await AsyncStorage.getItem('customers');
 	let newCustomers = JSON.parse(customers);
 	let updatedCustomers = [];
@@ -536,6 +544,7 @@ export async function getSales(callback)
 	}
 	catch(error){
 		console.log(error);
+		callback({});
 	}
 	
 }

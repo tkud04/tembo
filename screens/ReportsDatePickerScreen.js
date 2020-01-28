@@ -45,7 +45,7 @@ export default class ReportsDatePickerScreen extends React.Component {
 	switch(this.reportsType){
 	case "business":
 	helpers.getSales((sales) => {
-		//console.log("sales: ",sales);
+		console.log("sales: ",sales);
 		let result = sales;
 		
 		if(dt.value !== "all"){
@@ -53,7 +53,7 @@ export default class ReportsDatePickerScreen extends React.Component {
 		   result = sales.filter(s => helpers.compareDates(s.date,d2,dt.value));
 		}
 		let dtt = {dt: result,type: this.reportsType};
-		//console.log("result: ",result);
+		console.log("result: ",result);
 		this.navv.navigate('Tables',{
 		   dt: dtt
 	    });
@@ -83,7 +83,7 @@ export default class ReportsDatePickerScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerClipboard}  leftParam = "goBack" navv = {navigation} title="Reports" subtitle="View business/stock reports" sml={40}/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.headerClipboard}  leftParam = "goBack" navv = {navigation} title="Reports" subtitle="View reports" sml={40}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
@@ -166,7 +166,7 @@ const Column = styled.View`
 
 const Row = styled.View`
    width: 100%;
-    margin-top: 20px;	
+    margin-top: 10px;	
 `;
 
 const DateTypes = styled.FlatList`

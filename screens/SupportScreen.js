@@ -2,11 +2,12 @@ import React from 'react';
 import {ScrollView, Button} from 'react-native';
 import styled from 'styled-components';
 import HeaderMenuButton from '../components/HeaderMenuButton';
-import AppHomeHeader from '../components/AppHomeHeader';
+import AppDrawerHeader from '../components/AppDrawerHeader';
 import TitleHeader from '../components/TitleHeader';
 import CButton from '../components/CButton';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
+import {ThemeContext,UserContext} from '../MyContexts';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 import { Notifications } from 'expo';
@@ -19,7 +20,8 @@ export default class SupportScreen extends React.Component {
     super(props);
     
 this.user = {};
-helpers.getLoggedInUser((u) => {this.user = u});
+
+
 		
     this.state = {
          		   inputBorderBottomColor: '#ccc',
@@ -28,15 +30,22 @@ helpers.getLoggedInUser((u) => {this.user = u});
 				   phoneBorderBottomColor: '#ccc',
 				   emailBorderBottomColor: '#ccc',
 				   notesBorderBottomColor: '#ccc',
-				   name: this.user.name,
+				   name: "",
 				   uid: this.user.id,
-				   email: this.user.email,
-				   phone: this.user.phone,
-				   notes: ""	
+				   email: "",
+				   phone: "",
+				   notes: "",
+                   isLoadingComplete: false				   
 				 };	
 				    
 		this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
-					
+		
+		helpers.getLoggedInUser((u) => {
+			this.state.name = this._getName(u);
+			this.state.email = this._getEmail(u);
+			this.state.phone = this._getPhone(u);
+		});
+		
 	this.navv = null;
 	
   }
@@ -54,7 +63,7 @@ static navigationOptions = ({navigation}) => {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Tembo" subtitle="Support"/>,
+	   headerTitle: () => <AppDrawerHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Tembo" subtitle="Support"/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
@@ -62,6 +71,22 @@ static navigationOptions = ({navigation}) => {
 	  }
 	  
 	  };
+  
+  _getName = (u) =>{
+	let r = "Guest";
+	if(u.name) r = u.name;
+	return r;
+}
+_getEmail = (u) =>{
+	let r = "Sign in";
+	if(u.email) r = u.email; 
+	return r;
+}
+_getPhone = (u) =>{
+	let r = "";
+	if(u.phone) r = u.phone; 
+	return r;
+}
   
   _contact = () => {
 	  //form validation
@@ -118,8 +143,14 @@ static navigationOptions = ({navigation}) => {
   
   render() {
 	  this.navv = this.props.navigation;
-	  
+	
     return (
+	     <ThemeContext.Consumer>
+                  {theme => (
+                    <UserContext.Consumer>
+                      {({user,up,loggedIn}) => {
+
+						  return(
 	       <BackgroundImage source={require('../assets/images/bg.jpg')}>
 	        <Container>
 			  <ScrollView>		
@@ -135,7 +166,7 @@ static navigationOptions = ({navigation}) => {
 				    <ProductInput
 					style={{borderColor: this.state.nameBorderBottomColor}}
 				     placeholder="Customer name"
-					  value={this.state.name}
+					  value={user.name}
 				     onChangeText={text => {
 						this.setState({name: text});
 					 }}
@@ -155,7 +186,7 @@ static navigationOptions = ({navigation}) => {
 				    <ProductInput
 					style={{borderColor: this.state.emailBorderBottomColor}}
 				     placeholder="Email address"
-				     value={this.state.email}
+				     value={user.email}
 					 onChangeText={text => {
 						this.setState({email: text});
 					 }}
@@ -175,7 +206,7 @@ static navigationOptions = ({navigation}) => {
 				    <ProductInput
 					style={{borderColor: this.state.phoneBorderBottomColor}}
 				     placeholder="Phone number"
-					 value={this.state.phone}
+					 value={user.phone}
 				     onChangeText={text => {
 						this.setState({phone: text});
 					 }}
@@ -221,6 +252,11 @@ static navigationOptions = ({navigation}) => {
 			  </ScrollView>
 			</Container>
 			</BackgroundImage>
+			);
+			}}
+                    </UserContext.Consumer>
+                  )}
+                </ThemeContext.Consumer>
     );
   }
   
