@@ -165,6 +165,7 @@ export default class EditProductScreen extends React.Component {
 	 
 	else{
 	  const dt = {
+		createdAt: this.p.createdAt,
 		name: this.state.productName,
 		quantityType: this.state.quantityType,
 		sku: this.state.sku,

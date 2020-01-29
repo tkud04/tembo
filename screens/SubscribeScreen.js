@@ -3,7 +3,7 @@ import {ScrollView, Button} from 'react-native';
 import styled from 'styled-components';
 import Categories from '../components/Categories';
 import SubscribeCard from '../components/SubscribeCard';
-import AppHomeHeader from '../components/AppHomeHeader';
+import AppDrawerHeader from '../components/AppDrawerHeader';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -74,7 +74,7 @@ static navigationOptions = ({navigation}) => {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Tembo" subtitle="Subscribe"/>,
+	   headerTitle: () => <AppDrawerHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Tembo" subtitle="Subscribe"/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   

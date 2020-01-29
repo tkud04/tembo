@@ -4,7 +4,7 @@ import CStatusBar from '../components/CStatusBar';
 import CustomButton from '../components/CustomButton';
 import Tips from '../components/Tips';
 import SvgIcon from '../components/SvgIcon';
-import AppHomeHeader from '../components/AppHomeHeader';
+import AppDrawerHeader from '../components/AppDrawerHeader';
 import HeaderMenuButton from '../components/HeaderMenuButton';
 import CButton from '../components/CButton';
 import * as helpers from '../Helpers';
@@ -61,7 +61,7 @@ export default class ProfileScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report" subtitle="Pofile"/>,
+	   headerTitle: () => <AppDrawerHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report" subtitle="Profile"/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   

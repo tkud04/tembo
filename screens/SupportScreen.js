@@ -40,11 +40,13 @@ this.user = {};
 				    
 		this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 		
+		/**
 		helpers.getLoggedInUser((u) => {
 			this.state.name = this._getName(u);
 			this.state.email = this._getEmail(u);
 			this.state.phone = this._getPhone(u);
 		});
+		**/
 		
 	this.navv = null;
 	
@@ -72,21 +74,12 @@ static navigationOptions = ({navigation}) => {
 	  
 	  };
   
-  _getName = (u) =>{
-	let r = "Guest";
-	if(u.name) r = u.name;
-	return r;
-}
-_getEmail = (u) =>{
-	let r = "Sign in";
-	if(u.email) r = u.email; 
-	return r;
-}
-_getPhone = (u) =>{
-	let r = "";
-	if(u.phone) r = u.phone; 
-	return r;
-}
+  updateState = (dt) => {
+			 console.log("user: ",dt);
+			  this.state.name = dt.name;
+			  this.state.email = dt.email;
+			  this.state.phone = dt.phone;
+  }
   
   _contact = () => {
 	  //form validation
@@ -149,7 +142,7 @@ _getPhone = (u) =>{
                   {theme => (
                     <UserContext.Consumer>
                       {({user,up,loggedIn}) => {
-
+                       this.updateState(user);
 						  return(
 	       <BackgroundImage source={require('../assets/images/bg.jpg')}>
 	        <Container>
@@ -166,7 +159,7 @@ _getPhone = (u) =>{
 				    <ProductInput
 					style={{borderColor: this.state.nameBorderBottomColor}}
 				     placeholder="Customer name"
-					  value={user.name}
+					  value={this.state.name}
 				     onChangeText={text => {
 						this.setState({name: text});
 					 }}
@@ -186,7 +179,7 @@ _getPhone = (u) =>{
 				    <ProductInput
 					style={{borderColor: this.state.emailBorderBottomColor}}
 				     placeholder="Email address"
-				     value={user.email}
+				     value={this.state.email}
 					 onChangeText={text => {
 						this.setState({email: text});
 					 }}
@@ -206,7 +199,7 @@ _getPhone = (u) =>{
 				    <ProductInput
 					style={{borderColor: this.state.phoneBorderBottomColor}}
 				     placeholder="Phone number"
-					 value={user.phone}
+					 value={this.state.phone}
 				     onChangeText={text => {
 						this.setState({phone: text});
 					 }}
@@ -276,7 +269,7 @@ const ProductInputWrapper = styled.View`
 `;
 
 const ProductDescription = styled.Text` 
-                   color: #999;
+                   color: #777;
 				   margin-bottom: 2px;
 				   font-size: 14px;
 `;
@@ -287,7 +280,7 @@ const ProductInput = styled.TextInput`
 					 padding: 10px;
 					 margin-top: 5px;
 					 margin-bottom: 20px;
-					 color: #ccc;
+					 color: #000;
 `;
 
 

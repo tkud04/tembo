@@ -151,6 +151,7 @@ export default class EditCustomerScreen extends React.Component {
 	else{
 	  const dt = {
 		  id: this.c.id,
+		  createdAt: this.c.createdAt,
 		  customerImg: this.state.customerImg,
 				   customerName: this.state.customerName,
 				   customerType: this.state.customerType,
