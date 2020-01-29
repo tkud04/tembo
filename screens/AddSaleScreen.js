@@ -178,9 +178,12 @@ export default class AddSaleScreen extends React.Component {
 updateCustomer =() => {
 	if(this.state.hasCustomer){
 						return (
+					  <AddProductsWrapper>
+					  <ProductDescription style={{alignItems: 'center'}}>Customer</ProductDescription>
 					  <AddProductsView>
 					    <CustomerText>{this.state.customers[0].customerName}</CustomerText>
-					  </AddProductsView>				  
+					  </AddProductsView>			
+                      </AddProductsWrapper>					  
 					  );
 					  }
 					  else{
@@ -188,16 +191,19 @@ updateCustomer =() => {
 					  <ProductUpload
 					     onPress={() => this.goToSelectCustomer()}
 					  >
+					  <AddProductsWrapper>
+					  <ProductDescription style={{alignItems: 'center'}}>Click to change</ProductDescription>
 					  <AddProductsView>
-					    <AddProductsText>Click here</AddProductsText>
-					  </AddProductsView>				  
+					    <AddProductsText>Anonymous</AddProductsText>
+					  </AddProductsView>	
+                      </AddProductsWrapper>					  
 					  </ProductUpload>
 					  );
 					  }
 }
 
 _addSale = () => {
-	//console.log(this.state);
+	console.log("customers: ",this.state.customers);
 	 //form validation
 	  let shipping = parseInt(this.state.shipping), tax = parseInt(this.state.tax), discount = parseInt(this.state.discount);
 	 
@@ -208,10 +214,20 @@ _addSale = () => {
   let validationErrors = (this.state.customers.length < 1 || this.state.products.length < 1 || this.state.taxType == "none" || this.state.discountType ==  "none" || tax < 0 || discount < 0);
 	  if(validationErrors){
 	 if(this.state.customers.length < 1){
-		 showMessage({
-			 message: "Please add a customer",
-			 type: 'danger'
-		 });
+		 let anonymous = {
+			 createdAt: "",
+             customerEmail: "",
+             customerImg: "",
+             customerName: "Anonymous",
+             customerPhone: "",
+             customerType: "",
+             gender: "",
+             id: "",
+             notes: "",
+             sa: "",          
+             updatedAt: ""
+		 };
+		 this.state.customers.push(anonymous);
 	 }
 	 if(this.state.products.length < 1){
 		 showMessage({
@@ -277,7 +293,6 @@ _addSale = () => {
 				   </Logo>
 				   <TopRightInputs>
 					<ProductInputWrapper>
-					 <ProductDescription style={{alignItems: 'center'}}>Customer</ProductDescription>
 					 {
 					    this.updateCustomer()
 					 }
@@ -483,6 +498,10 @@ const ProductUpload = styled.TouchableOpacity`
 const ContactUpload = styled.TouchableOpacity`
 
 `;
+
+const AddProductsWrapper = styled.View`
+ 
+ `;
 
 const AddProductsView = styled.View`
  background-color: green;

@@ -509,6 +509,8 @@ export async function addSale(data,n)
 	data.id = generateID('sale');
 	data.status = "ok"; 
 	data.date = getDate();
+	data.createdAt = getDate();
+	data.updatedAt = getDate();
 	let sales = await AsyncStorage.getItem('sales');
 	let newSale = JSON.parse(sales);
 	
@@ -551,6 +553,7 @@ export async function getSales(callback)
 
 export async function updateSale(data,n)
 {
+	data.updatedAt = getDate();
 	let sales = await AsyncStorage.getItem('sales');
 	let newSale = JSON.parse(sales);
 	let updatedSales = [];

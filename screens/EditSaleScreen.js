@@ -250,6 +250,7 @@ _updateSale = () => {
 		let dt = {
 			id: this.s.id,
 			date: this.s.date,
+			createdAt: this.s.createdAt,
 			status: this.s.status,
 			customers: this.state.customers,
 			products: this.state.products,
