@@ -8,11 +8,13 @@ import * as helpers from '../Helpers';
 [{"customers":[{"customerImg":"","customerName":"Rita Okere","customerType":"individual","customerEmail":"ritaoker3@gmail.com","customerPhone":"08094625805","sa":"50 trans amadi layout, Port Harcourt Rivers state","notes":"","gender":"female","id":"customer_518738"}],"products":[{"name":"Green Tea","quantityType":"piece","sku":"SKU347178","costPrice":"500","sellingPrice":"1000","stock":"150","notes":"","productImg":"../assets/images/pic-11.jpg","categories":""}],"taxType":"flat","discountType":"flat","shipping":0,"tax":0,"discount":0}]
 **/
 
-
 const Sale = props => {
 	            let src = (props.data.customerImg == "" || !isNaN(props.data.customerImg)) ? require("../assets/images/pic-11.jpg") : {uri: props.data.customerImg};
 				let customers = props.data.customers, products = props.data.products;
-				let itemText = products.length == 1 ? 'item' : 'items';
+				let itemText = parseInt(products.length) == 1 ? 'product' : 'products';
+				let total = helpers.getTotal(products);
+				let profit = helpers.getProfit(products);
+				
 				return (
                             <Row>
 				             <CustomerName>
@@ -20,8 +22,9 @@ const Sale = props => {
 					         <CustomerBio>
 					          
 					           <Name>{customers[0].customerName}</Name>
-					           <Email>{props.data.date}</Email>
-					           <Phone>Added by: Me</Phone>
+					           <Phone>{`${products.length} ${itemText}`}</Phone>							   
+					           <Phone>{`Total: N${total}`}</Phone>
+					           <Profit color="green">{`Profit: N${profit}`}</Profit>
 					         </CustomerBio>
                             </CustomerName>				  
 				            <CustomerInfo>
@@ -31,7 +34,8 @@ const Sale = props => {
 				        	  </StatusWrapper>
 				        	 </StatusView>
 					         <StockView>
-					          <Stock> {`${products.length} ${itemText}`}</Stock>
+							 <Email>{props.data.date}</Email>					  
+					          <Stock>Added by: Me</Stock>
 					         </StockView>
 				            </CustomerInfo>
 				           </Row> 
@@ -99,11 +103,20 @@ const Email = styled.Text`
 `;
 
 const Phone = styled.Text`
-  font-size: 12;
+  font-size: 14;
   font-weight: 300;
   margin-left: 6px;
   margin-top: 10px;
   align-items: center;
+`;
+
+const Profit = styled.Text`
+  font-size: 14;
+  font-weight: 300;
+  margin-left: 6px;
+  margin-top: 10px;
+  align-items: center;
+  color: ${props => props.color};
 `;
 
 const StatusView = styled.View`

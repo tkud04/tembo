@@ -937,3 +937,28 @@ export function compareDates(str1, str2,type){
    console.log("x: ",x);
  return x;
 }
+
+export function getTotal(products){
+	let ret = 0;
+	
+	for(let i = 0; i < products.length; i++){
+		let p = products[i];
+		//console.log(`sp: ${parseInt(p.sellingPrice)}, qty: ${parseInt(p.qty)}, shipping: ${parseInt(p.shipping)}`);
+		ret += (  parseInt(p.sellingPrice) * parseInt(p.qty) );
+	}
+	
+	return ret;
+	
+}
+
+export function getProfit(products){
+	let ret = 0;
+	
+	for(let i = 0; i < products.length; i++){
+		let p = products[i];
+		ret += parseInt(p.profit);
+	}
+	
+	return ret;
+	
+}

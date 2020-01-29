@@ -56,8 +56,24 @@ export default class SelectProductFinalScreen extends React.Component {
     };
 	  
   
+  _increaseQuantity = () => {
+	  let newQty = parseInt(this.state.qty) + 1;
+	  this.state.qty = newQty;
+	  this.calculateProfit();
+	  this.setState({qty: newQty});
+  }
+  
+  _decreaseQuantity = () => {
+	  let newQty = parseInt(this.state.qty) - 1;
+	  if(newQty < 1) newQty = 1;
+	  this.state.qty = newQty;
+	  this.calculateProfit();
+	  this.setState({qty: newQty});
+  }
+  
   calculateProfit = () => {
 	  let cp = parseInt(this.state.p.costPrice), sp = parseInt(this.state.p.sellingPrice), qty = parseInt(this.state.qty);
+	  console.log("qty: ",this.state.qty);
 	  if(isNaN(cp)) cp = 0;
 	  if(isNaN(sp)) sp = 0;
 	  if(isNaN(qty)) qty = 0;
@@ -120,8 +136,9 @@ export default class SelectProductFinalScreen extends React.Component {
 					</ProductInputWrapper>
 					<ProductInputWrapper>
 					 <ProductDescription>Quantity</ProductDescription>
+					 <QuantityWrapper>
 				    <ProductInput
-					style={{borderColor: this.state.qtyBorderBottomColor}}
+					style={{ width: '90%',borderColor: this.state.qtyBorderBottomColor}}
 				     placeholder="Quantity"
 					 value={`${this.state.qty}`}
 				     onChangeText={text => {
@@ -138,6 +155,23 @@ export default class SelectProductFinalScreen extends React.Component {
 					 }}
 					 keyboardType="decimal-pad"
 					/>
+					<QuantityControlsWrapper>
+					  <QuantityButton
+					    onPress={() => {this._increaseQuantity();this.calculateProfit();}}
+					  >
+					     <QuantityControlsView>
+					      <QuantityControl>+</QuantityControl>
+						 </QuantityControlsView>
+					  </QuantityButton>
+					  <QuantityButton
+					    onPress={() => {this._decreaseQuantity()}}
+					  >
+					    <QuantityControlsView>
+					      <QuantityControl>-</QuantityControl>
+						 </QuantityControlsView>
+					  </QuantityButton>
+					</QuantityControlsWrapper>
+					</QuantityWrapper>
 					</ProductInputWrapper>
 					<ProductInputWrapper>
 					 <ProductDescription>Cost price (N)</ProductDescription>
@@ -265,4 +299,32 @@ const BottomInputs = styled.View`
    margin-left: 10px;
    margin-bottom: 10px;
    width: 90%;
+`;
+
+const QuantityButton = styled.TouchableOpacity`
+
+`;
+
+const QuantityControl = styled.Text`
+   margin-vertical: 1px;
+   font-size: 16px;
+   color: #fff;
+`;
+
+const QuantityControlsView = styled.View`
+ align-items: center;
+ justify-content: center;
+ background-color: green;
+ padding-horizontal: 10px;
+ border-bottom-width: 1px;
+ border-color: #fff;
+`;
+
+const QuantityControlsWrapper = styled.View`
+margin-top: 5px;
+`;
+
+const QuantityWrapper = styled.View`
+   flex-direction: row;
+    width: 100%;
 `;
