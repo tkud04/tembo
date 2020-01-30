@@ -33,12 +33,6 @@ userMenu = {
 			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardUsers)} w={40} h={20}/>    
 		}
 	},
-	Subscribe: {
-		screen: SubscribeStack,
-		navigationOptions:{
-			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardWallet)} w={40} h={20}/>    
-		}
-	},
 	'Sign out': {
 		screen: SignoutStack,
 		navigationOptions:{

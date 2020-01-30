@@ -3,7 +3,7 @@ import {ScrollView, Button} from 'react-native';
 import styled from 'styled-components';
 import Categories from '../components/Categories';
 import SubscribeCard from '../components/SubscribeCard';
-import AppDrawerHeader from '../components/AppDrawerHeader';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import * as helpers from '../Helpers';
 import AppStyles from '../styles/AppStyles';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -20,21 +20,24 @@ export default class SubscribeScreen extends React.Component {
  constructor(props) {
     super(props);
     this.state = { text: '', loading: false,dataSource: []};
-    this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
+    this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	this.navv = null;
+	this.signupData = props.navigation.state.params.signupData;
 	
 	this.pkgRow1 = [
 		{
 		   id: 345,
 	 	   name: "30 days",
-		   price: "N1,500.00",
-		   saved: "N0"
+		   price: "N100.00",
+		   saved: "N0",
+		   amount: 10000
 		},
 		{
 		   id: 232,
 	 	   name: "90 days",
-		   price: "N5,000.00",
-		   saved: "N0"
+		   price: "N200.00",
+		   saved: "N0",
+		   amount: 20000
 		},
 	];
 	
@@ -42,22 +45,25 @@ export default class SubscribeScreen extends React.Component {
 		{
 		   id: 125,
 	 	   name: "180 days",
-		   price: "N9,500.00",
-		   saved: "N500"
+		   price: "N400.00",
+		   saved: "N100",
+		   amount: 40000
 		},
 		{
 		   id: 962,
 	 	   name: "360 days",
-		   price: "N19,000.00",
-		   saved: "N100"
+		   price: "N800.00",
+		   saved: "N200",
+		   amount: 80000
 		},
 	];
 		
 	this.lifetimePkg = {
 		   id: 837,
 	 	   name: "One Time Purchase (Lifetime)",
-		   price: "N100,000.00",
-		   saved: "N0"
+		   price: "N1,000.00",
+		   saved: "N500",
+		   amount: 100000
 		};
 	
   }
@@ -74,11 +80,12 @@ static navigationOptions = ({navigation}) => {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppDrawerHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Tembo" subtitle="Subscribe"/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.chartBar}  leftParam = "goBack" navv = {navigation} title="Tembo" subtitle="Select a plan"  sml={60}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
-	   }
+	   },
+	   headerLeft: null,
 	  }
 	  
 	  };
@@ -96,7 +103,7 @@ static navigationOptions = ({navigation}) => {
 					<ItemsLayout>
 					 {
 					  this.pkgRow1.map((p) => {
-						  //console.log(p);					  
+						  console.log(p);					  
 						  return (
 						    <Column key={p.id}>
 					          <SubscribeCard pkg={p} navv={navv}/>

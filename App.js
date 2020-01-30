@@ -16,6 +16,7 @@ import FlashMessage from 'react-native-flash-message';
 import {ThemeContext,UserContext} from './MyContexts.js';
 
 
+
 export default class App extends React.Component {
 constructor(props){
 	super(props);
@@ -81,7 +82,7 @@ resolve = async (pr) => {
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
 		  <ThemeContext.Provider>
 		     <UserContext.Provider value={this.state}>
-		       <CustomContainerComponent />
+		       <CustomContainerComponent/>
 		     </UserContext.Provider>
 		  </ThemeContext.Provider>
           <FlashMessage position="bottom" />

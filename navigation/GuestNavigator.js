@@ -8,7 +8,6 @@ import SvgIcon from '../components/SvgIcon';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 
-import SubscribeStack from './SubscribeStack';
 import AppStack from './AppStack';
 import AuthStack from './AuthStack';
 
@@ -22,12 +21,6 @@ let userMenu = {
 		screen: AppStack,
 		navigationOptions:{
 			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardArea)} w={40} h={20}/>    
-		}
-	},
-	Subscribe: {
-		screen: SubscribeStack,
-		navigationOptions:{
-			drawerIcon: <SvgIcon xml={helpers.insertAppStyle(AppStyles.svg.cardWallet)} w={40} h={20}/>    
 		}
 	},
 	'Sign in': {

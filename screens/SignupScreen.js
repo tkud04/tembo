@@ -4,6 +4,7 @@ import CButton from '../components/CButton';
 import AppInputImageHeader from '../components/AppInputImageHeader';
 import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
+import NavigationService from '../NavigationService';
 import {ThemeContext,UserContext} from '../MyContexts';
 import {ScrollView,KeyboardAvoidingView} from 'react-native';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -129,10 +130,15 @@ export default class SignupScreen extends React.Component {
 	 
 	 console.log(dt); 
 	 showMessage({
-			 message: "Signing you up..",
+			 message: "Processing..",
 			 type: 'info'
 		 });
+		// console.log(this.navv);
+	NavigationService.navigate("SelectPlan",{
+		signupData: dt
+	});
 		 
+	/**
      helpers.signup(dt,(res) => {
 		 if(res.status == "ok"){
 			    showMessage({
@@ -169,13 +175,15 @@ export default class SignupScreen extends React.Component {
 		        });
 		    
 		   }
-	 });	
+	 });
+     **/	 
 	}
 	 
   }
   
   render() {
-	  this.navv = this.props.navigation;
+	  let navv = this.props.navigation;
+	  this.navv = navv;
 	  
     return (
 	       <BackgroundImage source={require('../assets/images/bg.jpg')}>

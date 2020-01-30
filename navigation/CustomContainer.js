@@ -6,6 +6,7 @@ import AppNavigator from './AppNavigator';
 import GuestNavigator from './GuestNavigator';
 import * as helpers from '../Helpers';
 import {NavigationEvents} from 'react-navigation';
+import NavigationService from '../NavigationService';
 
 
 export default class CustomContainer extends React.Component {
@@ -39,7 +40,11 @@ export default class CustomContainer extends React.Component {
 	       	  //let mnav = (uu.name === "Guest") ? GuestNavigator : AppNavigator;
 		      const AppContainer = createAppContainer(mnav);
 		     return (
-		       <AppContainer/>
+		       <AppContainer
+			   ref={navigatorRef => {
+                      NavigationService.setTopLevelNavigator(navigatorRef);
+                    }}
+			   />
 		     );	 
 		
 		}
