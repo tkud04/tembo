@@ -19,6 +19,7 @@ export default class SelectProductFinalScreen extends React.Component {
    constructor(props) {
 	   super(props);
 	 	this.p = props.navigation.state.params.p;
+	 	this.op = props.navigation.state.params.p;
 		this.from = props.navigation.state.params.from;
 		
 		this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
@@ -112,6 +113,7 @@ export default class SelectProductFinalScreen extends React.Component {
 	
 	this.navv.navigate(this.from,{
 		p: this.p,
+		originalProduct: this.op
 	});  
 	}
 	 

@@ -85,8 +85,29 @@ export default class AddSaleScreen extends React.Component {
   populateProducts = () => {
 	  try{
 	       this.p = this.props.navigation.state.params.p;
+	       this.op = this.props.navigation.state.params.originalProduct;
 		   console.log("p: ",this.p);
+		   console.log("op: ",this.op);
 		   let canAddThisProduct = false;
+		   
+		   //YOU ARE HERE
+		   /**
+		   
+		   //reduce original product stock
+		let origDt = {
+		createdAt: this.p.createdAt,
+		name: this.state.productName,
+		quantityType: this.state.quantityType,
+		sku: this.state.sku,
+		costPrice: this.state.costPrice,
+		sellingPrice: this.state.sellingPrice,
+		stock: this.state.stock,
+		notes: this.state.notes,
+		productImg: this.state.productImg,
+		categories: this.state.categories,
+		}
+		   
+		   **/
 		   
 		 if(this.state.products.length < 1){
 			 canAddThisProduct = true;
@@ -270,6 +291,8 @@ _addSale = () => {
             tax: tax,
             discount: discount			
 		};
+		
+		
 		
 		console.log(dt);
 		helpers.addSale(dt,this.navv);

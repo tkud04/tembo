@@ -32,6 +32,7 @@
     "react-native-fs": "^2.16.2",
     "react-native-generic-table-page": "^0.4.1",
     "react-native-gesture-handler": "~1.5.2",
+    "react-native-paystack": "^3.4.0",
     "react-native-reanimated": "~1.4.0",
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-svg": "9.13.3",
