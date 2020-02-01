@@ -9,6 +9,7 @@ import AppStyles from '../styles/AppStyles';
 import * as helpers from '../Helpers';
 import util from 'react-native-util';
 import AssetUtils from 'expo-asset-utils';
+import CButton from '../components/CButton';
 import * as FileSystem from 'expo-file-system';
 import * as WebBrowser from 'expo-web-browser';
 import * as Permissions from 'expo-permissions';
@@ -19,18 +20,29 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 
 //var RNFS = require('react-native-fs');
 
+
 export default class PackageScreen extends React.Component { 
  constructor(props) {
     super(props);
 	this.pkg = props.navigation.state.params.pkg;
+	this.signupData = props.navigation.state.params.signupData;
 	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
+	
+	console.log('this.pkg: ',this.pkg);
+	console.log('this.signupData: ',this.signupData);
 	
     this.state = { text: '',
                    loading: false,
-				   id: pkg.id,
-				   name: pkg.name,
-				   price: pkg.price,
-				   saved: pkg.saved,
+				   id: this.pkg.id,
+				   name: this.pkg.name,
+				   price: this.pkg.price,
+				   saved: this.pkg.saved,
+				   cardNumber: "",
+				   cardNumberBorderBottomColor: "#ccc",
+				   cardExpiry: "",
+				   cardExpiryBorderBottomColor: "#ccc",
+				   cvv: "",
+				   cvvBorderBottomColor: "#ccc"
 				 };
     this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 	this.navv = null;
@@ -45,6 +57,12 @@ export default class PackageScreen extends React.Component {
 	let file = await AssetUtils.resolveAsync(require('../html/charts.html'));
 	let fileContents = await FileSystem.readAsStringAsync(file.localUri);
 	this.html = fileContents;
+  }
+
+  _chargeCard = () => {
+	console.log('_chargeCard -> this.pkg: ',this.pkg);
+	console.log('_chargeCard -> this.signupData: ',this.signupData);
+	
   }
   
   launchDrawer = () => {
@@ -72,20 +90,72 @@ static navigationOptions = ({navigation}) => {
 	  this.navv = navv;
     return (
 	       <Container>
-           <WebView 
-		    useWebKit={true}
-		    source={{ html: this.html }} 
-			originWhitelist={['*']}
-		    style={{flex: 1}}
-			startInLoadingState={true}
-            allowUniversalAccessFromFileURLs={true}
-            javaScriptEnabled={true}
-            mixedContentMode={'always'}
-			onMessage={event => {
-               helpers.handlePostMessageAsync(event.nativeEvent.data);
-            }}
-            onNavigationStateChange={this.handleNavStateChange}
-		   />
+              <ScrollView>
+			  <Row>
+			  <ProductInputWrapper style={{borderColor: this.state.cardNumberBorderBottomColor}}>
+					 <ProductDescription>CARD NUMBER</ProductDescription>
+				    <ProductInput			
+				     placeholder="0000 0000 0000 0000"
+				     onChangeText={text => {
+						this.setState({cardNumber: text});
+					 }}
+					 onFocus={() => {
+						 
+						this.setState({cardNumberBorderBottomColor: "#00a2e8"});
+					 }}
+					 onBlur={() => {
+						
+						this.setState({cardNumberBorderBottomColor: "#ccc"});
+					 }}
+					 keyboardType="decimal-pad"
+					/>
+				</ProductInputWrapper>
+				</Row>
+				<Row>
+			  <ProductInputWrapper style={{borderColor: this.state.cardExpiryBorderBottomColor}}>
+					 <ProductDescription>CARD EXPIRY</ProductDescription>
+				    <ProductInput			
+				     placeholder="MM / YY"
+				     onChangeText={text => {
+						this.setState({cardExpiry: text});
+					 }}
+					 onFocus={() => {
+						 
+						this.setState({cardExpiryBorderBottomColor: "#00a2e8"});
+					 }}
+					 onBlur={() => {
+						
+						this.setState({cardExpiryBorderBottomColor: "#ccc"});
+					 }}
+					 keyboardType="decimal-pad"
+					/>
+					</ProductInputWrapper>
+					<ProductInputWrapper style={{borderColor: this.state.cvvBorderBottomColor}}>
+					 <ProductDescription>CVV</ProductDescription>
+				    <ProductInput			
+				     placeholder="123"
+				     onChangeText={text => {
+						this.setState({cvv: text});
+					 }}
+					 onFocus={() => {
+						 
+						this.setState({cvvBorderBottomColor: "#00a2e8"});
+					 }}
+					 onBlur={() => {
+						
+						this.setState({cvvBorderBottomColor: "#ccc"});
+					 }}
+					 keyboardType="decimal-pad"
+					/>
+					</ProductInputWrapper>
+				</Row>
+				<SubmitButton
+				       onPress={() => {this._chargeCard()}}
+				       title="Submit"
+                    >
+                        <CButton title={`Pay N${this.pkg.price}`} background="green" color="#fff" />					   
+				</SubmitButton>	
+			  </ScrollView>	
 		   </Container>
     );
   }
@@ -108,6 +178,33 @@ const Container = styled.View`
 					 background-color: white;	
                      border-radius: 20px;					 
 `;
-const MenuButton = styled.TouchableOpacity`
 
+const SubmitButton = styled.TouchableOpacity`
+
+`;
+
+const Row = styled.View`
+   margin: 5px;
+   width: 100%;
+   flex-direction: row;
+`;
+
+const ProductInputWrapper = styled.View` 
+                   margin-left: 10px;
+				   border: 1px solid #bbb;
+				   padding: 10px;
+`;
+
+const ProductDescription = styled.Text` 
+                   color: #555;
+				   margin-bottom: 2px;
+				   font-size: 12px;
+`;
+					 
+const ProductInput = styled.TextInput`
+					 align-items: center;
+					 padding: 10px;
+					 margin-top: 2px;
+					 margin-bottom: 2px;
+					 color: #000;
 `;

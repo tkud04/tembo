@@ -6,6 +6,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import { Notifications } from 'expo';
+//import RNPaystack from 'react-native-paystack';
 import {showMessage, hideMessage} from 'react-native-flash-message';
  
   export async function download(url){
@@ -961,4 +962,29 @@ export function getProfit(products){
 	
 	return ret;
 	
+}
+
+export function chargeCard(cardParams){
+//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   //console.log(response);
+			   
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error:", message: "Network error"};
+		   }
+	   })
+	   .catch(error => {
+		    alert("Failed to send message: " + error);			
+	   })
+	   .then(res => {
+		   callback(res); 
+		   
+		   
+	   }).catch(error => {
+		    alert("Unknown error: " + error);			
+	   });
 }

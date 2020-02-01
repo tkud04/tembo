@@ -23,18 +23,19 @@ export default class SubscribeScreen extends React.Component {
     this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	this.navv = null;
 	this.signupData = props.navigation.state.params.signupData;
+	console.log("Signup data (subscribe screen): ",this.signupData);
 	
 	this.pkgRow1 = [
 		{
 		   id: 345,
-	 	   name: "30 days",
+	 	   name: "1 Week",
 		   price: "N100.00",
 		   saved: "N0",
 		   amount: 10000
 		},
 		{
 		   id: 232,
-	 	   name: "90 days",
+	 	   name: "1 Month",
 		   price: "N200.00",
 		   saved: "N0",
 		   amount: 20000
@@ -44,14 +45,14 @@ export default class SubscribeScreen extends React.Component {
 	this.pkgRow2 = [
 		{
 		   id: 125,
-	 	   name: "180 days",
+	 	   name: "3 Months",
 		   price: "N400.00",
 		   saved: "N100",
 		   amount: 40000
 		},
 		{
 		   id: 962,
-	 	   name: "360 days",
+	 	   name: "1 Year",
 		   price: "N800.00",
 		   saved: "N200",
 		   amount: 80000
@@ -103,10 +104,10 @@ static navigationOptions = ({navigation}) => {
 					<ItemsLayout>
 					 {
 					  this.pkgRow1.map((p) => {
-						  console.log(p);					  
+						 // console.log(p);					  
 						  return (
 						    <Column key={p.id}>
-					          <SubscribeCard pkg={p} navv={navv}/>
+					          <SubscribeCard pkg={p} signupData={this.signupData} navv={navv}/>
 					        </Column>  
 						  )
 					  })
@@ -118,17 +119,13 @@ static navigationOptions = ({navigation}) => {
 						  //console.log(p);					  
 						  return (
 						    <Column key={p.id}>
-					          <SubscribeCard pkg={p} navv={navv}/>
+					          <SubscribeCard pkg={p} signupData={this.signupData} navv={navv}/>
 					        </Column>  
 						  )
 					  })
 				     }
 					</ItemsLayout>
-					<ItemsLayout style={{marginTop: -30,alignItems: 'center'}}>				
-						    <FullColumn key={this.lifetimePkg.id}>
-					          <SubscribeCard pkg={this.lifetimePkg} navv={navv}/>
-					        </FullColumn>  						 
-					</ItemsLayout>
+					
 			    </ScrollView>
 			</Container>
     );

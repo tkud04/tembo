@@ -1,68 +1,218 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Platform, StatusBar, CameraRoll} from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
-import { Text, Linking } from 'react-native';
-import { WebView } from 'react-native-webview';
-import CStatusBar from '../components/CStatusBar';
+import {ScrollView, Button} from 'react-native';
+import styled from 'styled-components';
+import Categories from '../components/Categories';
+import SubscribeCard from '../components/SubscribeCard';
+import AppInputImageHeader from '../components/AppInputImageHeader';
 import * as helpers from '../Helpers';
-import util from 'react-native-util';
-import * as FileSystem from 'expo-file-system';
-import * as WebBrowser from 'expo-web-browser';
-import * as Permissions from 'expo-permissions';
+import AppStyles from '../styles/AppStyles';
+import {showMessage, hideMessage} from 'react-native-flash-message';
+
+
 import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
+
+
 export default class SubscribeScreen extends React.Component { 
-  static navigationOptions = {
-       header: null
+
+ constructor(props) {
+    super(props);
+    this.state = { text: '', loading: false,dataSource: []};
+    this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
+	this.navv = null;
+	this.signupData = props.navigation.state.params.signupData;
+	
+	this.pkgRow1 = [
+		{
+		   id: 345,
+	 	   name: "1 Week",
+		   price: "N100.00",
+		   saved: "N0",
+		   amount: 10000
+		},
+		{
+		   id: 232,
+	 	   name: "1 Month",
+		   price: "N200.00",
+		   saved: "N0",
+		   amount: 20000
+		},
+	];
+	
+	this.pkgRow2 = [
+		{
+		   id: 125,
+	 	   name: "3 Months",
+		   price: "N400.00",
+		   saved: "N100",
+		   amount: 40000
+		},
+		{
+		   id: 962,
+	 	   name: "1 Year",
+		   price: "N800.00",
+		   saved: "N200",
+		   amount: 80000
+		},
+	];
+		
+	this.lifetimePkg = {
+		   id: 837,
+	 	   name: "One Time Purchase (Lifetime)",
+		   price: "N1,000.00",
+		   saved: "N500",
+		   amount: 100000
+		};
+	
+  }
+  
+  launchDrawer = () => {
+	this.navv.toggleDrawer();  
+  }
+
+static navigationOptions = ({navigation}) => {
+	 
+	  return {
+       drawerLabel: 'Subscribe',
+	   headerStyle: {
+		   backgroundColor: AppStyles.headerBackground,
+		   height: AppStyles.headerHeight    		   
+	   },
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.chartBar}  leftParam = "goBack" navv = {navigation} title="Tembo" subtitle="Select a plan"  sml={60}/>,
+	   headerTintColor: AppStyles.headerColor,
+	   headerTitleStyle: {
+		   
+	   },
+	   headerLeft: null,
+	  }
+	  
 	  };
 
-  state = {
-	userCook: "",
-	activeUser: ""
-  };
-  static navigatorStyle = {
-    tabBarHidden: true,
-}
 
   render() {
+	  let items = [];
+	  let navv = this.props.navigation;
+	  this.navv = navv;
+		 //console.log(items);
+		 
     return (
-	       <View style={{flex: 1}}>
-	       <CStatusBar backgroundColor="#2EBD6B" barStyle="light-content" />		   
-           <WebView 
-		    useWebKit={true}
-		    source={{ uri: 'https://eschoolng.net/mobileapp' }} 
-		    style={{flex: 1}}
-			startInLoadingState={true}
-            allowUniversalAccessFromFileURLs={true}
-            javaScriptEnabled={true}
-            mixedContentMode={'always'}
-			onMessage={event => {
-               helpers.handlePostMessageAsync(event.nativeEvent.data);
-            }}
-            onNavigationStateChange={this.handleNavStateChange}
-		   />
-		   </View>
+	        <Container>
+			    <ScrollView>
+					<ItemsLayout>
+					 {
+					  this.pkgRow1.map((p) => {
+						  console.log(p);					  
+						  return (
+						    <Column key={p.id}>
+					          <SubscribeCard pkg={p} navv={navv}/>
+					        </Column>  
+						  )
+					  })
+				     }			
+					</ItemsLayout>
+					<ItemsLayout style={{marginTop: -30}}>
+					  {
+					  this.pkgRow2.map((p) => {
+						  //console.log(p);					  
+						  return (
+						    <Column key={p.id}>
+					          <SubscribeCard pkg={p} navv={navv}/>
+					        </Column>  
+						  )
+					  })
+				     }
+					</ItemsLayout>
+					<ItemsLayout style={{marginTop: -30,alignItems: 'center'}}>				
+						    <FullColumn key={this.lifetimePkg.id}>
+					          <SubscribeCard pkg={this.lifetimePkg} navv={navv}/>
+					        </FullColumn>  						 
+					</ItemsLayout>
+			    </ScrollView>
+			</Container>
     );
   }
   
-      handleNavStateChange = newNavState => {
-	 const { url } = newNavState;
-	 	 if (!url) return;
-	// console.log("url: " + url);
-	 if(url.includes("admin/assignment")){
-		 this.webview.stopLoading();
-		 console.log("url: " + url);
-	 }
-
-  };
 }
 
-const styles = StyleSheet.create({ 
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
-});
+const Container = styled.View`
+                     flex: 1;
+					 background-color: white;	
+                     border-radius: 20px;					 
+`;
+
+const TitleBar = styled.View`
+                     width: 100%;
+					 margin-top: 40px;
+					 padding-left: 80px;
+					 flex-direction: row;
+`;
+
+const Avatar = styled.Image`
+           width: 44px;
+		   height: 44px;
+		   background: black;
+		   border-radius: 22px;
+		   margin-left: 20px;
+		   position: absolute;
+		   top: 0;
+		   left: 0;
+`;
+
+const Logo = styled.Image`
+           width: 33px;
+		   height: 33px;
+		   background: black;
+		   border-radius: 22px;
+		   margin-left: 20px;
+		   position: absolute;
+		   top: 0;
+		   left: 0;
+`;
+
+const Title = styled.Text`
+                     margin-top: -5px;
+                     font-size: 24;
+					 font-weight: 500;
+					 color: #b8bece;
+`;
+
+const Name = styled.Text`
+                     font-size: 24;
+					 font-weight: bold;
+					 color: #3c4560;
+					 margin-left: 10px;
+					 margin-top: -5px;
+`;
+
+const Subtitle = styled.Text`
+                    font-size: 20px;
+					color: #3c4560;
+					font-weight: 500;
+					margin-top: 10px;
+					margin-left: 25px;
+					text-transform: uppercase;
+`;
+
+const ItemsLayout = styled.View`
+                     flex-direction: row;
+					 flex: 1;					 
+`;
+
+const Column = styled.View`
+                   width: 50%;
+				   align-items: center;
+`;
+
+const FullColumn = styled.View`
+                   width: 90%;
+				   align-items: center;
+`;
+
+
+const NavButton = styled.Button``;
+
+const MenuButton = styled.TouchableOpacity`
+
+`;

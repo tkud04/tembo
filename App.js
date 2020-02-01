@@ -14,6 +14,7 @@ import * as FileSystem from 'expo-file-system';
 import { Notifications } from 'expo';
 import FlashMessage from 'react-native-flash-message';
 import {ThemeContext,UserContext} from './MyContexts.js';
+//import RNPaystack from 'react-native-paystack';
 
 
 
@@ -31,7 +32,7 @@ constructor(props){
  	
   };
   
-	
+  //RNPaystack.init({ publicKey: 'pk_test_7321b6bbe1d8d6281785f9760fe8b3b59f15172f' });
   //this.resolve(this.hu);
 }
 

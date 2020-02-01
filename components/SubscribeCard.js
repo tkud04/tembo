@@ -25,7 +25,8 @@ return(
 		onPress={() =>{
 			let navv = props.navv;
 			navv.navigate('Package',{
-		     pkg : props.pkg
+		     pkg : props.pkg,
+			 signupData: props.signupData
 	        });  
 		}}
       >
