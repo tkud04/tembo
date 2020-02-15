@@ -34,6 +34,14 @@ constructor(props){
   
   //RNPaystack.init({ publicKey: 'pk_test_7321b6bbe1d8d6281785f9760fe8b3b59f15172f' });
   //this.resolve(this.hu);
+  
+  		  helpers.getLoggedInUser().then((dt) => {
+			  this.state.user = dt;					  
+			  console.log("uu",this.state.user);
+			  this.state.up([this.state.user]);
+			  this.state.isRealLoadingComplete = true;
+			 
+		 });
 }
 
 resolve = async (pr) => {
@@ -54,14 +62,15 @@ resolve = async (pr) => {
   };
   
   _updateUser = (ret) => {
-    this.state.user = ret[0];
-    this.state.loggedIn = (Object.keys(this.state.user).length === 5);
-	console.log("user context updated with ",[ret,this.state.loggedIn]);
+    let uu = ret[0];
+    let ll = (Object.keys(this.state.user).length === 5);
+	this.setState({user: uu,loggedIn: ll});
+	console.log("user context updated with ",[uu,ll]);
   };
 
   render() {
    
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+    if (!this.state.isRealLoadingComplete && !this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
           startAsync={this._loadResourcesAsync}
@@ -72,12 +81,6 @@ resolve = async (pr) => {
     } else {
 		//helpers.getLoggedInUser((u) => {this._updateUser(u)});
 		
-		  helpers.getLoggedInUser().then((dt) => {
-			  this.state.user = dt;					  
-			  console.log("uu",this.state.user);
-			  this.state.up([this.state.user]);
-			 
-		 });
 		  return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}

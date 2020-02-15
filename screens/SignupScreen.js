@@ -135,7 +135,8 @@ export default class SignupScreen extends React.Component {
 		 });
 		// console.log(this.navv);
 	NavigationService.navigate("SelectPlan",{
-		signupData: dt
+		signupData: dt,
+		upp: upp
 	});
 		 
 	/**

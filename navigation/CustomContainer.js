@@ -30,10 +30,10 @@ export default class CustomContainer extends React.Component {
 	
 	
 	_getContainer = (uu,upp,lli) => {
-		      let kl = Object.keys(this.state.uuu).length;
+		      let kl = Object.keys(uu).length;
 			  console.log("keys length: ",kl);
 		       this.state.lli = (kl === 5);
-			    console.log('User and lli from  _getContainer: ',[this.state.uuu,this.state.lli]);
+			    console.log('User and lli from  _getContainer: ',[uu,this.state.lli]);
 			  let mnav = null;
 			  mnav = (this.state.lli) ? AppNavigator: GuestNavigator;
 		      //console.log(Object.keys(uu).length);
@@ -50,8 +50,6 @@ export default class CustomContainer extends React.Component {
 		}
 	
 	render(){
-		console.log("loading complete: ",this.state.isLoadingComplete);
-		if(this.state.isLoadingComplete){
 			return (
                 <ThemeContext.Consumer>
                   {theme => (
@@ -63,21 +61,6 @@ export default class CustomContainer extends React.Component {
                   )}
                 </ThemeContext.Consumer>		             				         
             );
-		
-		}
-		else{
-			 helpers.getLoggedInUser().then((dt) => {
-			  this.state.uuu = dt;
-			  this.state.lli = (Object.keys(dt).length === 0);
-			   this.setState({ isLoadingComplete: true });
-			  console.log('User in customcontainer render: ',this.state.uuu);
-			  console.log("loading complete render: ",this.state.isLoadingComplete);
-		 });
-		 
-			return (
-			<View></View>
-			);
-		}
 	}
 }
 

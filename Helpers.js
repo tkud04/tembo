@@ -32,17 +32,15 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
     return false;
 }
   
-    export async function handlePostMessageAsync(msgg){
-	  let uu = ""; //main url to launch in browser  
-	  let uc = ""; //user cookie
-	  let au = "" //active user
-	  
+    export async function handlePostMessageAsync(msgg){	  
 	  console.log("posted message: " + msgg);
 	  parsedMsg = this.tryParseJSON(msgg);
+	  console.log("parsed message: " + parsedMsg);
 	  
+	  /**
 	  if(parsedMsg){
 		  console.log("parsed message\n\nschool code: " + parsedMsg.userCook + "\nusername: " + parsedMsg.activeUser);
-          uc = parsedMsg.userCook;	  
+          uc = parsedMsg.userCook; 	  
           au = parsedMsg.activeUser;	  
           cid = parsedMsg.cid;	  
 		//this.setState({userCook: parsedMsg.userCook,activeUser: parsedMsg.activeUser});
@@ -61,60 +59,8 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 	  }
 	  else{
 		   this.download(postData);
-		 /*
-	  let msgArr = postData.split('|');
-	  //let result = null;
-	  
-	  if(msgArr[0] == "report"){
-		  uu = msgArr[1];
-		  ffname = FileSystem.documentDirectory + "eschoolng.pdf";
-		   console.log("report card script to download: " + uu);
-           this.download(uu);
 	  }
-	  else if(msgArr[0] == "assignment"){
-		  msg = msgArr[1];
-		  let nmsg = msg.substr(3);
-	      uu = "https://eschoolng.net/" + uc + "/" + nmsg;
-		   console.log("assignment file to download: " + uu);
-	      fnameArr =  msg.split('/');
-	      ffname = FileSystem.documentDirectory + fnameArr[3];	  
-          this.download(uu);
-	  }
-	  
-	  */
-	  
-	  /**
-	  else if(msgArr[0] == "assignment"){
-		  msg = msgArr[1];
-		  let nmsg = msg.substr(3);
-	      uu = "https://eschoolng.net/berkley/" + nmsg;
-		   console.log("assignment file to download: " + uu);
-	      fnameArr =  msg.split('/');
-	      ffname = FileSystem.documentDirectory + fnameArr[3];
-		  
-		  let result = await WebBrowser.openBrowserAsync(uu);
-	  if(result.type == "opened"){
-		  dmb = WebBrowser.dismissBrowser();
-	  }
-	  console.log(result);
-	  }
-	  
-
-	
-	 //alert(msg);
-	 
-	 //We have the URI, download the file to Documents
-	 
-	 //iOS
-	 /*
-	 if(Platform.OS === 'ios'){
-	 
-     }
-     else if(Platform.OS === 'android'){
-		 CameraRoll.saveToCameraRoll( uu, 'photo');
-	 }	 
-	 **/
-	  }
+	  **/
    }
   
   
@@ -988,3 +934,158 @@ export function chargeCard(cardParams){
 		    alert("Unknown error: " + error);			
 	   });
 }
+
+export function initializeTransaction(data){
+	let initialize_url = "https://api.paystack.co/transaction/initialize/";
+	
+	return fetch(initialize_url, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+    'Content-Type': 'application/json',
+    'authorization': 'Bearer sk_test_ba85038cb3b6a55e707404a245ad36108a9f2225',
+    'cache-control': 'no-cache'
+  },
+      body: JSON.stringify(data)
+  })
+  .then(response => {
+  	//console.log(response);
+	    return response;
+	})
+	.then(response => {
+	    //console.log(response);
+         if(response.status === 200){
+			   //console.log(response);
+			   
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error:", message: "Couldn't initialize transaction"};
+		   }
+		   })
+    .catch(error => {
+    	   return {status: "error:", message: `Failed to initialize transaction: ${error}`};
+	   });
+  /**
+  .then(response => {
+	    //console.log(response);
+         if(response.status === 200){
+			   //console.log(response);
+			   
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error:", message: "Couldn't fetch signup URL"};
+		   }
+		   })
+    .catch(error => {
+		   console.log(`Failed to fetch push endpoint ${PUSH_ENDPOINT}: ${error}`);		
+	   })
+	   .then(res => {
+		   console.log(res); 
+		   res.tk = token;
+		   callback(res);
+		   
+	   }).catch(error => {
+		   console.log(`Unknown error: ${error}`);			
+	   });
+	**/
+}
+
+/* repeatString() returns a string which has been repeated a set number of times */
+function repeatString(str, num) {
+    out = '';
+    for (var i = 0; i < num; i++) {
+        out += str;
+    }
+    return out;
+}
+
+/*
+dump() displays the contents of a variable like var_dump() does in PHP. dump() is
+better than typeof, because it can distinguish between array, null and object.
+Parameters:
+    v:              The variable
+    howDisplay:     "none", "body", "alert" (default)
+    recursionLevel: Number of times the function has recursed when entering nested
+                    objects or arrays. Each level of recursion adds extra space to the
+                    output to indicate level. Set to 0 by default.
+Return Value:
+    A string of the variable's contents
+Limitations:
+    Can't pass an undefined variable to dump(). 
+    dump() can't distinguish between int and float.
+    dump() can't tell the original variable type of a member variable of an object.
+    These limitations can't be fixed because these are *features* of JS. However, dump()
+*/
+export function dump(v, howDisplay, recursionLevel) {
+    howDisplay = (typeof howDisplay.type === 'undefined') ? {type: "alert"} : howDisplay;
+    recursionLevel = (typeof recursionLevel !== 'number') ? 0 : recursionLevel;
+
+    var vType = typeof v;
+    var out = vType;
+
+    switch (vType) {
+        case "number":
+        /* there is absolutely no way in JS to distinguish 2 from 2.0
+           so 'number' is the best that you can do. The following doesn't work:
+           var er = /^[0-9]+$/;
+           if (!isNaN(v) && v % 1 === 0 && er.test(3.0)) {
+               out = 'int';
+           }
+        */
+        break;
+    case "boolean":
+        out += ": " + v;
+        break;
+    case "string":
+        out += "(" + v.length + '): "' + v + '"';
+        break;
+    case "object":
+        //check if null
+        if (v === null) {
+            out = "null";
+        }
+        //If using jQuery: if ($.isArray(v))
+        //If using IE: if (isArray(v))
+        //this should work for all browsers according to the ECMAScript standard:
+        else if (Object.prototype.toString.call(v) === '[object Array]') {
+            out = 'array(' + v.length + '): {\n';
+            for (var i = 0; i < v.length; i++) {
+                out += repeatString('   ', recursionLevel) + "   [" + i + "]:  " +
+                    dump(v[i], "none", recursionLevel + 1) + "\n";
+            }
+            out += repeatString('   ', recursionLevel) + "}";
+        }
+        else {
+            //if object
+            let sContents = "{\n";
+            let cnt = 0;
+            for (var member in v) {
+                //No way to know the original data type of member, since JS
+                //always converts it to a string and no other way to parse objects.
+                sContents += repeatString('   ', recursionLevel) + "   " + member +
+                    ":  " + dump(v[member], "none", recursionLevel + 1) + "\n";
+                cnt++;
+            }
+            sContents += repeatString('   ', recursionLevel) + "}";
+            out += "(" + cnt + "): " + sContents;
+        }
+        break;
+    default:
+        out = v;
+        break;
+    }
+
+    if (howDisplay.type == 'body') {
+        var pre = document.getElementById(howDisplay.elem);
+        pre.innerHTML = out;
+       // document.body.appendChild(pre);
+    }
+    else if (howDisplay.type == 'alert') {
+       // alert(out);
+    }
+
+    return out;
+}
+ 

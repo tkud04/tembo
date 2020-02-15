@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {SvgXml} from 'react-native-svg';
 import * as helpers from '../Helpers';
 import CButton from './CButton';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 let naira = '\x8358';
 let ml = "20px";
@@ -24,10 +25,38 @@ return(
       <SubmitButton
 		onPress={() =>{
 			let navv = props.navv;
-			navv.navigate('Package',{
-		     pkg : props.pkg,
-			 signupData: props.signupData
-	        });  
+			let dt = {
+		      name: props.signupData.name,
+		      email: props.signupData.email,
+		      plan: props.pkg.plan
+          };
+		  
+			//initialize transaction
+            helpers.initializeTransaction(dt)
+            .then(ret => {
+  	          console.log("ret: ",ret);
+			  if(ret.status === "error"){
+				 showMessage({
+			      message: ret.message,
+			      type: 'danger'
+		        });
+			  }
+			  else{
+				navv.navigate('Package',{
+		         url : ret.data.authorization_url,
+			     signupData: props.signupData
+	            });  
+			  }
+			   
+	        })
+			.catch(error => {
+				console.log("error: ",error);
+				 showMessage({
+			      message: error.message,
+			      type: 'danger'
+		        });
+		        	
+	        });
 		}}
       >
          <CButton title="Subscribe" background="green" color="#fff" />					   

@@ -31,14 +31,14 @@ export default class SubscribeScreen extends React.Component {
 	 	   name: "1 Week",
 		   price: "N100.00",
 		   saved: "N0",
-		   amount: 10000
+		   plan: 'PLN_2uvu6h4nwe36e47'
 		},
 		{
 		   id: 232,
 	 	   name: "1 Month",
 		   price: "N200.00",
 		   saved: "N0",
-		   amount: 20000
+		   plan: 'PLN_9e4lr2n0wvw1qjw'
 		},
 	];
 	
@@ -48,14 +48,14 @@ export default class SubscribeScreen extends React.Component {
 	 	   name: "3 Months",
 		   price: "N400.00",
 		   saved: "N100",
-		   amount: 40000
+		   plan: 'PLN_uuzfsn4x9x6vcrc'
 		},
 		{
 		   id: 962,
 	 	   name: "1 Year",
 		   price: "N800.00",
 		   saved: "N200",
-		   amount: 80000
+		   plan: 'PLN_7nbz32fygirg5zt'
 		},
 	];
 		

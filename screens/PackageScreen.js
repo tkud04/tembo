@@ -24,32 +24,22 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 export default class PackageScreen extends React.Component { 
  constructor(props) {
     super(props);
-	this.pkg = props.navigation.state.params.pkg;
+	this.url = props.navigation.state.params.url;
 	this.signupData = props.navigation.state.params.signupData;
+	this.upp = props.navigation.state.params.upp;
 	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	
-	console.log('this.pkg: ',this.pkg);
+	console.log('this.url: ',this.url);
 	console.log('this.signupData: ',this.signupData);
 	
     this.state = { text: '',
                    loading: false,
-				   id: this.pkg.id,
-				   name: this.pkg.name,
-				   price: this.pkg.price,
-				   saved: this.pkg.saved,
-				   cardNumber: "",
-				   cardNumberBorderBottomColor: "#ccc",
-				   cardExpiry: "",
-				   cardExpiryBorderBottomColor: "#ccc",
-				   cvv: "",
-				   cvvBorderBottomColor: "#ccc"
 				 };
     this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 	this.navv = null;
-	console.log(this.state);
 	
 		this.html = "";
-		this.getHtml();
+		this.webview = null;
   }
   
   getHtml = async () => {
@@ -65,6 +55,64 @@ export default class PackageScreen extends React.Component {
 	
   }
   
+  sendData = () => {
+	  //console.log("webview: ",this.webview);
+	  if(this.webview !== null){
+	   this.webview.postMessage(this.state.run);
+	  }
+  }
+  
+  
+  handlePaymentPostMessageAsync = (msgg) => {	  
+	  //console.log("posted message: " + msgg);
+	  parsedMsg = helpers.tryParseJSON(msgg);
+	  console.log("parsed message: ",parsedMsg);
+	  
+	   if(parsedMsg && parsedMsg.status === "success"){
+		 
+     helpers.signup(this.signupData,(res) => {
+		 if(res.status == "ok"){
+			    showMessage({
+			      message: "Signup successful! Signing you in..",
+			      type: 'success'
+		        });
+		        this.signupData.tk = res.token;
+				
+		        //Log user in
+		        helpers.login(this.signupData,(res) => {
+					if(res.status == "ok"){
+                        showMessage({
+			              message: `Welcome back ${res.user.name}! Fetching your dashboard..`,
+			              type: 'success'
+		                });	
+                         
+                        this.upp(res.user);
+                        						
+						//this.navv.navigate("Dashboard");
+					}
+					else{
+						showMessage({
+			              message: `Username or password incorrect, please try again.`,
+			              type: 'danger'
+		                });
+					}
+					this.state.loading = false;
+				});   
+		   }
+		   else{
+			    showMessage({
+			      message: "There was a problem signing you up, please try again later",
+			      type: 'danger'
+		        });
+		    
+		   }
+	 });
+     
+	  }
+	  
+}
+
+  
   launchDrawer = () => {
 	this.navv.toggleDrawer();  
   }
@@ -75,7 +123,7 @@ static navigationOptions = ({navigation}) => {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight
 	   },
-	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.chartBar}  leftParam = "goBack" navv = {navigation} title="Choose package" subtitle="Choose a package" sml={60}/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.chartBar}  leftParam = "goBack" navv = {navigation} title="Signup" subtitle="Make payment" sml={60}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
@@ -90,72 +138,22 @@ static navigationOptions = ({navigation}) => {
 	  this.navv = navv;
     return (
 	       <Container>
-              <ScrollView>
-			  <Row>
-			  <ProductInputWrapper style={{borderColor: this.state.cardNumberBorderBottomColor}}>
-					 <ProductDescription>CARD NUMBER</ProductDescription>
-				    <ProductInput			
-				     placeholder="0000 0000 0000 0000"
-				     onChangeText={text => {
-						this.setState({cardNumber: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({cardNumberBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({cardNumberBorderBottomColor: "#ccc"});
-					 }}
-					 keyboardType="decimal-pad"
-					/>
-				</ProductInputWrapper>
-				</Row>
-				<Row>
-			  <ProductInputWrapper style={{borderColor: this.state.cardExpiryBorderBottomColor}}>
-					 <ProductDescription>CARD EXPIRY</ProductDescription>
-				    <ProductInput			
-				     placeholder="MM / YY"
-				     onChangeText={text => {
-						this.setState({cardExpiry: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({cardExpiryBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({cardExpiryBorderBottomColor: "#ccc"});
-					 }}
-					 keyboardType="decimal-pad"
-					/>
-					</ProductInputWrapper>
-					<ProductInputWrapper style={{borderColor: this.state.cvvBorderBottomColor}}>
-					 <ProductDescription>CVV</ProductDescription>
-				    <ProductInput			
-				     placeholder="123"
-				     onChangeText={text => {
-						this.setState({cvv: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({cvvBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({cvvBorderBottomColor: "#ccc"});
-					 }}
-					 keyboardType="decimal-pad"
-					/>
-					</ProductInputWrapper>
-				</Row>
-				<SubmitButton
-				       onPress={() => {this._chargeCard()}}
-				       title="Submit"
-                    >
-                        <CButton title={`Pay N${this.pkg.price}`} background="green" color="#fff" />					   
-				</SubmitButton>	
-			  </ScrollView>	
+				<WebView 
+		    useWebKit={true}
+		    source={{ uri: this.url }} 
+			originWhitelist={['*']}
+		    style={{flex: 1}}
+			startInLoadingState={true}
+            allowUniversalAccessFromFileURLs={true}
+            javaScriptEnabled={true}
+            mixedContentMode={'always'}
+			onMessage={event => {
+               this.handlePaymentPostMessageAsync(event.nativeEvent.data);
+            }}
+			onLoadEnd={() => {this.sendData()}}
+            onNavigationStateChange={this.handleNavStateChange}
+			ref={r => {this.webview = r;}}
+		   />
 		   </Container>
     );
   }

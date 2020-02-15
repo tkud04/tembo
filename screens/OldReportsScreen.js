@@ -7,7 +7,7 @@ import * as wvhelpers from '../WebViews/Helper';
 import AppStyles from '../styles/AppStyles';
 import AssetUtils from 'expo-asset-utils';
 import * as FileSystem from 'expo-file-system';
-import {ScrollView, Button} from 'react-native';
+import {View, ScrollView, Button} from 'react-native';
 import { WebView } from 'react-native-webview';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
@@ -16,20 +16,50 @@ import { Notifications } from 'expo';
 
 //var RNFS = require('react-native-fs');
 
-export default class ChartsScreen extends React.Component { 
+export default class ReportsScreen extends React.Component { 
  constructor(props) {
     super(props);
-	this.dt = props.navigation.state.params.dtt;
+	this.dt = {};
+	
 	this.props.navigation.setParams({goBack: () => {this.props.navigation.goBack()}});
 	this.props.navigation.setParams({goToCharts: () => {this.goToCharts()}});
 	
+	helpers.getSales((ss => {
+		let sss = [];
+		
+		for(let i = 0; i < ss.length; i++){
+			sss[i] = ss[i];
+			for(let ii = 0; ii < sss[i].products.length; ii++){
+				sss[i].products[ii].productImg = "";
+			}
+		}
+		this.dt.sales = sss;
+		
+	}));
+	
+	helpers.getProducts((pp => {
+		let ppp = [];
+			for(let j = 0; j < pp.length; j++){
+			ppp[j] = pp[j];
+			ppp[j].productImg = "";
+		}
+		   this.dt.products = ppp;
+		}));
+	
+	setTimeout(() => {
+		
+         this.state.isLoadingComplete = true;
+	},2000);
+		
+	
     this.state = { text: '',
                    dt: this.dt,
-				  run: `${JSON.stringify(this.dt)}`
+				  run: `${JSON.stringify(this.dt)}`,
+				  isLoadingComplete: false
 				 };
+				 
     this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
 	this.navv = null;
-	console.log(this.dt);
 	
 		this.html = "";
 		this.getHtml();
@@ -39,7 +69,7 @@ export default class ChartsScreen extends React.Component {
   
   getHtml = async () => {
 	  //Webview local html
-	let file = await AssetUtils.resolveAsync(require('../html/charts.html'));
+	let file = await AssetUtils.resolveAsync(require('../html/full-reports.html'));
 	let fileContents = await FileSystem.readAsStringAsync(file.localUri);
 	this.html = fileContents;
   }
@@ -51,8 +81,10 @@ export default class ChartsScreen extends React.Component {
   
   sendData = () => {
 	  //console.log("webview: ",this.webview);
+	  console.log("this.dt: ",this.dt);
+	  let rrun = `${JSON.stringify(this.dt)}`;
 	  if(this.webview !== null){
-	   this.webview.postMessage(this.state.run);
+	   this.webview.postMessage(rrun);
 	  }
   }
 
@@ -65,7 +97,7 @@ export default class ChartsScreen extends React.Component {
 		   backgroundColor: AppStyles.headerBackground,
 		   height: AppStyles.headerHeight    		   
 	   },
-	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.chartArea} leftParam = "goBack" navv = {navigation} title="Reports" subtitle="View reports" sml={40}/>,
+	   headerTitle: () => <AppInputImageHeader xml={AppStyles.svg.chartArea} leftParam = "goBack" navv = {navigation} title="Reports" subtitle="Business/stock reports" sml={30}/>,
 	   headerTintColor: AppStyles.headerColor,
 	   headerTitleStyle: {
 		   
@@ -77,8 +109,8 @@ export default class ChartsScreen extends React.Component {
   render() {
 	  let navv = this.props.navigation;
 	  this.navv = navv;
-
-    return (
+     if(this.state.isLoadingComplete){
+      return (
 	       <Container>
            <WebView 
 		    useWebKit={true}
@@ -97,7 +129,12 @@ export default class ChartsScreen extends React.Component {
 			ref={r => {this.webview = r;}}
 		   />
 		   </Container>
-    );
+      );
+	}
+	else{
+		return (<View></View>);
+	}
+	 
   }
   
       handleNavStateChange = newNavState => {
