@@ -332,7 +332,12 @@ export async function updateProduct(data,n)
 		});
 	}
 	
-	await AsyncStorage.setItem('products',JSON.stringify(updatedProducts))
+	if(n === null){
+		await AsyncStorage.setItem('products',JSON.stringify(updatedProducts));
+	}
+
+    else{
+		await AsyncStorage.setItem('products',JSON.stringify(updatedProducts))
 	                  .then(() => {
 						  showMessage({
 			               message: `Product updated!`,
@@ -346,7 +351,7 @@ export async function updateProduct(data,n)
 			               type: 'danger'
 		                 });
 					  });
-					  
+	}	
 }
 
 export async function getProducts(callback)

@@ -8,6 +8,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import {ScrollView} from 'react-native';
+import { KeyboardAwareView } from 'react-native-keyboard-aware-view';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
@@ -179,10 +180,11 @@ export default class ProductsScreen extends React.Component {
 	  this.navv = this.props.navigation;
 	  
     return (
+	      <KeyboardAwareView animated={true}>
 	       <BackgroundImage source={require('../assets/images/bg.jpg')}>
 	        <Container>
 			  <ScrollView>		     
-                   
+                  
 				   <Row style={{marginTop: 10}}>
 				   <ImageUpload
 				    onPress={() => this.addImage()}
@@ -310,10 +312,12 @@ export default class ProductsScreen extends React.Component {
 				       title="Submit"
                     >
                         <CButton title="Submit" background="green" color="#fff" />					   
-				    </SubmitButton>			  
+				    </SubmitButton>	
+                 		
 			  </ScrollView>
 			</Container>
 			</BackgroundImage>
+			</KeyboardAwareView>			
     );
   }
   

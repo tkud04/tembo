@@ -282,7 +282,7 @@ export default class EditProductScreen extends React.Component {
 				    <ProductInput
 					style={{borderColor: this.state.stockBorderBottomColor}}
 				     placeholder="Stock"
-					 value={this.state.stock}
+					 value={`${this.state.stock}`}
 				     onChangeText={text => {
 						this.setState({stock: text});
 					 }}

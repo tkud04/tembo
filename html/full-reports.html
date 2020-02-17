@@ -1546,6 +1546,7 @@ function dump(v, howDisplay, recursionLevel) {
                                         <tbody>
                                         	
                                         </tbody>
+										<tfoot></tfoot>
                        </table>
                     </div>
                 </div>
@@ -1626,7 +1627,8 @@ function populateHotItemsTable(dtt){
   //body
   let ret = "";
    let unitsSold = [], totalProfit = [];
-  
+    let totalUnitsSold = 0, totalTotalProfit = 0;
+	
   //initialize the empty arrays for each of the products
   for(let i = 0; i < dtt.products.length; i++){
      let p = dtt.products[i];
@@ -1642,6 +1644,9 @@ function populateHotItemsTable(dtt){
 	  let pp = s.products[k];
 	   unitsSold[pp.sku] += parseInt(pp.qty);
 	   totalProfit[pp.sku] += parseInt(pp.profit);
+	   
+	   totalUnitsSold += parseInt(pp.qty);
+	   totalTotalProfit += parseInt(pp.profit);
    }
   }
   
@@ -1650,7 +1655,10 @@ function populateHotItemsTable(dtt){
     let temp = "<tr><td>" + p.sku + "</td><td>" + p.name + "</td><td>" + unitsSold[p.sku] + "</td><td>" + totalProfit[p.sku] + "</td></tr>";
     ret += temp;
   }
+  
+  let fret = "<tr><td></td><td></td><td>Total: <strong>" + totalUnitsSold + "</strong></td><td>Total: <strong>N" + totalTotalProfit + "</strong></td></tr>";
   $('#hot-items-table tbody').html(ret);
+  $('#hot-items-table tfoot').html(fret);
 }
 
 function populateSalesChart(dtt){
@@ -1692,14 +1700,15 @@ let salesChartContainer = new CanvasJS.Chart("salesChartContainer", {
 }
 
 function populateProfitChart(dtt){
-let rt = [];
+let rt = [], temp = [];
   let arr = dtt.sales;
   let totalProfitMetric = 0;
   
   for(let i = 0; i < arr.length; i++){
     let p = arr[i].products, totalProfit = 0;
 
-	let lbl = arr[i].customers[0].customerName + "(" + arr[i].date + ")";
+	//let lbl = arr[i].customers[0].customerName + "(" + arr[i].date + ")";
+	let lbl = arr[i].customers[0].customerName;
 	
 	for(let j = 0; j < p.length; j++){
 	   let pp = p[j];
@@ -1708,9 +1717,23 @@ let rt = [];
 	}
 	
 	//alert("lbl: " + lbl + ", totalProfit: " + totalProfit);
-	rt.push({label: lbl,y: totalProfit});
+	if(temp[lbl]){
+	  temp[lbl] += parseInt(totalProfit);
+	}
+	
+	else{
+	  temp[lbl] = parseInt(totalProfit);
+	}
+	
   }
-  
+
+ // console.log("temp: ",temp);
+  for(let k in temp){
+    let v = temp[k];
+	//console.log(`k = ${k}, v = ${v}`);
+	rt.push({label: k,y: v});
+  }
+
   let profitRet = [              
 		{
 		   
@@ -1739,27 +1762,27 @@ let profitsChartContainer = new CanvasJS.Chart("profitsChartContainer", {
   let newdt = JSON.parse(dtt);
    //dump(newdt, {type:'body',elem:'dtt'});
    
-   	let dt = {
-  "products": [
-     {
+   	    let dt = {
+  "products":   [
+      {
       "categories": "",
-      "costPrice": "2000",
-      "createdAt": "02/03/20",
-      "name": "Fine cloth",
+      "costPrice": "500",
+      "createdAt": "02/15/20",
+      "name": "Blue Ivy Condom",
       "notes": "",
       "productImg": "",
-      "quantityType": "piece",
-      "sellingPrice": "5000",
-      "sku": "SKU570560",
-      "stock": "200",
-      "updatedAt": "02/03/20",
+      "quantityType": "pack",
+      "sellingPrice": "1200",
+      "sku": "SKU282253",
+      "stock": 4,
+      "updatedAt": "02/17/20",
     },
   ],
-  "sales":  [
-     {
-      "createdAt": "02/03/20",
-      "customers":  [
-         {
+  "sales":   [
+      {
+      "createdAt": "02/15/20",
+      "customers":   [
+          {
           "createdAt": "",
           "customerEmail": "",
           "customerImg": "",
@@ -1773,37 +1796,81 @@ let profitsChartContainer = new CanvasJS.Chart("profitsChartContainer", {
           "updatedAt": "",
         },
       ],
-      "date": "02/03/20",
+      "date": "02/15/20",
       "discount": 0,
       "discountType": "flat",
-      "id": "sale-401562",
-      "products":  [
-         {
+      "id": "sale-245313",
+      "products":   [
+          {
           "categories": "",
-          "costPrice": "2000",
-          "createdAt": "02/03/20",
-          "name": "Fine cloth",
+          "costPrice": "500",
+          "createdAt": "02/15/20",
+          "name": "Blue Ivy Condom",
           "notes": "",
           "productImg": "",
-          "profit": 6000,
-          "qty": 2,
-          "quantityType": "piece",
-          "sellingPrice": "5000",
-          "sku": "SKU570560",
-          "stock": "200",
-          "updatedAt": "02/03/20",
+          "profit": 140000,
+          "qty": "200",
+          "quantityType": "pack",
+          "sellingPrice": "1200",
+          "sku": "SKU282253",
+          "stock": 0,
+          "updatedAt": "02/15/20",
         },
       ],
       "shipping": 0,
       "status": "ok",
       "tax": 0,
       "taxType": "flat",
-      "updatedAt": "02/03/20",
+      "updatedAt": "02/15/20",
     },
-     {
-      "createdAt": "02/03/20",
-      "customers":  [
-         {
+      {
+      "createdAt": "02/17/20",
+      "customers":   [
+          {
+          "createdAt": "02/17/20",
+          "customerEmail": "cus1@gmail.com",
+          "customerImg": "",
+          "customerName": "Trina Bum",
+          "customerPhone": "08052451212",
+          "customerType": "individual",
+          "gender": "female",
+          "id": "customer-314434",
+          "notes": "",
+          "sa": "23 sing road apapa Lagos",
+          "updatedAt": "02/17/20",
+        },
+      ],
+      "date": "02/17/20",
+      "discount": 0,
+      "discountType": "flat",
+      "id": "sale-252764",
+      "products":   [
+          {
+          "categories": "",
+          "costPrice": "500",
+          "createdAt": "02/15/20",
+          "name": "Blue Ivy Condom",
+          "notes": "",
+          "productImg": "",
+          "profit": 3500,
+          "qty": 5,
+          "quantityType": "pack",
+          "sellingPrice": "1200",
+          "sku": "SKU282253",
+          "stock": 4,
+          "updatedAt": "02/17/20",
+        },
+      ],
+      "shipping": 0,
+      "status": "ok",
+      "tax": 0,
+      "taxType": "flat",
+      "updatedAt": "02/17/20",
+    },
+	{
+      "createdAt": "02/17/20",
+      "customers":   [
+          {
           "createdAt": "",
           "customerEmail": "",
           "customerImg": "",
@@ -1817,79 +1884,35 @@ let profitsChartContainer = new CanvasJS.Chart("profitsChartContainer", {
           "updatedAt": "",
         },
       ],
-      "date": "02/03/20",
+      "date": "02/17/20",
       "discount": 0,
       "discountType": "flat",
-      "id": "sale-255193",
-      "products":  [
-         {
+      "id": "sale-245319",
+      "products":   [
+          {
           "categories": "",
-          "costPrice": "2000",
-          "createdAt": "02/03/20",
-          "name": "Fine cloth",
+          "costPrice": "500",
+          "createdAt": "02/17/20",
+          "name": "Blue Ivy Condom",
           "notes": "",
           "productImg": "",
-          "profit": 18000,
-          "qty": 6,
-          "quantityType": "piece",
-          "sellingPrice": "5000",
-          "sku": "SKU570560",
-          "stock": "200",
-          "updatedAt": "02/03/20",
+          "profit": 8400,
+          "qty": "12",
+          "quantityType": "pack",
+          "sellingPrice": "1200",
+          "sku": "SKU282253",
+          "stock": 0,
+          "updatedAt": "02/17/20",
         },
       ],
       "shipping": 0,
       "status": "ok",
       "tax": 0,
       "taxType": "flat",
-      "updatedAt": "02/03/20",
-    },
-     {
-      "createdAt": "02/03/20",
-      "customers":  [
-         {
-          "createdAt": "",
-          "customerEmail": "",
-          "customerImg": "",
-          "customerName": "Anonymous",
-          "customerPhone": "",
-          "customerType": "",
-          "gender": "",
-          "id": "",
-          "notes": "",
-          "sa": "",
-          "updatedAt": "",
-        },
-      ],
-      "date": "02/03/20",
-      "discount": 0,
-      "discountType": "flat",
-      "id": "sale-69629",
-      "products":  [
-         {
-          "categories": "",
-          "costPrice": "2000",
-          "createdAt": "02/03/20",
-          "name": "Fine cloth",
-          "notes": "",
-          "productImg": "",
-          "profit": 3000,
-          "qty": 1,
-          "quantityType": "piece",
-          "sellingPrice": "5000",
-          "sku": "SKU570560",
-          "stock": "200",
-          "updatedAt": "02/03/20",
-        },
-      ],
-      "shipping": 0,
-      "status": "ok",
-      "tax": 0,
-      "taxType": "flat",
-      "updatedAt": "02/03/20",
-    },
+      "updatedAt": "02/17/20",
+    }
   ],
-}
+};
 //dump(dt, {type:'body',elem:'dtt'});
 
 //Stock view

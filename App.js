@@ -82,7 +82,7 @@ resolve = async (pr) => {
 		//helpers.getLoggedInUser((u) => {this._updateUser(u)});
 		
 		  return (
-        <View style={styles.container}>
+		 <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
 		  <ThemeContext.Provider>
 		     <UserContext.Provider value={this.state}>
@@ -90,7 +90,8 @@ resolve = async (pr) => {
 		     </UserContext.Provider>
 		  </ThemeContext.Provider>
           <FlashMessage position="bottom" />
-        </View>
+		  </View>
+        
       );	
     }
   }

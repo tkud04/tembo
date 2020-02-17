@@ -90,11 +90,17 @@ export default class SelectProductFinalScreen extends React.Component {
 	  if(isNaN(sp)) sp = 0;
 	  if(isNaN(qty)) qty = 0;
 	  
-  let validationErrors = (this.state.qty < 1);
+  let validationErrors = (this.state.qty < 1 || this.state.qty > this.p.stock);
 	  if(validationErrors){
 	 if(this.state.qty < 1){
 		 showMessage({
 			 message: "Quantity must be at least 1",
+			 type: 'danger'
+		 });
+	 }
+	 if(this.state.qty > this.p.stock){
+		 showMessage({
+			 message: "Not enough in stock for that quantity!",
 			 type: 'danger'
 		 });
 	 }
@@ -104,6 +110,24 @@ export default class SelectProductFinalScreen extends React.Component {
 	else{
 	  this.p.profit = this.state.profit;
 	  this.p.qty = this.state.qty;
+	  this.p.stock -= this.state.qty;
+	 
+	 //Update the product here
+	 let newP = {
+       categories: this.p.categories,
+       costPrice: this.p.costPrice,
+       createdAt: this.p.createdAt,
+       name: this.p.name,
+       notes: this.p.notes,
+       productImg: this.p.productImg,
+       quantityType: this.p.quantityType,
+       sellingPrice: this.p.sellingPrice,
+       sku: this.p.sku,
+       stock: this.p.stock,
+       updatedAt: this.p.updatedAt,
+	 }
+	 
+	 helpers.updateProduct(newP,null);	
 	 
 	 console.log(this.p);
      showMessage({
