@@ -79,6 +79,28 @@ export default class AddSaleScreen extends React.Component {
 		ret += (parseInt(p[2]) * parseInt(p[3]));
 	}
     console.log("ret: ",ret);
+	
+	/** apply shipping, tax and discount if applicable)**/
+	 let shipping = parseInt(this.state.shipping), tax = parseInt(this.state.tax), discount = parseInt(this.state.discount);
+	 
+	  if(isNaN(shipping)) shipping = 0;
+	  if(isNaN(tax)) tax = 0;
+	  if(isNaN(discount)) discount = 0;
+	  
+	  if(shipping > 0){
+		  ret += shipping;
+	  } 
+	  if(discount > 0){
+		  let discountType = (this.state.discountType) ? this.state.discountType : "flat";
+		  if(discountType == "flat"){ ret -= discount;} 
+		  else if(discountType == "%"){ ret -= (ret * (discount / 100));} 
+	  } 
+	  if(tax > 0){
+		   let taxType = (this.state.taxType) ? this.state.taxType : "flat";
+		  if(taxType == "flat"){ ret += tax;} 
+		  else if(taxType == "%"){ ret += (ret * (tax / 100));} 
+	  }
+	  
     this.state.productsTable.total = ret;	
   }
   
@@ -185,6 +207,18 @@ export default class AddSaleScreen extends React.Component {
       this.state.customers.map((element) => {
 								return <ProductSelect.Item key={element.id} label={element.customerName} value={element.id}/>
 								});						
+  }
+  
+  _applyShipping = () => {
+	  this.getTotal(this.state.productsTable.rows);
+  }
+
+  _applyDiscount = () => {
+	  this.getTotal(this.state.productsTable.rows);
+  }
+
+  _applyTax = () => {
+	  this.getTotal(this.state.productsTable.rows);
   }
   
    goToSelectProduct = () => {
@@ -353,6 +387,7 @@ _addSale = () => {
 						
 						this.setState({shippingBorderBottomColor: "#ccc"});
 					 }}
+					  onEndEditing={() => {this._applyShipping()}}
 					  keyboardType="decimal-pad"
 					/>
 					</ProductInputWrapper>
@@ -374,6 +409,7 @@ _addSale = () => {
 						
 						this.setState({taxBorderBottomColor: "#ccc"});
 					 }}
+					  onEndEditing={() => {this._applyTax()}}
 					  keyboardType="decimal-pad"
 					/>
 					</BigInputWrapper>					
@@ -383,7 +419,7 @@ _addSale = () => {
 					    style={{borderColor: this.state.inputBorderBottomColor}}
 					    selectedValue={this.state.taxType}
 						mode="dropdown"
-					    onValueChange={(value,index) => {this.setState({taxType: value})}}
+					    onValueChange={(value,index) => {this.setState({taxType: value}); this._applyTax()}}
 					  >
 					    <CustomSelect.Item key="gtype-1" label="Tax type" value="none"/>
 						{
@@ -412,6 +448,7 @@ _addSale = () => {
 						
 						this.setState({discountBorderBottomColor: "#ccc"});
 					 }}
+					  onEndEditing={() => {this._applyDiscount()}}
 					  keyboardType="decimal-pad"
 					/>
 					</BigInputWrapper>					
@@ -421,7 +458,7 @@ _addSale = () => {
 					    style={{borderColor: this.state.inputBorderBottomColor}}
 					    selectedValue={this.state.discountType}
 						mode="dropdown"
-					    onValueChange={(value,index) => {this.setState({discountType: value})}}
+					    onValueChange={(value,index) => {this.setState({discountType: value}); this._applyDiscount();}}
 					  >
 					    <CustomSelect.Item key="gtype-1" label="Discount type" value="none"/>
 						{
