@@ -11,6 +11,7 @@ import util from 'react-native-util';
 import AssetUtils from 'expo-asset-utils';
 import CButton from '../components/CButton';
 import * as FileSystem from 'expo-file-system';
+import {ThemeContext,UserContext} from '../MyContexts';
 import * as WebBrowser from 'expo-web-browser';
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
@@ -63,7 +64,7 @@ export default class PackageScreen extends React.Component {
   }
   
   
-  handlePaymentPostMessageAsync = (msgg) => {	  
+  handlePaymentPostMessageAsync = (msgg,upp) => {	  
 	  //console.log("posted message: " + msgg);
 	  parsedMsg = helpers.tryParseJSON(msgg);
 	  console.log("parsed message: ",parsedMsg);
@@ -79,29 +80,11 @@ export default class PackageScreen extends React.Component {
 		        this.signupData.tk = res.token;
 				
 		        //Log user in
-		        helpers.login(this.signupData,(res) => {
-					if(res.status == "ok"){
-                        showMessage({
-			              message: `Welcome back ${res.user.name}! Fetching your dashboard..`,
-			              type: 'success'
-		                });	
-                         
-                        this.upp(res.user);
-                        						
-						//this.navv.navigate("Dashboard");
-					}
-					else{
-						showMessage({
-			              message: `Username or password incorrect, please try again.`,
-			              type: 'danger'
-		                });
-					}
-					this.state.loading = false;
-				});   
+		        upp([this.signupData]);  
 		   }
 		   else{
 			    showMessage({
-			      message: "There was a problem signing you up, please try again later",
+			      message: "There was a problem signing you up, please go back and try again.",
 			      type: 'danger'
 		        });
 		    
@@ -138,6 +121,8 @@ static navigationOptions = ({navigation}) => {
 	  this.navv = navv;
     return (
 	       <Container>
+		   <UserContext.Consumer>
+					  {({user,up,loggedIn}) => (
 				<WebView 
 		    useWebKit={true}
 		    source={{ uri: this.url }} 
@@ -148,12 +133,14 @@ static navigationOptions = ({navigation}) => {
             javaScriptEnabled={true}
             mixedContentMode={'always'}
 			onMessage={event => {
-               this.handlePaymentPostMessageAsync(event.nativeEvent.data);
+               this.handlePaymentPostMessageAsync(event.nativeEvent.data,up);
             }}
 			onLoadEnd={() => {this.sendData()}}
             onNavigationStateChange={this.handleNavStateChange}
 			ref={r => {this.webview = r;}}
 		   />
+					  )}
+					   </UserContext.Consumer>	
 		   </Container>
     );
   }

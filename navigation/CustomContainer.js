@@ -32,7 +32,7 @@ export default class CustomContainer extends React.Component {
 	_getContainer = (uu,upp,lli) => {
 		      let kl = Object.keys(uu).length;
 			  console.log("keys length: ",kl);
-		       this.state.lli = (kl === 5);
+		       this.state.lli = (kl > 4);
 			    console.log('User and lli from  _getContainer: ',[uu,this.state.lli]);
 			  let mnav = null;
 			  mnav = (this.state.lli) ? AppNavigator: GuestNavigator;

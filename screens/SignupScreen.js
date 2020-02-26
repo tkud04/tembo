@@ -325,7 +325,7 @@ const ProductInputWrapper = styled.View`
 `;
 
 const ProductDescription = styled.Text` 
-                   color: #999;
+                   color: #777;
 				   margin-bottom: 2px;
 				   font-size: 14px;
 `;
@@ -336,7 +336,7 @@ const ProductInput = styled.TextInput`
 					 padding: 5px;
 					 margin-top: 5px;
 					 margin-bottom: 10px;
-					 color: #ccc;
+					 color: #000;
 `;
 
 

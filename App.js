@@ -63,7 +63,7 @@ resolve = async (pr) => {
   
   _updateUser = (ret) => {
     let uu = ret[0];
-    let ll = (Object.keys(this.state.user).length === 5);
+    let ll = (Object.keys(uu).length > 4);
 	this.setState({user: uu,loggedIn: ll});
 	console.log("user context updated with ",[uu,ll]);
   };

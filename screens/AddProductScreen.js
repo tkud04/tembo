@@ -7,6 +7,7 @@ import * as helpers from '../Helpers';
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {ScrollView} from 'react-native';
 import { KeyboardAwareView } from 'react-native-keyboard-aware-view';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -105,6 +106,14 @@ export default class ProductsScreen extends React.Component {
 	  console.log(ret);
 	  
 	  if(!ret.cancelled){
+		  
+		  FileSystem.getInfoAsync(ret.uri,{})
+		  .then((i) => {
+			  console.log("info: ",i);
+		  })
+		  .catch(e => {console.log("get info error: ",e)
+		  });
+		  
 		  let fileContents = await FileSystem.readAsStringAsync(ret.uri, {encoding: FileSystem.EncodingType.Base64});
 		  //console.log("fileContents: ",fileContents);
 		  this.setState({productImg: fileContents});
@@ -180,7 +189,7 @@ export default class ProductsScreen extends React.Component {
 	  this.navv = this.props.navigation;
 	  
     return (
-	      <KeyboardAwareView animated={true}>
+	       <Wrapper>
 	       <BackgroundImage source={require('../assets/images/bg.jpg')}>
 	        <Container>
 			  <ScrollView>		     
@@ -315,9 +324,12 @@ export default class ProductsScreen extends React.Component {
 				    </SubmitButton>	
                  		
 			  </ScrollView>
+			   
 			</Container>
-			</BackgroundImage>
-			</KeyboardAwareView>			
+			<KeyboardSpacer/>
+			
+			</BackgroundImage>		
+			</Wrapper>
     );
   }
   
@@ -326,6 +338,10 @@ export default class ProductsScreen extends React.Component {
 const BackgroundImage = styled.ImageBackground`
            width: 100%;
 		   height: 100%;
+`;
+
+const Wrapper = styled.View`
+			flex: 1;
 `;
 
 const Container = styled.View`

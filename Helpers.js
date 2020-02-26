@@ -120,7 +120,7 @@ export async function signup(pm, callback) {
   let token = await Notifications.getExpoPushTokenAsync();
 
   // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = PUSH_ENDPOINT + "?tk=" + token + "&name=" + pm.name + "&phone=" + pm.phone + "&email=" + pm.email + "&password=" + pm.password;
+  let upu = PUSH_ENDPOINT + "?tk=" + token + "&name=" + pm.name + "&img=" + pm.img + "&phone=" + pm.phone + "&email=" + pm.email + "&password=" + pm.password;
   return fetch(upu, {
     method: 'GET'
   })
@@ -141,6 +141,7 @@ export async function signup(pm, callback) {
 	   .then(res => {
 		   console.log(res); 
 		   res.tk = token;
+		   saveData(pm);
 		   callback(res);
 		   
 	   }).catch(error => {
