@@ -12,48 +12,34 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 
 import { Notifications } from 'expo';
 
-//var RNFS = require('react-native-fs');
-
-
-
 export default class HomeScreen extends React.Component { 
-
- constructor(props) {
+   constructor(props) {
     super(props);
-    this.state = { text: '', loading: false,dataSource: []};
-    this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
+	this.props.navigation.setParams({launchDrawer: this.launchDrawer});	
+	//this.dt = props.navigation.state.params.dt;
+	
+	
+    this.state = {
+	                 isLoadingComplete: false,
+					 tryAgain: false,
+					 networkProblem: false,
+					 networkProblemText: "",
+					
+				 };	
+				 
 	this.navv = null;
+	
   }
   
-  launchDrawer = () => {
+    launchDrawer = () => {
 	this.navv.toggleDrawer();  
   }
-
-static navigationOptions = ({navigation}) => {
-	 
-	  return {
-       drawerLabel: 'Home',
-	   headerStyle: {
-		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight    		   
-	   },
-	   headerTitle: () => <AppHomeHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Tembo" subtitle="Dashboard"/>,
-	   headerTintColor: AppStyles.headerColor,
-	   headerTitleStyle: {
-		   
-	   }
-	  }
 	  
-	  };
-
-
-  render() {
+ 
+render() {
 	  let items = [];
 	  let navv = this.props.navigation;
 	  this.navv = navv;
-	  helpers.getList((dt => {
-		  items = dt;
-		 }));
 		 //console.log(items);
 		 
     return (
@@ -82,10 +68,12 @@ static navigationOptions = ({navigation}) => {
   
 }
 
+
 const Container = styled.View`
                      flex: 1;
 					 background-color: white;	
-                     border-radius: 20px;					 
+                     border-radius: 20px;		
+                     margin-top: 170px;					 
 `;
 
 const TitleBar = styled.View`

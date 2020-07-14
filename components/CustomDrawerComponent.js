@@ -3,17 +3,22 @@ import {View,ScrollView, Button,SafeAreaView,TouchableNativeFeedback} from 'reac
 import styled from 'styled-components';
 import AppStyles from '../styles/AppStyles';
 import SvgIcon from './SvgIcon';
+import AstroIcon from './AstroIcon';
 import * as helpers from '../Helpers';
-import { DrawerItems } from 'react-navigation-drawer';
+import * as RootNavigation from '../RootNavigation.js';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+} from '@react-navigation/drawer';
 import {ThemeContext,UserContext} from '../MyContexts';
 
 
 
 let uu = {};
 
-_getUsername = (u) =>{
+_getName = (u) =>{
 	let r = "Guest";
-	if(u.name) r = u.name;
+	if(u.name) r = `${u.name}`;
 	return r;
 }
 _getEmail = (u) =>{
@@ -21,78 +26,88 @@ _getEmail = (u) =>{
 	if(u.email) r = u.email; 
 	return r;
 }
-const ripple = TouchableNativeFeedback.Ripple('#adacac', false);
-const CustomDrawerComponent = props => (
-  <View style={{ flex: 1 }}>
 
-        <ScrollView>
-          <SafeAreaView
-            style={{flex: 1}}
-            forceInset={{ top: 'always', horizontal: 'never' }}
-          >
-		    
-			<ThemeContext.Consumer>
+_getRating = (u) =>{
+	let r = "4.5";
+	//if(u.email) r = u.email; 
+	return r;
+}
+
+_goToProfile = (u) =>{
+	console.log("u: ", u);
+	RootNavigation.navigate('Profile', { u: u });
+}
+const ripple = TouchableNativeFeedback.Ripple('#adacac', false);
+const CustomDrawerComponent = props => {
+	
+  //const navv = useNavigation();
+  return (
+  <ThemeContext.Consumer>
              {theme => (
                <UserContext.Consumer>
 			   {({user,up,loggedIn}) => {
-				   //console.log("user in cdc: ",user);
-				   //console.log("cdc items: ",props.items);
 				   helpers.getLoggedInUser().then((dt) => {
-			  uu = dt;
-			  //console.log("updating context from cdc async");
-			  //up([uu,loggedIn]);
-			  //console.log('User inside cdc async function',uu);
+					   
 		 });
-				   return (
-		     <View>
-            <View style={{ backgroundColor: AppStyles.headerBackground }}>
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+		    return (
+			    <DrawerContentScrollView {...props}>
+				
+				  <ProfileButton
+			  onPress={() => {_goToProfile(user)}}
+			 >
+            <View style={{ backgroundColor: AppStyles.mainButtonBackground, marginTop: -5}}>
+              <View style={{ marginLeft: 5, marginBottom: 5, marginTop: 0, flexDirection: "row"}}>
 			    <Logo source={require('../assets/images/bg.jpg')}/>
-				<Username style={{ color: '#f9f9f9', marginTop: '3%', fontFamily: 'sans-serif-condensed' }}>{`Hi ${_getUsername(user)}`}</Username>
-                <Email style={{ color: '#f9f9f9', fontFamily: 'sans-serif-condensed' }}>{`${_getEmail(user)}`}</Email>
+				<View style={{alignItems: 'flex-start',marginLeft: 5}}>
+				<Username style={{ color: '#f9f9f9', marginTop: 13, fontFamily: 'sans-serif-condensed' }}>{`${_getName(user)}`}</Username>
+				 <View style={{color: "#fff", flexDirection: "row", alignItems: 'center', justifyContent: 'center'}}>
+				   <AstroIcon xml={AppStyles.svg.ionMail} w={20} h={20} ss={{marginTop: 0, marginLeft: 3, marginRight: 3}}/>
+				   <Rating>{_getEmail(user)}</Rating>
+				 </View>
+				</View>
               </View>
             </View>
-			             
-			</View>
+			</ProfileButton>
+				
+				  <DrawerItemList {...props}/>
+				  
+				  <View elevation={6} style={{ backgroundColor: '#ffffff' }}>
 
-			  )
-			   }}
-              </UserContext.Consumer>
-              )}
-             </ThemeContext.Consumer>		
-            <View>
-			            <DrawerItems {...props} />
-						 </View>
-          </SafeAreaView>
-        </ScrollView>
-        <View elevation={6} style={{ backgroundColor: '#ffffff' }}>
           <TouchableNativeFeedback background={ripple}>
             <FooterItem>
               <SvgIcon xml={AppStyles.svg.cardUsers} w="10%" h="10%"/>
-              <FooterItemText style={{ fontFamily: 'sans-serif-medium' }}>FAQ</FooterItemText>
+              <FooterItemText style={{ fontFamily: 'sans-serif-medium' }}>Account</FooterItemText>
             </FooterItem>
           </TouchableNativeFeedback>
-
-          <TouchableNativeFeedback background={ripple}>
-            <FooterItem style={{marginBottom: 5}}>
-              <SvgIcon xml={AppStyles.svg.cardLightbulb} w="10%" h="10%"/>
-              <FooterItemText style={{ fontFamily: 'sans-serif-medium' }}>Developer</FooterItemText>
+		  <TouchableNativeFeedback background={ripple}>
+            <FooterItem>
+              <SvgIcon xml={AppStyles.svg.cardUsers} w="10%" h="10%"/>
+              <FooterItemText style={{ fontFamily: 'sans-serif-medium' }}>Help</FooterItemText>
             </FooterItem>
           </TouchableNativeFeedback>
         </View>
-
-      </View>
-);
+		
+			    </DrawerContentScrollView>
+			
+			);
+			   }}
+			  </UserContext.Consumer>
+              )}
+             </ThemeContext.Consumer>
+)
+};
 
 export default CustomDrawerComponent;
 
 
 const Username = styled.Text`
-
+font-size: 15;
 `;
 
-const Email = styled.Text`
-margin-bottom: 4px;
+const Rating = styled.Text`
+margin-vertical: 5px;
+color: #f9f9f9;
+font-family: sans-serif-condensed;
 `;
 
 const Divider = styled.View`
@@ -123,9 +138,14 @@ const SvgView = styled.View`
 `;
 
 const Logo = styled.Image`
-           width: 110px;
-		   height: 110px;
+           width: 50px;
+		   height: 50px;
 		   background: black;
-		   border-radius: 55px;
-		   margin-top: 25px;
+		   border-radius: 44px;
+		   margin-top: 10px;
+		   margin-left: 5px;
+`;
+
+const ProfileButton = styled.TouchableOpacity`
+
 `;

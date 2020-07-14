@@ -9,6 +9,8 @@ import { Notifications } from 'expo';
 //import RNPaystack from 'react-native-paystack';
 import {showMessage, hideMessage} from 'react-native-flash-message';
  
+ const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com';
+ 
   export async function download(url){
 	 //result = await WebBrowser.openBrowserAsync(url);
 	 result = await Linking.openURL(url);
@@ -95,7 +97,7 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
 export async function signup(pm, callback) {
-	const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com/app/signup';
+	let url = `${PUSH_ENDPOINT}/app/signup`;
 	//const PUSH_ENDPOINT = encodeURIComponent(`https://www.eschoolng.net/mobileapp/expo_url.php?ppp=n`);
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS
@@ -120,7 +122,7 @@ export async function signup(pm, callback) {
   let token = await Notifications.getExpoPushTokenAsync();
 
   // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = PUSH_ENDPOINT + "?tk=" + token + "&name=" + pm.name + "&img=" + pm.img + "&phone=" + pm.phone + "&email=" + pm.email + "&password=" + pm.password;
+  let upu = url + "?tk=" + token + "&name=" + pm.name + "&img=" + pm.img + "&phone=" + pm.phone + "&email=" + pm.email + "&password=" + pm.password;
   return fetch(upu, {
     method: 'GET'
   })
@@ -136,7 +138,7 @@ export async function signup(pm, callback) {
 		   }
 		   })
     .catch(error => {
-		   console.log(`Failed to fetch push endpoint ${PUSH_ENDPOINT}: ${error}`);		
+		   console.log(`Failed to fetch push endpoint ${url}: ${error}`);		
 	   })
 	   .then(res => {
 		   console.log(res); 
@@ -151,7 +153,7 @@ export async function signup(pm, callback) {
 
 export async function login(data,callback)
 {
-	const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com/app/login';
+	let url = `${PUSH_ENDPOINT}/app/login`;
 	 const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS
   );
@@ -175,7 +177,7 @@ export async function login(data,callback)
   let token = await Notifications.getExpoPushTokenAsync();
 
   // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = PUSH_ENDPOINT + "?tk=" + token + "&username=" + data.username + "&password=" + data.password;
+  let upu = url + "?tk=" + token + "&username=" + data.username + "&password=" + data.password;
   return fetch(upu, {
     method: 'GET'
   })
@@ -191,13 +193,73 @@ export async function login(data,callback)
 		   }
 		   })
     .catch(error => {
-		   console.log(`Failed to fetch push endpoint ${PUSH_ENDPOINT}: ${error}`);
+		   console.log(`Failed to fetch push endpoint ${url}: ${error}`);
            return {status: "error:", message: "Couldn't fetch login URL [HARD FAIL]"};		   
 	   })
 	   .then(res => {
 		   //console.log('Test', JSON.stringify(res));
 		   
 		   saveData(res);
+		   /**if(res.status == "ok"){
+			   
+		   }
+		   else{
+			   
+		   }**/
+		   callback(res);
+		   
+	   }).catch(error => {
+		   console.log(`Unknown error: ${error}`);			
+	   });   
+}
+
+export async function updateProfile(data,callback)
+{
+	let url = `${PUSH_ENDPOINT}/app/update-profile`;
+	 const { status: existingStatus } = await Permissions.getAsync(
+    Permissions.NOTIFICATIONS
+  );
+  let finalStatus = existingStatus;
+
+  // only ask if permissions have not already been determined, because
+  // iOS won't necessarily prompt the user a second time.
+  if (existingStatus !== 'granted') {
+    // Android remote notification permissions are granted during the app
+    // install, so this will only ask on iOS
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    finalStatus = status;
+  }
+
+  // Stop here if the user did not grant permissions
+  if (finalStatus !== 'granted') {
+    return;
+  }
+
+  // Get the token that uniquely identifies this device
+  let token = await Notifications.getExpoPushTokenAsync();
+
+  // POST the token to your backend server from where you can retrieve it to send push notifications.
+  let upu = url + "?tk=" + token + "&name=" + data.name + "&email=" + data.email +  "&phone=" + data.phone + "&password=" + data.password;
+  return fetch(upu, {
+    method: 'GET'
+  })
+  .then(response => {
+	    //console.log(response);
+         if(response.status === 200){
+			   //console.log(response);
+			   
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error:", message: "Couldn't fetch update profile URL"};
+		   }
+		   })
+    .catch(error => {
+		   console.log(`Failed to fetch push endpoint ${url}: ${error}`);
+           return {status: "error:", message: "Couldn't fetch update profile URL [HARD FAIL]"};		   
+	   })
+	   .then(res => {
+		   //console.log('Test', JSON.stringify(res));
 		   /**if(res.status == "ok"){
 			   
 		   }
@@ -242,46 +304,6 @@ export async function saveData(dt){
 						  console.log("Error saving user profile",error);
 					  });
   
-}
-
-export function getData(callback){
-	let req = "http://peaceful-scrubland-30200.herokuapp.com/flowers";
-	
-	//fetch request
-	fetch(req)
-	   .then(response => {
-		   if(response.status === 200){
-			   //console.log(response);
-			   
-			   return response.json();
-		   }
-		   else{
-			   return {status: "error:", message: "Network error"};
-		   }
-	   })
-	   .catch(error => {
-		    alert("Failed to send message: " + error);			
-	   })
-	   .then(res => {
-		   callback(res); 
-		   
-		   
-	   }).catch(error => {
-		    alert("Unknown error: " + error);			
-	   });
-}
-
-
-
-export function getList(callback){
-	let ret = [
-	{text: 'Fruits'},
-	{text: 'Drinks'},
-	{text: 'Foods'},
-	{ text: 'Vegetables'},
-	{text: 'Salts'},
-	];
-	callback(ret);
 }
 
 
@@ -996,102 +1018,5 @@ export function initializeTransaction(data){
 		   console.log(`Unknown error: ${error}`);			
 	   });
 	**/
-}
-
-/* repeatString() returns a string which has been repeated a set number of times */
-function repeatString(str, num) {
-    out = '';
-    for (var i = 0; i < num; i++) {
-        out += str;
-    }
-    return out;
-}
-
-/*
-dump() displays the contents of a variable like var_dump() does in PHP. dump() is
-better than typeof, because it can distinguish between array, null and object.
-Parameters:
-    v:              The variable
-    howDisplay:     "none", "body", "alert" (default)
-    recursionLevel: Number of times the function has recursed when entering nested
-                    objects or arrays. Each level of recursion adds extra space to the
-                    output to indicate level. Set to 0 by default.
-Return Value:
-    A string of the variable's contents
-Limitations:
-    Can't pass an undefined variable to dump(). 
-    dump() can't distinguish between int and float.
-    dump() can't tell the original variable type of a member variable of an object.
-    These limitations can't be fixed because these are *features* of JS. However, dump()
-*/
-export function dump(v, howDisplay, recursionLevel) {
-    howDisplay = (typeof howDisplay.type === 'undefined') ? {type: "alert"} : howDisplay;
-    recursionLevel = (typeof recursionLevel !== 'number') ? 0 : recursionLevel;
-
-    var vType = typeof v;
-    var out = vType;
-
-    switch (vType) {
-        case "number":
-        /* there is absolutely no way in JS to distinguish 2 from 2.0
-           so 'number' is the best that you can do. The following doesn't work:
-           var er = /^[0-9]+$/;
-           if (!isNaN(v) && v % 1 === 0 && er.test(3.0)) {
-               out = 'int';
-           }
-        */
-        break;
-    case "boolean":
-        out += ": " + v;
-        break;
-    case "string":
-        out += "(" + v.length + '): "' + v + '"';
-        break;
-    case "object":
-        //check if null
-        if (v === null) {
-            out = "null";
-        }
-        //If using jQuery: if ($.isArray(v))
-        //If using IE: if (isArray(v))
-        //this should work for all browsers according to the ECMAScript standard:
-        else if (Object.prototype.toString.call(v) === '[object Array]') {
-            out = 'array(' + v.length + '): {\n';
-            for (var i = 0; i < v.length; i++) {
-                out += repeatString('   ', recursionLevel) + "   [" + i + "]:  " +
-                    dump(v[i], "none", recursionLevel + 1) + "\n";
-            }
-            out += repeatString('   ', recursionLevel) + "}";
-        }
-        else {
-            //if object
-            let sContents = "{\n";
-            let cnt = 0;
-            for (var member in v) {
-                //No way to know the original data type of member, since JS
-                //always converts it to a string and no other way to parse objects.
-                sContents += repeatString('   ', recursionLevel) + "   " + member +
-                    ":  " + dump(v[member], "none", recursionLevel + 1) + "\n";
-                cnt++;
-            }
-            sContents += repeatString('   ', recursionLevel) + "}";
-            out += "(" + cnt + "): " + sContents;
-        }
-        break;
-    default:
-        out = v;
-        break;
-    }
-
-    if (howDisplay.type == 'body') {
-        var pre = document.getElementById(howDisplay.elem);
-        pre.innerHTML = out;
-       // document.body.appendChild(pre);
-    }
-    else if (howDisplay.type == 'alert') {
-       // alert(out);
-    }
-
-    return out;
 }
  

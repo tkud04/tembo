@@ -7,37 +7,24 @@ import * as helpers from '../Helpers';
 import {useNavigation} from '@react-navigation/native';
 
 
-const AppHomeHeader = props => {
+const AppTransparentInputHeader = props => {
 		//console.log("r: ",props.r);
 		const navv = useNavigation();
 		
 return (
 <Container>
-<BackgroundImage source={require('../assets/images/header.jpg')}>
-</BackgroundImage>
-<OverlayView pointerEvents="none"></OverlayView>
 <HeaderView>
   <ButtonsView>
-  <MenuButton onPress={() => {console.log("pressing.."); navv.toggleDrawer()}}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginTop: 10, marginLeft: 20, alignSelf: 'flex-start'}}/>
+  <MenuButton onPress={() => {console.log("pressing.."); navv.goBack()}} style={{marginLeft: 1}}>
+		  <HeaderMenuButton xml={AppStyles.svg.headerBackBlack} w={30} h={30} ss={{marginTop: 10, marginLeft: 20, alignSelf: 'flex-start'}}/>
 		</MenuButton>
-	<SvgView>
-	{
-		props.xml && <SvgIcon xml={helpers.insertAppStyle(props.xml)} w={40} h={40}/>
-	}
-	<Title style={{fontSize: 12}}>{props.title}</Title>
-  </SvgView>
   </ButtonsView>
-  
-  <TitleView sml={props.sml}>
-  <Title>{props.subtitle}</Title>
-  </TitleView>
 </HeaderView>  
 </Container>
 )
 };
 
-export default AppHomeHeader;
+export default AppTransparentInputHeader;
 
 const Container = styled.View`
 
@@ -51,7 +38,7 @@ right: 0;
 bottom: 0;
 
            width: 100%;
-		   height: ${AppStyles.headerHeight - 40};
+		   height: ${AppStyles.headerHeight - 20};
 `;
 
 const Title = styled.Text`
@@ -82,7 +69,7 @@ margin-left: -10;
 `;
 
 const TitleView = styled.View`
-margin-top: 55px;
+margin-top: 75px;
 margin-left: ${props => props.sml}px;
 align-items: center;
 justify-content: center;
@@ -99,6 +86,6 @@ top: 0;
 left: 0;
 right: 0;
 bottom: 0;
-background-color: rgba(0, 155, 0,0.5);
-height: ${AppStyles.headerHeight - 40};
+background-color: rgba(101, 33, 33,0.5);
+height: ${AppStyles.headerHeight - 20};
 `;

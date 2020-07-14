@@ -35,7 +35,6 @@ export default class SigninScreen extends React.Component {
 				     
 	this.navv = null;
 	
-	//This screen is only visible when signed out. So clear all user data here
   }
 
 
@@ -43,26 +42,6 @@ export default class SigninScreen extends React.Component {
 	this.navv.toggleDrawer();  
   }
    
-      static navigationOptions = ({navigation}) => {
-	   return {
-	   headerStyle: {
-		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight / 2
-	   },
-	   headerTitle: () => <AppHeader w="80%" h="80%" ml="30px" xml={AppStyles.svg.headerUsers} title="Sign in"/>,
-	   headerLeft: () => (
-	    <MenuButton onPress={navigation.getParam('launchDrawer')}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginLeft: 10}}/>
-		</MenuButton>
-		),
-	   headerTintColor: AppStyles.headerColor,
-	   headerTitleStyle: {
-		   
-       },
-	   
-	   }
-   
-    };
 	
 	_updateSigninButton = () => {
 	if(this.state.loading){
@@ -132,7 +111,7 @@ export default class SigninScreen extends React.Component {
                          lli = true;
                         upp([res.user,lli]);
                         						
-						this.navv.navigate("Dashboard");
+						this.navv.navigate("Home");
 					}
 					else{
 						showMessage({
@@ -154,7 +133,7 @@ export default class SigninScreen extends React.Component {
 	       <BackgroundImage source={require('../assets/images/bg.jpg')}>
 		   <KeyboardAvoidingView>
 	        <Container>
-			  <ScrollView>		     
+			  <ScrollView>			  
 				   <Row style={{justifyContent: 'center',alignItems: 'center'}}>			   
 				   <Logo source={require('../assets/images/bg.jpg')}/>			   
 				   </Row>
@@ -232,6 +211,7 @@ const BackgroundImage = styled.ImageBackground`
 
 const Container = styled.View`
 					 background-color: #fff;
+					 justify-content: flex-end;
 `;
 
 const ProductInputWrapper = styled.View` 

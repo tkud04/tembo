@@ -1,76 +1,52 @@
-import React from 'react';
-import styled from 'styled-components';
-import CStatusBar from '../components/CStatusBar';
-import CustomButton from '../components/CustomButton';
-import Tips from '../components/Tips';
-import SvgIcon from '../components/SvgIcon';
-import AppDrawerHeader from '../components/AppDrawerHeader';
-import HeaderMenuButton from '../components/HeaderMenuButton';
+import React,{useState, useEffect, useRef} from 'react';
 import CButton from '../components/CButton';
 import * as helpers from '../Helpers';
 import * as ImagePicker from 'expo-image-picker';
 import AppStyles from '../styles/AppStyles';
-import {ScrollView, Button} from 'react-native';
+import TitleHeader from '../components/TitleHeader';
+import {Animated, View,StyleSheet, ScrollView, Dimensions, Button, TouchableOpacity, Image, TextInput, Text} from 'react-native';
 import {ThemeContext,UserContext} from '../MyContexts';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 
 import { Notifications } from 'expo';
 
-//var RNFS = require('react-native-fs');
-
-export default class ProfileScreen extends React.Component { 
-     constructor(props) {
-    super(props);
-		 helpers._getPermissionAsync('camera roll');
-		 this.props.navigation.setParams({launchDrawer: this.launchDrawer});
-		 
-		 
-       this.state = { inputBorderBottomColor: '#ccc',
-                   inputBorderBottomWidth: 1,
-				   nameBorderBottomColor: '#ccc',				   
-				   emailBorderBottomColor: '#ccc',			   
-				   phoneBorderBottomColor: '#ccc',			   
-				   passwordBorderBottomColor: '#ccc',			   
-				   confirmPasswordBorderBottomColor: '#ccc',			   
-				   loading: false,
-				   dataSource: [],
+const { width, height } = Dimensions.get('window');
+let dt = {}, navv = null;
+  
+  const _launchDrawer = () => {
+	navv.toggleDrawer();  
+  }
+  
+const ProfileScreen = (props) => {
+	navv = props.navigation;
+	//console.log("params: ",props.route.params);
+	
+	/**	   			   
 				   name: "",				   
 				   email: "",		
                    img: null,				   
 				   phone: "",				   
 				   confirmPassword: "",				   
-				   password: ""				   
-				 };	
-				 
-		
-				     
-	this.navv = null;
-  }
-  
-    launchDrawer = () => {
-	this.navv.toggleDrawer();  
-  }
+				   password: ""			
+	**/
 	
-
-   static navigationOptions = ({navigation}) => {
-	 
-	  return {
-       drawerLabel: 'Subscribe',
-	   headerStyle: {
-		   backgroundColor: AppStyles.headerBackground,
-		   height: AppStyles.headerHeight    		   
-	   },
-	   headerTitle: () => <AppDrawerHeader xml={AppStyles.svg.chartBar} navv = {navigation} title="Daily Sales Report" subtitle="Profile"/>,
-	   headerTintColor: AppStyles.headerColor,
-	   headerTitleStyle: {
-		   
-	   }
-	  }
-	  
-	  };
-	  
-	addImage = async () => {
+	const [nameBorderBottomColor,setNameBorderBottomColor] = useState('#777');
+	const [emailBorderBottomColor,setEmailBorderBottomColor] = useState('#777');
+	const [phoneBorderBottomColor,setPhoneBorderBottomColor] = useState('#777');
+	const [passwordBorderBottomColor,setPasswordBorderBottomColor] = useState('#777');
+	const [confirmPasswordBorderBottomColor,setConfirmPasswordBorderBottomColor] = useState('#777');
+	const [isLoading,setIsLoading] = useState(false);
+	const [dataNotUpdated,setDataNotUpdated] = useState(true);
+	const [name,setName] = useState("");
+	const [email,setEmail] = useState("");
+	const [img,setImg] = useState(null);
+	const [phone,setPhone] = useState("");
+	const [password,setPassword] = useState("");
+	const [confirmPassword,setConfirmPassword] = useState("");
+	const [fadeAnim] = useState(new Animated.Value(0));
+	
+	const addImage = async () => {
 	  let ret = await ImagePicker.launchImageLibraryAsync({
 		  mediaTypes: ImagePicker.MediaTypeOptions.All,
 		  allowsEditing: true,
@@ -81,7 +57,7 @@ export default class ProfileScreen extends React.Component {
 	  console.log(ret);
 	  
 	  if(!ret.cancelled){
-		  this.setState({img: ret.uri});
+		  setImg(ret.uri);
 		  
 		  showMessage({
 			 message: "Image uploaded!",
@@ -90,24 +66,25 @@ export default class ProfileScreen extends React.Component {
 	  }
   }
   
-  updateState = (dt) => {
-			 console.log("user: ",dt);
-			  this.state.name = dt.name;
-			  this.state.email = dt.email;
-			  this.state.phone = dt.phone;
+  const updateState = (dt) => {
+			// console.log("user: ",dt);
+			  setName(dt.name);
+			  setEmail(dt.email);
+			  setPhone(dt.phone);
+			  setDataNotUpdated(false);
   }
 	
-	 _update = () => {
+	const _update = () => {
 	  //form validation
 	  
-	  if(this.state.password.length > 0){
-		  if(this.state.password.length < 6 || this.state.password != this.state.confirmPassword){
-			   if(this.state.password.length < 6){
+	  if(password.length > 0){
+		  if(password.length < 6 || password != confirmPassword){
+			   if(password.length < 6){
 		 showMessage({
 			 message: "Password must be at least 6 characters",
 			 type: 'danger'
 		 });
-	 }if(this.state.password != this.state.confirmPassword){
+	 }if(password != confirmPassword){
 		 showMessage({
 			 message: "Passwords must match",
 			 type: 'danger'
@@ -118,21 +95,21 @@ export default class ProfileScreen extends React.Component {
 	  
 	  else{
 		 
-  let validationErrors = (this.state.name.length < 2 || this.state.phone.length < 6 || this.state.email.length < 6);
+  let validationErrors = (name.length < 2 || phone.length < 6 || email.length < 6);
 	  if(validationErrors){
 
-	 if(this.state.name.length < 2){
+	 if(name.length < 2){
 		 showMessage({
 			 message: "Name must be at least 2 characters",
 			 type: 'danger'
 		 });
 	 }
-	 if(this.state.email.length < 6){
+	 if(email.length < 6){
 		 showMessage({
 			 message: "Email address must be at least 6 characters",
 			 type: 'danger'
 		 });
-	 }if(this.state.phone.length < 6){
+	 }if(phone.length < 6){
 		 showMessage({
 			 message: "Phone number must be at least 6 characters",
 			 type: 'danger'
@@ -142,254 +119,234 @@ export default class ProfileScreen extends React.Component {
 	}
 	
 	else{
+		setIsLoading(true);
 	  const dt = {
-		  img: this.state.img,
-				   name: this.state.name,
-				   email: this.state.email,
-				   phone: this.state.phone,
-				   password: this.state.password
+		  img: img,
+				   name: name,
+				   email: email,
+				   phone: phone,
+				   password: password
 	 };  
 	 
 	 console.log(dt);
-     //helpers.updateCustomer(dt,this.navv);	
+     helpers.updateCustomer(dt,navv);	
 	}
 	
 	  }
 	 
   }
-
-  render() {
-	  	  let navv = this.props.navigation;
-	  this.navv = navv;
-
-    return (
-	<ThemeContext.Consumer>
- {theme => (
-   <UserContext.Consumer>
-   {({user,up,loggedIn}) => {
-	   this.updateState(user);
-	   return (
-	        <Container>
-			  <ScrollView>
-			     <TitleBar>
-			             <Title>Welcome back,</Title>
-			             <Name>{this.state.name}</Name>
-				        
-			        </TitleBar>
-					<ImageRow style={{justifyContent: 'center',alignItems: 'center'}}>
-                   <ImageUpload
-				     onPress={() => this.addImage()}
-				   >					
-				   <Logo source={{uri: this.state.img}}/>			   
-				   </ImageUpload>
-				   <ProductDescription style={{marginTop: 2}}>Tap to upload</ProductDescription>
-				   </ImageRow>
-					<BottomInputs>
-				    <ProductInputWrapper>
-					 <ProductDescription>Name</ProductDescription>
-				    <ProductInput
-					style={{borderColor: this.state.nameBorderBottomColor}}
-				     placeholder="Name"
-					 value={this.state.name}
-				     onChangeText={text => {
-						this.setState({name: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({nameBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({nameBorderBottomColor: "#ccc"});
-					 }}
-					/>
-					</ProductInputWrapper>
-					
-					<ProductInputWrapper>
-					 <ProductDescription>Email address</ProductDescription>
-				    <ProductInput
-					style={{borderColor: this.state.emailBorderBottomColor}}
-				     placeholder="Email adress"
-					 value={this.state.email}
-				     onChangeText={text => {
-						this.setState({email: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({emailBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({emailBorderBottomColor: "#ccc"});
-					 }}
-					/>
-					</ProductInputWrapper>
-					<ProductInputWrapper>
-					 <ProductDescription>Phone number</ProductDescription>
-				    <ProductInput
-					style={{borderColor: this.state.phoneBorderBottomColor}}
-				     placeholder="Phone number"
-					 value={this.state.phone}
-				     onChangeText={text => {
-						this.setState({phone: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({phoneBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({phoneBorderBottomColor: "#ccc"});
-					 }}
-					/>
-					</ProductInputWrapper>
-					
-				   
-					<ProductInputWrapper>
-					 <ProductDescription>Password</ProductDescription>
-				    <ProductInput
-					style={{borderColor: this.state.passwordBorderBottomColor}}
-				     placeholder="Password"
-				     onChangeText={text => {
-						this.setState({password: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({passwordBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({passwordBorderBottomColor: "#ccc"});
-					 }}
-					 secureTextEntry={true}
-					/>
-					</ProductInputWrapper>
-					
-					<ProductInputWrapper>
-					 <ProductDescription>Confirm new password</ProductDescription>
-				    <ProductInput
-					style={{borderColor: this.state.confirmPasswordBorderBottomColor}}
-				     placeholder="Confirm password"
-				     onChangeText={text => {
-						this.setState({confirmPassword: text});
-					 }}
-					 onFocus={() => {
-						 
-						this.setState({confirmPasswordBorderBottomColor: "#00a2e8"});
-					 }}
-					 onBlur={() => {
-						
-						this.setState({confirmPasswordBorderBottomColor: "#ccc"});
-					 }}
-					 secureTextEntry={true}
-					/>
-					</ProductInputWrapper>
-					
-				   </BottomInputs>
-				   <SubmitButton
-				       onPress={() => {this._update()}}
-				       title="Submit"
-                    >
-                        <CButton title="Submit" background="green" color="#fff" />					   
-				    </SubmitButton>
-				   		    
-			  </ScrollView>
-			</Container>
-			);
-	 }}
-   </UserContext.Consumer>
- )}
-</ThemeContext.Consumer>	
-    );
-  }
   
+  
+  useEffect(() => {
+		 props.navigation.setParams({launchDrawer: _launchDrawer});
+		 
+   },[]);
+   
+   useEffect(() => {
+	if(isLoading){
+	Animated.loop(
+	Animated.sequence([
+	Animated.timing(fadeAnim,{
+		toValue: 1,
+		duration: 1000
+	}),
+	Animated.timing(fadeAnim,{
+		toValue: 0,
+		duration: 1000
+	})
+	])
+	).start();
+    }
+   },[isLoading]);
+  
+	
+	 return (
+	 <UserContext.Consumer> 
+   {({user,up,loggedIn}) => {
+	     if(dataNotUpdated){
+			updateState(user); 
+		 }
+	     
+	      return (
+	        <View style={styles.container}>	
+               <ScrollView>			
+					<View style={[styles.row,styles.topView,styles.centered]}>
+						 <TitleHeader bc={AppStyles.mainButtonBackground} tc={AppStyles.mainButtonBackground} title={`Welcome back, ${name}`}/>
+					</View>
+					<View style={[styles.imageRow,styles.centered]}>
+                      <TouchableOpacity
+				       onPress={() => addImage()}
+				      >					
+				        <Image style={styles.avatar} source={{uri: img}}/>			   
+				      </TouchableOpacity>
+				      <Text style={[styles.textStyle1,{color: AppStyles.mainButtonBackground}]}>Tap to upload</Text>
+	               </View>
+				   <View style={styles.bottomInputs}>
+				     <View style={styles.inputWrapper}>
+					   <Text style={[styles.textStyle1,{color: AppStyles.mainButtonBackground}]}>Name</Text>
+				       <TextInput
+					     style={[styles.inputControl,{borderColor:nameBorderBottomColor}]}
+				         placeholder="Name"
+					     value={name}
+				         onChangeText={text => {
+						   setName(text);
+					     }}
+					     onFocus={() => {
+						  setNameBorderBottomColor("#00a2e8");
+					     }}
+					     onBlur={() => {
+						  setNameBorderBottomColor("#777");
+					     }}
+					   />
+					  </View>
+					  <View style={styles.inputWrapper}>
+					   <Text style={[styles.textStyle1,{color: AppStyles.mainButtonBackground}]}>Email address</Text>
+				       <TextInput
+					     style={[styles.inputControl,{borderColor:emailBorderBottomColor}]}
+				         placeholder="Email address"
+					     value={email}
+				         onChangeText={text => {
+						   setEmail(text);
+					     }}
+					     onFocus={() => {
+						  setEmailBorderBottomColor("#00a2e8");
+					     }}
+					     onBlur={() => {
+						  setEmailBorderBottomColor("#777");
+					     }}
+					   />
+					  </View>
+					  <View style={styles.inputWrapper}>
+					   <Text style={[styles.textStyle1,{color: AppStyles.mainButtonBackground}]}>Phone number</Text>
+				       <TextInput
+					     style={[styles.inputControl,{borderColor:phoneBorderBottomColor}]}
+				         placeholder="Phone number"
+					     value={phone}
+				         onChangeText={text => {
+						   setPhone(text);
+					     }}
+					     onFocus={() => {
+						  setPhoneBorderBottomColor("#00a2e8");
+					     }}
+					     onBlur={() => {
+						  setPhoneBorderBottomColor("#777");
+					     }}
+					   />
+					  </View>
+					  <View style={styles.inputWrapper}>
+					   <Text style={[styles.textStyle1,{color: AppStyles.mainButtonBackground}]}>Password</Text>
+				       <TextInput
+					     style={[styles.inputControl,{borderColor:passwordBorderBottomColor}]}
+				         placeholder="Password"
+					     value={password}
+				         onChangeText={text => {
+						   setPassword(text);
+					     }}
+					     onFocus={() => {
+						  setPasswordBorderBottomColor("#00a2e8");
+					     }}
+					     onBlur={() => {
+						  setPasswordBorderBottomColor("#777");
+					     }}
+						 secureTextEntry={true}
+					   />
+					  </View>
+					  <View style={styles.inputWrapper}>
+					   <Text style={[styles.textStyle1,{color: AppStyles.mainButtonBackground}]}>Confirm password</Text>
+				       <TextInput
+					     style={[styles.inputControl,{borderColor:confirmPasswordBorderBottomColor}]}
+				         placeholder="Password"
+					     value={confirmPassword}
+				         onChangeText={text => {
+						   setConfirmPassword(text);
+					     }}
+					     onFocus={() => {
+						  setConfirmPasswordBorderBottomColor("#00a2e8");
+					     }}
+					     onBlur={() => {
+						  setConfirmPasswordBorderBottomColor("#777");
+					     }}
+						 secureTextEntry={true}
+					   />
+					  </View>
+					{isLoading ? (
+						<Animated.View
+						  style={[styles.centered,{marginBottom: 2,opacity: fadeAnim}]}
+						 >
+						<TitleHeader bc={AppStyles.mainButtonBackground} tc={AppStyles.mainButtonBackground} title="Processing.."/>
+						</Animated.View>
+					   
+						) : (
+						<TouchableOpacity
+				       onPress={() => {_update()}}
+				       title="Submit"
+                       >
+                        <CButton title="Submit" background={AppStyles.mainButtonBackground} color="#fff" />					   
+				    </TouchableOpacity>
+						)}
+				   </View>
+			   </ScrollView>
+	      </View>
+		 );
+   }}
+   </UserContext.Consumer>
+    );  
+
 }
 
-const Container = styled.View`
-                     flex: 1;
-					 background-color: #fff;
-`;
+export default ProfileScreen;
 
-const TitleBar = styled.View`
-                     width: 100%;
-					 margin-top: 20px;
-					 margin-bottom: 8px;
-					 align-items: center;
-					 justify-content: center;
-`;
-
-
-const Logo = styled.Image`
-           width: 110px;
-		   height: 110px;
-		   background: #adacac;
-		   border-radius: 55px;
-`;
-
-const ImageUpload = styled.TouchableOpacity`
-
-`;
-
-
-const Title = styled.Text`
-                     margin-top: -5px;
-                     font-size: 24;
-					 font-weight: 500;
-					 color: #b8bece;
-`;
-
-const Name = styled.Text`
-                     font-size: 24;
-					 font-weight: bold;
-					 color: #3c4560;
-					 margin-top: 5px;
-`;
-
-const NavButton = styled.Button``;
-
-
-const ProductInputWrapper = styled.View` 
-                   margin-left: 10px;
-`;
-
-const ProductDescription = styled.Text` 
-                   color: #777;
-				   margin-bottom: 2px;
-				   font-size: 14px;
-`;
-					 
-const ProductInput = styled.TextInput`
-					 align-items: center;
-					 border: 1px solid #bbb;
-					 padding: 5px;
-					 margin-top: 5px;
-					 margin-bottom: 10px;
-					 color: #000;
-`;
-
-const SubmitButton = styled.TouchableOpacity`
-
-`;
-
-
-const BottomInputs = styled.KeyboardAvoidingView`
-   margin-top: 20px;
-   margin-left: 10px;
-   margin-bottom: 10px;
-   width: 90%;
-`;
-
-const Row = styled.View`
-   margin: 5px;
-   width: 100%;
-   flex-direction: row;
-`;
-
-const ImageRow = styled.View`
-   margin: 5px;
-   width: 100%;
-`;
-
-const MenuButton = styled.TouchableOpacity`
-
-`;
+const styles = StyleSheet.create({
+  container:{
+	   flex: 1,
+	   backgroundColor: '#fff'
+   },
+   centered: {
+	   justifyContent: 'center',
+	   alignItems: 'center'
+   },
+  row:{
+	    margin: 5,
+        width: '100%',
+       flexDirection: 'row'
+    },
+ topView:{
+	 marginTop: 20,
+	 width: '100%',
+	 backgroundColor: 'rgba(0,0,0,0)'
+ },
+ imageRow: {
+	 margin: 5,
+     width: '100%'
+ },
+ avatar: {
+	 width: 110,
+	 height: 110,
+     backgroundColor: '#adacac',
+     borderRadius: 55
+ },
+ textStyle1: {
+	  color: '#000',
+	  marginBottom: 2,
+	  fontSize: 14 
+ },
+ bottomInputs: {
+	  marginTop: 20,
+      marginLeft: 10,
+      marginBottom: 10,
+      width: '90%'
+ },
+ inputWrapper: {
+	   marginLeft: 10
+ },
+ inputControl: {
+	  color: '#000',
+	  alignItems: 'center',
+	  borderWidth: 1,
+	  borderColor: '#bbb',
+	  borderRadius: 5,
+	  padding: 5,
+	  marginTop: 5,
+	  marginBottom: 10
+ },
+});

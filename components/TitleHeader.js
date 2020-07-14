@@ -16,12 +16,12 @@ const TitleBar = styled.View`
                      width: 90%;
 					 margin-top: 10px;
 					 margin-bottom: 20px;
-					 margin-left: 3px;
 					 flex-direction: row;
 					 border-color: ${props => props.bc};	
 					 border-width: 1;	
                      border-radius: 5px;					 
 					 padding: 7px;
+					 padding-left: 0;
 					 align-items: center;
 					 justify-content: center;
 					 

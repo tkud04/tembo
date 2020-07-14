@@ -4,9 +4,9 @@
     "description": "Daily sales/inventory app for Tecno Mobile",
     "slug": "tembo-app",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
-      "android"
+      "android",
+	  "ios"
     ],
     "version": "1.0.0",
     "orientation": "portrait",

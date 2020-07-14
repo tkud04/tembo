@@ -7,37 +7,34 @@ import * as helpers from '../Helpers';
 import {useNavigation} from '@react-navigation/native';
 
 
-const AppHomeHeader = props => {
+const AppTransparentHeader = props => {
 		//console.log("r: ",props.r);
 		const navv = useNavigation();
 		
 return (
 <Container>
-<BackgroundImage source={require('../assets/images/header.jpg')}>
-</BackgroundImage>
-<OverlayView pointerEvents="none"></OverlayView>
 <HeaderView>
   <ButtonsView>
-  <MenuButton onPress={() => {console.log("pressing.."); navv.toggleDrawer()}}>
-		  <HeaderMenuButton xml={AppStyles.svg.headerHamburger} w={30} h={30} ss={{marginTop: 10, marginLeft: 20, alignSelf: 'flex-start'}}/>
-		</MenuButton>
-	<SvgView>
-	{
-		props.xml && <SvgIcon xml={helpers.insertAppStyle(props.xml)} w={40} h={40}/>
-	}
-	<Title style={{fontSize: 12}}>{props.title}</Title>
-  </SvgView>
+  <MenuButtonView>
+  <MenuButton onPress={() => { navv.toggleDrawer()}}>
+	 <HeaderMenuButton xml={AppStyles.svg.headerBlackHamburger} w={30} h={30} ss={{marginTop: 10, marginLeft: 20, alignSelf: 'flex-start'}}/>
+  </MenuButton>
+  </MenuButtonView>
+  <EarningsView>
+   <EarningsText>₦0.00</EarningsText>
+  </EarningsView>
+  <MenuButtonView>
+  <MenuButton onPress={() => { navv.toggleDrawer()}} style={{alignSelf: 'flex-end'}}>
+	 <HeaderMenuButton xml={AppStyles.svg.ionSearch} w={30} h={30} ss={{marginTop: 10, marginRight: 20, alignSelf: 'flex-end'}}/>
+  </MenuButton>
+  </MenuButtonView>
   </ButtonsView>
-  
-  <TitleView sml={props.sml}>
-  <Title>{props.subtitle}</Title>
-  </TitleView>
 </HeaderView>  
 </Container>
 )
 };
 
-export default AppHomeHeader;
+export default AppTransparentHeader;
 
 const Container = styled.View`
 
@@ -51,7 +48,7 @@ right: 0;
 bottom: 0;
 
            width: 100%;
-		   height: ${AppStyles.headerHeight - 40};
+		   height: ${AppStyles.headerHeight - 20};
 `;
 
 const Title = styled.Text`
@@ -62,15 +59,16 @@ const Title = styled.Text`
 
 const HeaderView = styled.View`
 flex-direction: column;
- justify-content: flex-start;
+ justify-content: space-between;
  align-items: flex-start;
 
 `;
 
 const ButtonsView = styled.View`
 flex-direction: row;
-justify-content: space-evenly;
+justify-content: space-between;
 margin-top: 20px;
+width: 100%;
  
 `;
 
@@ -82,7 +80,7 @@ margin-left: -10;
 `;
 
 const TitleView = styled.View`
-margin-top: 55px;
+margin-top: 75px;
 margin-left: ${props => props.sml}px;
 align-items: center;
 justify-content: center;
@@ -93,12 +91,33 @@ const MenuButton = styled.TouchableOpacity`
 
 `;
 
+const MenuButtonView =  styled.View`
+
+`;
+
 const OverlayView = styled.View`
 position: absolute;
 top: 0;
 left: 0;
 right: 0;
 bottom: 0;
-background-color: rgba(0, 155, 0,0.5);
-height: ${AppStyles.headerHeight - 40};
+background-color: rgba(101, 33, 33,0.5);
+height: ${AppStyles.headerHeight - 20};
 `;
+
+const EarningsView = styled.View`
+flex-direction: row;
+background-color: black;
+border-radius: 20;
+width: 30%;
+margin-top: 10;
+paddingVertical: 5;
+align-items: center;
+justify-content: center;
+`;
+
+const EarningsText = styled.Text`
+color: #fff;
+font-size: 20;
+`;
+

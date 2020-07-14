@@ -17,3 +17,26 @@ const ret = createStackNavigator(
 );
 
 export default ret;
+
+
+const Stack = createStackNavigator();
+
+
+let ProfileStack = () => (
+<Stack.Navigator>
+				<Stack.Screen
+                  name="Profile"
+	              component={ProfileScreen}
+				  options={({route}) => ({
+				  headerTransparent: true,
+	             header: () => <AppHomeHeader xml={AppStyles.svg.chartBar}  r = {route} title="Tembo" subtitle="Profile"  sml={100}/>,
+	             //headerTintColor: AppStyles.headerColor,
+	             headerLeft: null  
+				  })}
+	              
+                />
+				
+                </Stack.Navigator>
+);
+
+export default ProfileStack;

@@ -1,21 +1,47 @@
 import 'react-native-gesture-handler';
 
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { SplashScreen, AppLoading } from 'expo';
 import {Asset} from 'expo-asset';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as helpers from './Helpers';
-import CustomContainerComponent from './navigation/CustomContainerComponent';
+import { NavigationContainer } from '@react-navigation/native';
+import { navigationRef } from './RootNavigation';
+import AppStyles from './styles/AppStyles';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import CustomDrawerComponent from './components/CustomDrawerComponent';
+import AppStack from './navigation/AppStack';
+import AuthStack from './navigation/AuthStack';
+import SignoutStack from './navigation/SignoutStack';
+import SvgIcon from './components/SvgIcon';
+import AstroIcon from './components/AstroIcon';
+import SignoutScreen from './screens/SignoutScreen';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
 import { Notifications } from 'expo';
+import * as TaskManager from 'expo-task-manager';
 import FlashMessage from 'react-native-flash-message';
 import {ThemeContext,UserContext} from './MyContexts.js';
-//import RNPaystack from 'react-native-paystack';
+import AppIntroSlider from 'react-native-app-intro-slider';
 
+
+
+const LOCATION_TASK_NAME = 'background-location-task';
+const Drawer = createDrawerNavigator();
+
+const GUEST = {
+	email: "",
+    fname: "Welcome,",
+    gender: "",
+    id: "guest",
+    lname: "Guest",
+    password: "",
+    to: "",
+	tk: null
+};
 
 
 export default class App extends React.Component {
@@ -26,30 +52,30 @@ constructor(props){
 	
 	this.state = {
     isLoadingComplete: false,
-	user:  {},
+    isLoggedIn: false,
+    isRealLoadingComplete: false,
+	user:  GUEST,
+	ttk: null,
 	up: this._updateUser,
-	loggedIn: false
- 	
+	loggedIn: false,
+	showApp: true
   };
   
-  //RNPaystack.init({ publicKey: 'pk_test_7321b6bbe1d8d6281785f9760fe8b3b59f15172f' });
-  //this.resolve(this.hu);
-  
-  		  helpers.getLoggedInUser().then((dt) => {
-			  this.state.user = dt;					  
-			  console.log("uu",this.state.user);
-			  this.state.up([this.state.user]);
+   helpers.getLoggedInUser().then((dt) => {
+			  this.state.user = (Object.keys(dt).length === 0) ? GUEST : dt;					  
 			  this.state.isRealLoadingComplete = true;
+			  this.state.isLoggedIn = true;
+			  console.log("uu",this.state.user);
+			  this.state.up([this.state.user]);	   
 			 
 		 });
+  
+	
+  //this.resolve(this.hu);
+  this.navv = null;
+  
+   this.ss = {color: "#fff", backgroundColor: AppStyles.mainButtonBackground, paddingVertical: 5, borderRadius: 10};
 }
-
-resolve = async (pr) => {
-	let rr = await pr;
-	console.log("rr",rr);
-	this._updateUser(rr);
-}
-
   
   _notificationSubscription = null;
   
@@ -61,15 +87,54 @@ resolve = async (pr) => {
     this.setState({notification: notification});
   };
   
-  _updateUser = (ret) => {
-    let uu = ret[0];
-    let ll = (Object.keys(uu).length > 4);
-	this.setState({user: uu,loggedIn: ll});
-	console.log("user context updated with ",[uu,ll]);
+  _updateUser = (u) => {
+    let uuser = (Object.keys(u[0]).length === 0) ? GUEST : u[0];
+    let tttk  = (u[1] === "test") ? "testTTK" : uuser.tk;
+	let lloggedIn = (tttk !== null);
+	this.setState({user: uuser,tk: tttk,loggedIn: lloggedIn});
+	console.log("user context updated with ",[u,lloggedIn]);
+  };
+  
+ _renderItem = ({ item }) => {
+    return (
+      <View style={styles.slide}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Image source={item.image} />
+        <Text style={styles.text}>{item.text}</Text>
+      </View>
+    );
+  }
+  
+  _onDone = () => {
+	  this.setState({showApp: true});
+  };
+  
+   _renderNextButton = () => {
+    return (
+      <View style={styles.buttonCircle}>
+        <Ion
+          name="md-arrow-round-forward"
+          color="rgba(255, 255, 255, .9)"
+          size={24}
+        />
+      </View>
+    );
+  };
+  _renderDoneButton = () => {
+    return (
+      <View style={styles.buttonCircle}>
+        <Ion
+          name="md-checkmark"
+          color="rgba(255, 255, 255, .9)"
+          size={24}
+        />
+      </View>
+    );
   };
 
   render() {
-   
+   this.navv = this.props.navigation;
+   //console.log("navv from App.js: ",this.navv);
     if (!this.state.isRealLoadingComplete && !this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -81,17 +146,35 @@ resolve = async (pr) => {
     } else {
 		//helpers.getLoggedInUser((u) => {this._updateUser(u)});
 		
+		 
 		  return (
-		 <View style={styles.container}>
+        <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-		  <ThemeContext.Provider>
-		     <UserContext.Provider value={this.state}>
-		       <CustomContainerComponent/>
+		 {this.state.showApp ? (
+		   <ThemeContext.Provider>
+		     <UserContext.Provider value={this.state}>			
+		       <NavigationContainer ref={navigationRef}>
+			    <Drawer.Navigator initialRouteName='Dashboard' drawerContent={props => (<CustomDrawerComponent {...props}/>)}>
+				   {this.state.loggedIn ? (
+				   <>
+				    <Drawer.Screen name="Home" component={AppStack} options={{drawerIcon: () => <AstroIcon xml={AppStyles.svg.ionHome} w={40} h={20} ss={this.ss}/>}} />
+				   
+				     <Drawer.Screen name="Sign out" component={SignoutStack} options={{drawerIcon: () => <AstroIcon xml={AppStyles.svg.cardSignOut} w={40} h={20} ss={this.ss}/>}} />
+					</>
+				   ) : (
+				    <Drawer.Screen name="Sign in" component={AuthStack} options={{drawerIcon: () => <AstroIcon xml={AppStyles.svg.ionLoginOutline} w={40} h={20} ss={this.ss}/>}} />
+				   )}
+           
+                </Drawer.Navigator>
+			   </NavigationContainer>
 		     </UserContext.Provider>
 		  </ThemeContext.Provider>
+		 ) : (
+		   <Text style={{fontWeight: bold,justifyContent: 'center',alignItems: 'center'}}>Intro sliders will be displayed here</Text>
+		 )}
+		 
           <FlashMessage position="bottom" />
-		  </View>
-        
+        </View>
       );	
     }
   }
@@ -126,10 +209,28 @@ resolve = async (pr) => {
   };
 }
 
+/**
+TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+  if (error) {
+    // Error occurred - check `error.message` for more details.
+	console.log("Error: ",error.message);
+    return;
+  }
+  if (data) {
+    const { locations } = data;
+    // do something with the locations captured in the background
+	console.log("Locations: ",locations);
+  }
+});
+**/
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
 	fontFamily: 'Roboto'
   },
+  slide: {
+	  
+  }
 });
