@@ -129,7 +129,7 @@ const ProfileScreen = (props) => {
 	 };  
 	 
 	 console.log(dt);
-     helpers.updateCustomer(dt,navv);	
+     helpers.updateProfile(dt,navv);	
 	}
 	
 	  }
@@ -148,11 +148,13 @@ const ProfileScreen = (props) => {
 	Animated.sequence([
 	Animated.timing(fadeAnim,{
 		toValue: 1,
-		duration: 1000
+		duration: 1000,
+		useNativeDriver: false
 	}),
 	Animated.timing(fadeAnim,{
 		toValue: 0,
-		duration: 1000
+		duration: 1000,
+		useNativeDriver: false
 	})
 	])
 	).start();
