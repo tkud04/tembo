@@ -1,35 +1,37 @@
 {
   "expo": {
-    "name": "Tembo",
-    "description": "Daily sales/inventory app for Tecno Mobile",
-    "slug": "tembo-app",
-    "privacy": "public",
-    "platforms": [
-      "android",
-	  "ios"
-    ],
+    "name": "Ace Webmail",
+    "slug": "ace-webmail",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#80ff80"
-    },
+    "icon": "./assets/icon.png",
     "notification": {
-      "icon": "./assets/images/notification.png"
+     "icon": "./assets/icon.png",
+    },
+	"splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
     "updates": {
-      "enabled": true
+      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "assets/**/*"
+      "**/*"
     ],
+    "ios": {
+      "supportsTablet": true
+    },
     "android": {
-      "package": "com.tecno.tembo",
-      "permissions": [
-        "NOTIFICATIONS"
-      ]
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+    "googleServicesFile": "./google-services.json",
+    "package": "com.aceluxurystore.mail"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     }
   }
 }

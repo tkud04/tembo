@@ -1,5 +1,0 @@
-3) When typing into field you cant see the fields you typing into. this has to be worked on. the text pad covers the text box you are typing into (this affects all pages)
-
-4) Discount and Tax did not add to sales Total; it tax should add and discount should deduct from total.
-
-5)Total Profit should also be less discount and tax

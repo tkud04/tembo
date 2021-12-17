@@ -1,23 +1,18 @@
-import { Text, Linking, AsyncStorage} from 'react-native';
-import { WebView } from 'react-native-webview';
-import util from 'react-native-util';
-import * as FileSystem from 'expo-file-system';
-import * as WebBrowser from 'expo-web-browser';
-import * as Permissions from 'expo-permissions';
+import React, { useState, useEffect } from 'react';
+import { Platform, StyleSheet, View, Text, Alert} from 'react-native';
+import * as SecureStore from 'expo-secure-store';
+import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import { Notifications } from 'expo';
+import { useNavigation } from '@react-navigation/native';
+import * as RootNavigation from './RootNavigation.js';
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 //import RNPaystack from 'react-native-paystack';
-import {showMessage, hideMessage} from 'react-native-flash-message';
- 
- const PUSH_ENDPOINT = 'https://tranquil-coast-18744.herokuapp.com';
- 
-  export async function download(url){
-	 //result = await WebBrowser.openBrowserAsync(url);
-	 result = await Linking.openURL(url);
-	 console.log(result);
-  }
-  
-    export function tryParseJSON(jsonString){
+//import {showMessage, hideMessage} from 'react-native-flash-message';
+export const API = "https://mail.aceluxurystore.com/api";
+export const currentNav = null;
+
+export function tryParseJSON(jsonString){
     try {
         var o = JSON.parse(jsonString);
 
@@ -25,7 +20,7 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
         // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
         // but... JSON.parse(null) returns null, and typeof null === "object", 
         // so we must check for that, too. Thankfully, null is falsey, so this suffices:
-        if (o && typeof o === "object") {
+        if (o && typeof o === "object") { 
             return o;
         }
     }
@@ -33,990 +28,607 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 
     return false;
 }
-  
-    export async function handlePostMessageAsync(msgg){	  
-	  console.log("posted message: " + msgg);
-	  parsedMsg = this.tryParseJSON(msgg);
-	  console.log("parsed message: " + parsedMsg);
-	  
-	  /**
-	  if(parsedMsg){
-		  console.log("parsed message\n\nschool code: " + parsedMsg.userCook + "\nusername: " + parsedMsg.activeUser);
-          uc = parsedMsg.userCook; 	  
-          au = parsedMsg.activeUser;	  
-          cid = parsedMsg.cid;	  
-		//this.setState({userCook: parsedMsg.userCook,activeUser: parsedMsg.activeUser});
-	    postData = parsedMsg.data;
-	  }
-	  else{
-		  postData = msgg;
-	  }
-	  console.log("postData: " + postData);
-	  
-	  if(postData === 'notification'){
-		  this.registerForPushNotificationsAsync(parsedMsg);
-	  }
-	  else if(postData === 'logout'){
-		  this.logout();
-	  }
-	  else{
-		   this.download(postData);
-	  }
-	  **/
-   }
-  
-  
-    export async function _getPermissionAsync(type){
-  //const { status, permissions } = await Permissions.askAsync(Permissions.READ_EXTERNAL_STORAGE,Permissions.WRITE_EXTERNAL_STORAGE,Permissions.CAMERA);
- // const {cp} = await Permissions.askAsync(Permissions.READ_EXTERNAL_STORAGE);
-  //const {wes} = await Permissions.askAsync(Permissions.WRITE_EXTERNAL_STORAGE);
-  
-  if(Constants.platform.ios){
 
-	     let {status} = null;
-	     if(type == 'camera roll'){
-		     status = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-	        }
-		 else if(type == 'contacts'){
-		     status = await Permissions.askAsync(Permissions.READ_CONTACTS);
-	        }
-			console.log(status);
-	    if(status !== 'granted'){
-		 showMessage({
-			 message: `Sorry, we need ${type} permissions to make this work!`,
-			 type: 'danger'
-		 });	
-        }		 
+export async function save(key, value) {
+  await SecureStore.setItemAsync(key, value);
+}
+
+export async function getValueFor(key) {
+  let result = await SecureStore.getItemAsync(key), ret = null;
+  if (result) {
+    ret = result;
+  } else {
+    //alert('No values stored under that key.');
+  }
+  return ret;
+}
+
+export async function remove(key) {
+  await SecureStore.deleteItemAsync(key);
+}
+
+
+export function getInbox(){
+	
+let ret = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    from: 'First Item',
+    subject: 'First Item',
+    msg: 'First Item',
+  },
+  {
+    id: 'bd7asdfea-c1b6-46c2-aed5-3ad53abb28ba',
+    from: 'Second Item',
+    subject: 'Second Item',
+    msg: 'Second Item',
+  },{
+    id: 'bd7acmkea-s2b1-46c2-aed5-3ad53abb28ba',
+    from: 'Third Item',
+    subject: 'Third Item',
+    msg: 'Third Item',
+  },{
+    id: 'bdbzcbea-x36y-46c2-aed5-3ad53abb28ba',
+    from: 'Fourth Item',
+    subject: 'Fourth Item',
+    msg: 'Fourth Item',
+  },
+];
+
+return ret;
+}
+
+export function fetchInbox(){
+	
+let ret = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    from: 'First Item',
+    subject: 'First Item',
+    msg: 'First Item',
+  },
+  {
+    id: 'bd7asdfea-c1b6-46c2-aed5-3ad53abb28ba',
+    from: 'Second Item',
+    subject: 'Second Item',
+    msg: 'Second Item',
+  },{
+    id: 'bd7acmkea-s2b1-46c2-aed5-3ad53abb28ba',
+    from: 'Third Item',
+    subject: 'Third Item',
+    msg: 'Third Item',
+  },{
+    id: 'bdbzcbea-x36y-46c2-aed5-3ad53abb28ba',
+    from: 'Fourth Item',
+    subject: 'Fourth Item',
+    msg: 'Fourth Item',
+  },
+];
+
+return ret;
+}
+
+export async function fetchMessages(dt){
+	
+let ret = [], url = `${API}/messages?u=${dt.u}&tk=${dt.tk}&l=${dt.l}`;;
+//console.log("url: ",url);
+try {
+	//create request
+	const req = new Request(url);
+      const response = await fetch(url);
+      const dt = await response.json();
 	  
-	  return status;
+	  if(dt.status == "ok"){
+		let dtt = dt.data;
+		for(let i = 0; i < dtt.length; i++){
+			let ii = dtt[i];
+			ret.push(ii);
+		}
+	  }
+    } catch (error) {
+      console.error(error);
+	  
     }
+//console.log("ret: ",ret);
+return ret;
+}
+
+
+export function serializeJSON(data) {
+  return Object.keys(data).map(function (keyName) {
+    return encodeURIComponent(keyName) + '=' + encodeURIComponent(data[keyName])
+  }).join('&');
+}
+
+export async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "You've got mail! 📬",
+      body: 'Here is the notification body',
+      data: { data: 'goes here' },
+    },
+    trigger: { seconds: 2 },
+  });
+}
+
+export async function registerForPushNotificationsAsync() {
+  let token = "", cid = Constants.isDevice;
+
+  if (cid) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+		  // alert(`In registerForPushNotificationsAsync(), finalStatus = ${finalStatus}`);
+    if (finalStatus == 'granted') {
+      Notifications.getExpoPushTokenAsync()
+	  .then(data => {
+		  //alert(`In getExpoPushTokenAsync(), data = ${data}`);
+		  console.log(` data: `,data);
+		  token = data.data;
+		  	save('ace_etk',token); 
+	  })
+	  .catch(err => {
+		  alert(`In getExpoPushTokenAsync(), err = ${err}`);
+	  });
+    }
+	else {
+		alert('Failed to get push token for push notification!');
+	}
     
+    //console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
   }
 
-
-
-
-export async function signup(pm, callback) {
-	let url = `${PUSH_ENDPOINT}/app/signup`;
-	//const PUSH_ENDPOINT = encodeURIComponent(`https://www.eschoolng.net/mobileapp/expo_url.php?ppp=n`);
-  const { status: existingStatus } = await Permissions.getAsync(
-    Permissions.NOTIFICATIONS
-  );
-  let finalStatus = existingStatus;
-
-  // only ask if permissions have not already been determined, because
-  // iOS won't necessarily prompt the user a second time.
-  if (existingStatus !== 'granted') {
-    // Android remote notification permissions are granted during the app
-    // install, so this will only ask on iOS
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    finalStatus = status;
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
   }
-
-  // Stop here if the user did not grant permissions
-  if (finalStatus !== 'granted') {
-    return;
-  }
-
-  // Get the token that uniquely identifies this device
-  let token = await Notifications.getExpoPushTokenAsync();
-
-  // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = url + "?tk=" + token + "&name=" + pm.name + "&img=" + pm.img + "&phone=" + pm.phone + "&email=" + pm.email + "&password=" + pm.password;
-  return fetch(upu, {
-    method: 'GET'
-  })
-  .then(response => {
-	    //console.log(response);
-         if(response.status === 200){
-			   //console.log(response);
-			   
-			   return response.json();
-		   }
-		   else{
-			   return {status: "error:", message: "Couldn't fetch signup URL"};
-		   }
-		   })
-    .catch(error => {
-		   console.log(`Failed to fetch push endpoint ${url}: ${error}`);		
-	   })
-	   .then(res => {
-		   console.log(res); 
-		   res.tk = token;
-		   saveData(pm);
-		   callback(res);
-		   
-	   }).catch(error => {
-		   console.log(`Unknown error: ${error}`);			
-	   });
+  
+  //alert(`In registerForPushNotificationsAsync(), token: ${token}`);
+  return token;
 }
 
-export async function login(data,callback)
-{
-	let url = `${PUSH_ENDPOINT}/app/login`;
-	 const { status: existingStatus } = await Permissions.getAsync(
-    Permissions.NOTIFICATIONS
-  );
-  let finalStatus = existingStatus;
-
-  // only ask if permissions have not already been determined, because
-  // iOS won't necessarily prompt the user a second time.
-  if (existingStatus !== 'granted') {
-    // Android remote notification permissions are granted during the app
-    // install, so this will only ask on iOS
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    finalStatus = status;
-  }
-
-  // Stop here if the user did not grant permissions
-  if (finalStatus !== 'granted') {
-    return;
-  }
-
-  // Get the token that uniquely identifies this device
-  let token = await Notifications.getExpoPushTokenAsync();
-
-  // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = url + "?tk=" + token + "&username=" + data.username + "&password=" + data.password;
-  return fetch(upu, {
-    method: 'GET'
-  })
-  .then(response => {
-	    //console.log(response);
-         if(response.status === 200){
-			   //console.log(response);
-			   
-			   return response.json();
-		   }
-		   else{
-			   return {status: "error:", message: "Couldn't fetch login URL"};
-		   }
-		   })
-    .catch(error => {
-		   console.log(`Failed to fetch push endpoint ${url}: ${error}`);
-           return {status: "error:", message: "Couldn't fetch login URL [HARD FAIL]"};		   
-	   })
-	   .then(res => {
-		   //console.log('Test', JSON.stringify(res));
-		   
-		   saveData(res);
-		   /**if(res.status == "ok"){
-			   
-		   }
-		   else{
-			   
-		   }**/
-		   callback(res);
-		   
-	   }).catch(error => {
-		   console.log(`Unknown error: ${error}`);			
-	   });   
+export function findItem(l,x){
+	console.log("[l,x]: ",[l,x]);
+	return l.find(i => i.id == x);
 }
 
-export async function updateProfile(data,callback)
-{
-	let url = `${PUSH_ENDPOINT}/app/update-profile`;
-	 const { status: existingStatus } = await Permissions.getAsync(
-    Permissions.NOTIFICATIONS
-  );
-  let finalStatus = existingStatus;
-
-  // only ask if permissions have not already been determined, because
-  // iOS won't necessarily prompt the user a second time.
-  if (existingStatus !== 'granted') {
-    // Android remote notification permissions are granted during the app
-    // install, so this will only ask on iOS
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    finalStatus = status;
-  }
-
-  // Stop here if the user did not grant permissions
-  if (finalStatus !== 'granted') {
-    return;
-  }
-
-  // Get the token that uniquely identifies this device
-  let token = await Notifications.getExpoPushTokenAsync();
-
-  // POST the token to your backend server from where you can retrieve it to send push notifications.
-  let upu = url + "?tk=" + token + "&name=" + data.name + "&email=" + data.email +  "&phone=" + data.phone + "&password=" + data.password;
-  return fetch(upu, {
-    method: 'GET'
-  })
-  .then(response => {
-	    //console.log(response);
-         if(response.status === 200){
-			   //console.log(response);
-			   
-			   return response.json();
-		   }
-		   else{
-			   return {status: "error:", message: "Couldn't fetch update profile URL"};
-		   }
-		   })
-    .catch(error => {
-		   console.log(`Failed to fetch push endpoint ${url}: ${error}`);
-           return {status: "error:", message: "Couldn't fetch update profile URL [HARD FAIL]"};		   
-	   })
-	   .then(res => {
-		   //console.log('Test', JSON.stringify(res));
-		   /**if(res.status == "ok"){
-			   
-		   }
-		   else{
-			   
-		   }**/
-		   callback(res);
-		   
-	   }).catch(error => {
-		   console.log(`Unknown error: ${error}`);			
-	   });   
-}
-
-export async function logout(callback) {
-	let ret = {status: "Unknown"};
-	 try{
-	 //**
-	 await AsyncStorage.removeItem('ivtry_user');
-	  await AsyncStorage.removeItem('products');
-	  await AsyncStorage.removeItem('customers');
-	  //**/
-	  await AsyncStorage.removeItem('sales');
-	  
-	  ret = {status: "ok"};
+export function wvParse(s){
+	 let r = "";
+	 const regex = /(html)|(device-width)/;
+	 let sr = s.search(regex);
+	   // console.log('sr: ',sr);
+	 if(sr == -1){
+		 r = `
+		 <html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  </head>
+  <body style="max-width:100%; width:100%;background-color:white;">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="color-scheme" content="only" />
+	${s}
+	</body>
+	</html>
+		 `;
 	 }
-	 catch(err){
-		 ret = {status: "error",message: err};
+	 else{
+		 r = s;
 	 }
-	 
-	 callback(ret);
+	 return r;
+ }
+ 
+ export async function reply(dt){
+	 let {n, l} = dt;
+    let msg = await getValueFor("ace_current_msg");	 
+	let dest = "";
+	if(l == "inbox") dest = 'InboxEditMessage';
+	console.log(`l=`,l);
+    n.navigate(dest,{op: "reply",l: l,msg: msg});
+ }
+ export async function forward(dt){
+	  let {n, l} = dt;
+    let msg = await getValueFor("ace_current_msg"); 
+	let dest = "";
+	if(l == "inbox") dest = 'InboxEditMessage';
+    n.navigate(dest,{op: "forward",l: l,msg: msg});
+ }
+
+ export async function deleteMessage(){
+	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
+    console.log(`delete msg with label ${l}, id ${xf}`);
 }
 
-export async function saveData(dt){
-	console.log(dt);
+export async function markMessageRead(dt){
+	 let {n, l} = dt;
+	let xf = await getValueFor("ace_current_xf"),	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+	console.log(`mark msg with id ${xf} as read`);
 	
+	//create request
+	let url = `${API}/mark-read?u=${u}&tk=${tk}&xf=${xf}`, dest = "";
+		   
+	const req = new Request(url,{method: 'GET'});
 	
-	await AsyncStorage.setItem('ivtry_user',JSON.stringify(dt.user))
-	                  .then(() => {
-						  console.log("user profile saved");
-					  })
-					  .catch((error) => {
-						  console.log("Error saving user profile",error);
-					  });
-  
-}
-
-
-export async function addProduct(data,n)
-{
-	data.createdAt = getDate();
-	data.updatedAt = getDate();
-	
-	let products = await AsyncStorage.getItem('products');
-	let newProduct = JSON.parse(products);
-	
-	if(!newProduct) newProduct = [];
-	newProduct.push(data);
-	
-	await AsyncStorage.setItem('products',JSON.stringify(newProduct))
-	                  .then(() => {
-						  showMessage({
-			               message: `Product saved!`,
-			               type: 'success'
-		                 });
-						 n.navigate("Home");
-					  })
-					  .catch((error) => {
-						  showMessage({
-			               message: `Error: ${error.message}`,
-			               type: 'success'
-		                 });
-					  });
-}
-
-export async function updateProduct(data,n) 
-{
-	data.updatedAt = getDate();
-	let products = await AsyncStorage.getItem('products');
-	let newProduct = JSON.parse(products);
-	let updatedProducts = [];
-	
-	if(!newProduct){
-	  updatedProducts.push(data);
-	} 
-	
-	else{
-	    updatedProducts = newProduct.map((p) =>{
-			if(p.sku == data.sku){
-				console.log('found you');
-				p = data;
-			}
-			return p;
-		});
-	}
-	
-	if(n === null){
-		await AsyncStorage.setItem('products',JSON.stringify(updatedProducts));
-	}
-
-    else{
-		await AsyncStorage.setItem('products',JSON.stringify(updatedProducts))
-	                  .then(() => {
-						  showMessage({
-			               message: `Product updated!`,
-			               type: 'success'
-		                 });
-						 n.navigate("Home");
-					  })
-					  .catch((error) => {
-						  showMessage({
-			               message: `Error: ${error.message}`,
-			               type: 'danger'
-		                 });
-					  });
-	}	
-}
-
-export async function getProducts(callback)
-{
-	try{
-		let products = await AsyncStorage.getItem('products');
-		//console.log(products);
-		if(products !== null){
-			let ret = JSON.parse(products);
-			//console.log(ret);
-			callback(ret);
-		}
-	
-	}
-	catch(error){
-		console.log(error);
-	}
-	
-}
-
-
-export async function addCustomer(data,n)
-{
-	data.id = generateID('customer');
-	data.createdAt = getDate();
-	data.updatedAt = getDate();
-	
-	let customers = await AsyncStorage.getItem('customers');
-	let newCustomers = JSON.parse(customers);
-	
-	if(!newCustomers) newCustomers = [];
-	newCustomers.push(data);
-	
-	await AsyncStorage.setItem('customers',JSON.stringify(newCustomers))
-	                  .then(() => {
-						  showMessage({
-			               message: `Customer saved!`,
-			               type: 'success'
-		                 });
-						 n.navigate("Home");
-					  })
-					  .catch((error) => {
-						  showMessage({
-			               message: `Error: ${error.message}`,
-			               type: 'success'
-		                 });
-					  });
-}
-
-export async function getCustomers(callback)
-{
-	try{
-		let customers = await AsyncStorage.getItem('customers');
-		//console.log(customers);
-		if(customers !== null){
-			let ret = JSON.parse(customers);
-			console.log(ret);
-			callback(ret);
-		}
-	}
-	catch(error){
-		console.log(error);
-	}
-	
-}
-
-export async function updateCustomer(data,n)
-{
-	data.updatedAt = getDate();
-	let customers = await AsyncStorage.getItem('customers');
-	let newCustomers = JSON.parse(customers);
-	let updatedCustomers = [];
-	
-	if(!newCustomers){
-	  updatedCustomers.push(data);
-	} 
-	
-	else{
-	    updatedCustomers = newCustomers.map((c) =>{
-			if(c.id == data.id){
-				console.log('found you');
-				c = data;
-			}
-			return c;
-		});
-	}
-	
-	await AsyncStorage.setItem('customers',JSON.stringify(updatedCustomers))
-	                  .then(() => {
-						  showMessage({
-			               message: `Customer info updated!`,
-			               type: 'success'
-		                 });
-						 n.navigate("Home");
-					  })
-					  .catch((error) => {
-						  showMessage({
-			               message: `Error: ${error.message}`,
-			               type: 'danger'
-		                 });
-					  });
-					  
-}
-
-export async function addSale(data,n)
-{
-	data.id = generateID('sale');
-	data.status = "ok"; 
-	data.date = getDate();
-	data.createdAt = getDate();
-	data.updatedAt = getDate();
-	let sales = await AsyncStorage.getItem('sales');
-	let newSale = JSON.parse(sales);
-	
-	if(!newSale) newSale = [];
-	newSale.push(data);
-
-	await AsyncStorage.setItem('sales',JSON.stringify(newSale))
-	                  .then(() => {
-						  showMessage({
-			               message: `Sale recorded!`,
-			               type: 'success'
-		                 });
-						 n.navigate("Home");
-					  })
-					  .catch((error) => {
-						  showMessage({
-			               message: `Error: ${error.message}`,
-			               type: 'success'
-		                 });
-					  });
-					  
-}
-
-export async function getSales(callback)
-{
-	try{
-		let sales =  await AsyncStorage.getItem('sales');
-		//console.log(sales);
-		if(sales !== null){
-			let ret = JSON.parse(sales);
-			callback(ret);
-		}
-	}
-	catch(error){
-		console.log(error);
-		callback({});
-	}
-	
-}
-
-export async function updateSale(data,n)
-{
-	data.updatedAt = getDate();
-	let sales = await AsyncStorage.getItem('sales');
-	let newSale = JSON.parse(sales);
-	let updatedSales = [];
-	
-	if(!newSale){
-	  updatedSales.push(data);
-	} 
-	
-	else{
-	    updatedSales = newSale.map((s) =>{
-			if(s.id == data.id){
-				console.log('found you');
-				s = data;
-			}
-			return s;
-		});
-	}
-	
-	await AsyncStorage.setItem('sales',JSON.stringify(updatedSales))
-	                  .then(() => {
-						  showMessage({
-			               message: `Sale updated!`,
-			               type: 'success'
-		                 });
-						 n.navigate("Home");
-					  })
-					  .catch((error) => {
-						  showMessage({
-			               message: `Error: ${error.message}`,
-			               type: 'danger'
-		                 });
-					  });
-					  
-}
-
-
-export async function deleteSale(data,n)
-{
-	let sales = await AsyncStorage.getItem('sales');
-	let newSale = JSON.parse(sales);
-	let updatedSales = [];
-	
-	if(!newSale){
-		
-	} 
-	
-	else{
-	    updatedSales = newSale.map((s) =>{
-			if(s.id == data.id){
-				console.log('found you');
-				s.status = "deleted";
-			}
-			
-			return s;
-			
-		});
-	}
-	
-	await AsyncStorage.setItem('sales',JSON.stringify(updatedSales))
-	                  .then(() => {
-						  showMessage({
-			               message: `Sale deleted!`,
-			               type: 'success'
-		                 });
-						 n.navigate("Home");
-					  })
-					  .catch((error) => {
-						  showMessage({
-			               message: `Error: ${error.message}`,
-			               type: 'danger'
-		                 });
-					  });
-					  
-}
-
-
-export function generateSKU()
-{
-	return `SKU${Math.floor(Math.random() * Math.floor(999999))}`;
-}
-
-export function generateID(txt)
-{
-	return `${txt}-${Math.floor(Math.random() * Math.floor(999999))}`;
-}
-
-export function getUniqueID(txt)
-{
-	return `${txt}_${Math.floor(Math.random() * Math.floor(999999))}`;
-}
-
-export function _launchDrawer(){
-	showMessage({
-			 message: "Launching drawer menu",
-			 type: 'success'
-		 })	 
-}
-
-export function insertAppStyle(s){
-return `
-<style>
-svg{
-	display: block; 
-	margin: 0 auto;
-}
-</style>
-<svg role="img" viewBox="0 0 512 512">
-${s}
-</svg>
-`;	
-}
-
-export let nav = null;
-
-export function setNavState(n){
-	nav = n;
-}
-
-export function navigate(r){
-	nav.navigate(r);
-}
-
-export function goToAddProduct(){
-	this.navigate('AddProduct');
-}
-
-export async function getLoggedInUser(){
-
-	let ret = {};
-
-	try{
-		let uuu = await AsyncStorage.getItem('ivtry_user');
-		//console.log(customers);
-		if(uuu !== null){
-			let ret = JSON.parse(uuu);
-			return ret;
-		}
-	}
-	catch(error){
-		console.log(error);
-	}
-    
-	return ret;
-}
-
-
-export async function getLoggedInUser2(callback){
-
-	let ret = {id: 0, name: "Guest"};
-
-	try{
-		let uuu = await AsyncStorage.getItem('ivtry_user');
-		//console.log(customers);
-		if(uuu !== null){
-			let ret = JSON.parse(uuu);
-			console.log("logged in user: ",ret);
-		}
-	}
-	catch(error){
-		console.log(error);
-	}
-
-	/**ret = {
-		id: 345,
-		name: "Tobi Kudayisi",
-		email: "kudayisitobi@gmail.com",
-		phone: "07054291601"
-	};
-	**/
-	return ret;
-}
-
-
-
-export async function getPackage(id,callback){
-
-	let	ret = [
-		{
-		   id: 345,
-	 	   name: "30 days",
-		   price: "N1,500.00",
-		   saved: "N0"
-		},
-		{
-		   id: 232,
-	 	   name: "90 days",
-		   price: "N5,000.00",
-		   saved: "N0"
-		},
-		{
-		   id: 125,
-	 	   name: "180 days",
-		   price: "N9,500.00",
-		   saved: "N500"
-		},
-		{
-		   id: 962,
-	 	   name: "360 days",
-		   price: "N19,000.00",
-		   saved: "N100"
-		},
-		{
-		   id: 837,
-	 	   name: "One Time Purchase (Lifetime)",
-		   price: "N100,000.00",
-		   saved: "N0"
-		},
-	];
-	
-	let rret = {};
-	ret.map((p) =>{
-			if(p.id == data.id){
-				console.log('found you');
-				rret = p;
-			}
-		});
-	callback(rret);
-}
-
-export function getDate(){
-	
-	let options = {
-		weekday: 'long',
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit'
-	};
-	
-	let today = new Date();
-	return today.toLocaleDateString();
-}
-
-export function setDate(str){
-	let d = new Date(str);
-	return d;
-}
-
-
- Date.prototype.diff = function(y,m,d){
-        var cleanDate = function(x){
-            x.setHours(0);
-            x.setMinutes(0);
-            x.setSeconds(0);
-            return x;
-        }
-
-        var dateToCompare = new Date(y,m,d),
-            date = cleanDate(this),
-            daysCount = [31,28,31,30,31,30,31,31,30,31,30,31],
-            d = (date > dateToCompare ? date : dateToCompare),
-            d1 = (date < dateToCompare ? date : dateToCompare),
-            days = 0,
-            months = 0,
-            years = 0;
-
-        var yearDiff = function(){
-           years = d.getFullYear() - (d1.getFullYear() + 1);
-           years = years < 0 ? 0 : years;
-        }
-
-        var monthDiff = function(){
-            months = d.getFullYear() == d1.getFullYear() ? (d.getMonth() - 1) - d1.getMonth() : d.getMonth() + (12 - (d1.getMonth() + 1));
-            if(months >= 12){
-                years = years + Math.floor(months / 12)
-                months = months % 12;
-            }
-        }
-
-        var getAdjustedDays = function(){
-            var adjustedDays = 0, i=0;
-            for(i = (d1.getMonth() + 1); i <= 12; i++){
-                if(daysCount[i] == 31){
-                    adjustedDays++;
-                }
-            }
-            return adjustedDays;
-        }
-
-        var dayDiff = function(){
-             var month = d1.getMonth();
-            if(month == 1 && months == 0 && years == 0){
-                 days = d.getDate() - d1.getDate();
-            }else if(month == 1){
-                days = (isLeapYear(d1.getFullYear()) ? 29 - d1.getDate() : 28 - d1.getDate()) + d.getDate() + (d1.getDate() == d.getDate() ? 1 : 2);
-                days = Math.ceil(days - (getAdjustedDays() / 2));
-           }else{
-                days = (daysCount[month] - d1.getDate()) + d.getDate() + (d1.getMonth() == d.getMonth() ? 2 : 1);
-               days = Math.ceil(days - (getAdjustedDays() / 2));
-           } 
-           getAdjustedDays();
-           if(days >= 30){
-               months = months + Math.floor(days / 30); //averge are 30 days
-               days = days % 30;
-           }
-       }  
-
-       var isLeapYear = function(year) {
-           return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
-       }
-
-       yearDiff();
-       monthDiff();
-       dayDiff();
-
-       return {"years" : years, "months" : months, "days" : days};
-    }
-
-
-    
-    //console.log(new Date().diff(2005, 8, 25));
-    //console.log(new Date().diff(2018, 8, 25));
-
-
-export function getDateInterval(dd){
-	let d = new Date(), ret = null;
-	
-	switch(dd){
-		case "today":
-		ret = d.getDate();
-		break;
-		
-		case "yesterday":
-		ret = d.getDate() - 1;
-		break;
-		
-		case "7-days":
-		ret = d.getDate() - 7;
-		break;
-		
-		case "30-days":
-		ret = d.getDate() - 30;
-		break;
-		
-		case "prev-month":
-		let rr = d.toLocaleDateString('en-US',{month:"short"});
-		ret = d.getMonth() - 30;
-		break;
-		
-		case "current-month":
-		ret = d.getMonth() + 1;
-		break;
-    }
-	
-	d.setDate(ret);
-	return d;
-}
-
-export function compareDates(str1, str2,type){
-	let today = new Date();
-	let s2 = setDate(today), s1 = setDate(str1);
-	let y1 = s1.getFullYear(), m1 = s1.getMonth(), d1 = s1.getDate();
-	let y2 = s2.getFullYear(), m2 = s2.getMonth(), d2 = s2.getDate();
-	console.log(`s1: ${s1}, s2: ${s2}, type: ${type}`);
-	console.log(`y1: ${y1}, m1: ${m1}, d1: ${d1}`);
-	console.log(`y2: ${y2}, m2: ${m2}, d2: ${d2}`);
-	
-	let x = false;
-	
-	switch(type){
-		case 'today':
-		  x = y1 === y2 && m1 === m2 && d1 === d2;
-		break;
-		case 'yesterday':
-		  x = y1 <= y2 && m1 <= m2 && (d2 - d1 <= 1);
-		break;
-		case '7-days':
-		  x = y1 <= y2 && m1 <= m2 && (d2 - d1 <= 7);
-		break;
-		case '30-days':
-		   x = y1 <= y2 && (m2 - m1 <= 2 || m2 - m1 === 11) && (d2 - d1 <= 30);
-		break;
-		case 'previous-month':
-		  x = y1 <= y2 && (m2 - m1 === 1 || m2 - m1 === 11);
-		break;
-		case 'current-month':
-		  x = y1 === y2 && m2 - m1 === 1;
-		break;
-   }
-   console.log("x: ",x);
- return x;
-}
-
-export function getTotal(products){
-	let ret = 0;
-	
-	for(let i = 0; i < products.length; i++){
-		let p = products[i];
-		//console.log(`sp: ${parseInt(p.sellingPrice)}, qty: ${parseInt(p.qty)}, shipping: ${parseInt(p.shipping)}`);
-		ret += (  parseInt(p.sellingPrice) * parseInt(p.qty) );
-	}
-	
-	return ret;
-	
-}
-
-export function getProfit(products){
-	let ret = 0;
-	
-	for(let i = 0; i < products.length; i++){
-		let p = products[i];
-		ret += parseInt(p.profit);
-	}
-	
-	return ret;
-	
-}
-
-export function chargeCard(cardParams){
-//fetch request
+	//fetch request
 	fetch(req)
 	   .then(response => {
 		   if(response.status === 200){
-			   //console.log(response);
-			   
 			   return response.json();
 		   }
 		   else{
-			   return {status: "error:", message: "Network error"};
+			   return {status: "error", message: "Technical error"};
 		   }
 	   })
-	   .catch(error => {
-		    alert("Failed to send message: " + error);			
+	    .catch(error => {
+		    alert("Failed first to mark message as read: " + error);	
 	   })
 	   .then(res => {
-		   callback(res); 
-		   
-		   
+		   console.log(res);
+			
 	   }).catch(error => {
-		    alert("Unknown error: " + error);			
+		    alert("Failed to mark message as read: " + error);
+	   });
+	
+}
+
+export async function markMessageUnread(dt){
+	 let {n, l} = dt;
+	let xf = await getValueFor("ace_current_xf"),	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+	console.log(`mark msg with id ${xf} as unread`);
+	
+	//create request
+	let url = `${API}/mark-unread?u=${u}&tk=${tk}&xf=${xf}`, dest = "";
+		   
+	const req = new Request(url,{method: 'GET'});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to mark message as unread: " + error);	
+	   })
+	   .then(res => {
+		   console.log(res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+             let nm = "", ntt = "";
+			 
+		   if(res.status == "ok"){
+               nm = "Done!", ntt = "success";
+		   }
+		   else if(res.status == "error"){
+			    nm = "Something went wrong, please try again later", ntt = "error";				 
+		   }
+		   
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+              
+			  if(l == "inbox") dest = 'InboxScreen';
+              n.navigate(dest);
+		   		     
+	   }).catch(error => {
+		    alert("Failed to mark message as unread: " + error);
+	   });
+	
+}
+
+export async function clearEmailStorage(){
+	let xf = await save("ace_current_msg");
+}
+
+export async function resetEmailStorage(){
+	await save("ace_current_msg","");
+	await save("ace_current_t","");
+	await save("ace_current_label","");
+	await save("ace_current_s","");
+	await save("ace_current_xf","");
+	await save("ace_current_op","");
+	await save("ace_current_msgg","");
+}
+
+export async function replyMessage(l,dt){
+	
+	//create request
+	let url = `${API}/message`, dest = "";
+		   
+	const req = new Request(url,{method: 'POST', body: dt});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to send reply: " + error);	
+	   })
+	   .then(res => {
+		   console.log(res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+             	 
+		   if(res.status == "ok"){
+              alert("Message sent!");	
+               if(l == "inbox") dest = "Inbox";	  
+               else if(l == "drafts") dest = "Drafts";	 
+                resetEmailStorage();			   
+                 RootNavigation.navigate(dest);	   
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			 if(res.message == "validation" || res.message == "dt-validation"){
+				 alert(`<p class='text-primary'>Please enter a valid email address.</p>`);
+			 }
+			 else{
+			   alert("Got an error while sending reply: " + error);			
+			 }					 
+		   }
+		   		     
+	   }).catch(error => {
+		    alert("Failed to send reply: " + error);
+	   });
+	 
+}
+
+export async function forwardMessage(l,dt){
+	//create request
+	let url = `${API}/message`, dest = "";
+		   
+	const req = new Request(url,{method: 'POST', body: dt});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to forward message: " + error);	
+	   })
+	   .then(res => {
+		   console.log(res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+             	 
+		   if(res.status == "ok"){
+              alert("Message sent!");	
+               if(l == "inbox") dest = "Inbox";	  
+               else if(l == "drafts") dest = "Drafts";	  
+			   resetEmailStorage();
+			    RootNavigation.navigate(dest);	  
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			 if(res.message == "validation" || res.message == "dt-validation"){
+				 alert(`<p class='text-primary'>Please enter a valid email address.</p>`);
+			 }
+			 else{
+			   alert("Got an error while forwarding message: " + error);			
+			 }					 
+		   }
+		   		     
+	   }).catch(error => {
+		    alert("Failed to forward message: " + error);
 	   });
 }
 
-export function initializeTransaction(data){
-	let initialize_url = "https://api.paystack.co/transaction/initialize/";
+export async function sendNewMessage(){
+		let  c = await getValueFor("ace_current_msgg"), t = await getValueFor("ace_current_t"), tt = [], s = await getValueFor("ace_current_s"),
+       	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+		console.log("[c, s, t]: ",[c, s, t]);
+		if(!c || !t || !s){
+			let nm = "Please fill all required details", ntt = "danger";
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+		}
+		else{
+		tt.push({em: t});
+	console.log(`sennd new msg with label ${c}, s ${s} to [${t}]`);
 	
-	return fetch(initialize_url, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-    'Content-Type': 'application/json',
-    'authorization': 'Bearer sk_test_ba85038cb3b6a55e707404a245ad36108a9f2225',
-    'cache-control': 'no-cache'
-  },
-      body: JSON.stringify(data)
-  })
-  .then(response => {
-  	//console.log(response);
-	    return response;
-	})
-	.then(response => {
-	    //console.log(response);
-         if(response.status === 200){
-			   //console.log(response);
-			   
+	let fd = new FormData();
+	fd.append("u",u);
+    fd.append("tk",tk);
+    fd.append("t",JSON.stringify(tt));
+    fd.append("s",s);
+    fd.append("c",c);
+	
+	//create request
+	let url = `${API}/new-message`, dest = "";
+		   
+	const req = new Request(url,{method: 'POST', body: fd});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
 			   return response.json();
 		   }
 		   else{
-			   return {status: "error:", message: "Couldn't initialize transaction"};
+			   return {status: "error", message: "Technical error"};
 		   }
-		   })
-    .catch(error => {
-    	   return {status: "error:", message: `Failed to initialize transaction: ${error}`};
-	   });
-  /**
-  .then(response => {
-	    //console.log(response);
-         if(response.status === 200){
-			   //console.log(response);
-			   
-			   return response.json();
-		   }
-		   else{
-			   return {status: "error:", message: "Couldn't fetch signup URL"};
-		   }
-		   })
-    .catch(error => {
-		   console.log(`Failed to fetch push endpoint ${PUSH_ENDPOINT}: ${error}`);		
+	   })
+	    .catch(error => {
+		    alert("Failed first to send new message: " + error);	
 	   })
 	   .then(res => {
-		   console.log(res); 
-		   res.tk = token;
-		   callback(res);
-		   
+		   console.log('res: ',res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+           
+		   if(res.status == "ok"){
+              let nm = "Message sent!", ntt = "success";
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+              dest = "Inbox";	  
+			   resetEmailStorage();
+			    RootNavigation.navigate(dest);	  
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			 if(res.message == "validation" || res.message == "dt-validation"){
+				 alert(`Please enter all required fields.`);
+			 }
+			 else{
+			   alert("Got an error while sending new message: " + res.message);			
+			 }					 
+		   }
+		 
+		   		     
 	   }).catch(error => {
-		   console.log(`Unknown error: ${error}`);			
+		    alert("Failed to send new message: " + error);
 	   });
-	**/
+		}
 }
- 
+
+export async function attachMessage(){
+	let xf = await getValueFor("ace_current_msg"), l = await getValueFor("ace_current_label");
+	console.log(`attach file to msg with label ${l}, id ${xf}`);
+}
+
+async function saveDraft(){
+		let  c = await getValueFor("ace_current_msgg"), t = await getValueFor("ace_current_t"), tt = [], s = await getValueFor("ace_current_s"),
+       	u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+		tt.push({em: t});
+		
+		let fd = new FormData();
+	fd.append("u",u);
+    fd.append("tk",tk);
+    fd.append("t",JSON.stringify(tt));
+    fd.append("s",s);
+    fd.append("c",c);
+	
+	//create request
+	let url = `${API}/save-draft`, dest = "";
+		   
+	const req = new Request(url,{method: 'POST', body: fd});
+	
+	//fetch request
+	fetch(req)
+	   .then(response => {
+		   if(response.status === 200){
+			   return response.json();
+		   }
+		   else{
+			   return {status: "error", message: "Technical error"};
+		   }
+	   })
+	    .catch(error => {
+		    alert("Failed first to save draft: " + error);	
+	   })
+	   .then(res => {
+		   console.log('res: ',res);
+			// hideElem(['#rp-loading','#rp-submit']); 
+           
+		   if(res.status == "ok"){
+              let nm = "saved to Drafts!", ntt = "success";
+	         showMessage({
+               message: nm,
+               type: ntt,
+             });
+              dest = "Inbox";	  
+			   resetEmailStorage();
+			    RootNavigation.navigate(dest);	  
+		   }
+		   else if(res.status == "error"){
+			   console.log(res.message);
+			 if(res.message == "validation" || res.message == "dt-validation"){
+				 alert(`Please enter all required fields.`);
+			 }
+			 else{
+			   alert("Got an error while saving draft: " + res.message);			
+			 }					 
+		   }
+		 
+		   		     
+	   }).catch(error => {
+		    alert("Failed to save draft: " + error);
+	   });
+}
+
+export async function discardMessage(){
+	let l = await getValueFor("ace_current_label"), dest = "Inbox";
+	console.log(`discard compose msg and return to label ${l}`);
+	
+	Alert.alert(
+      "Discard",
+      "Do you want to discard your message?",
+      [
+        {
+          text: "Save as draft",
+          onPress: () => {
+			  console.log("Cancel Pressed");
+			  //saveDraft();
+			  },
+          style: "cancel"
+        },
+        { 
+		  text: "Yes",
+		  onPress: () => {
+			  console.log("OK Pressed");
+			   RootNavigation.navigate(dest);	  
+			  }
+		}
+      ]
+    );
+}
+
+ export async function sendMessage(){
+	let xf = await getValueFor("ace_current_xf"), l = await getValueFor("ace_current_label"), op = await getValueFor("ace_current_op"),
+	     m = await getValueFor("ace_current_msgg"), u = await getValueFor("ace_u"), tk = await getValueFor("ace_tk");
+    console.log(`send msg (${op}) with label ${l}, id ${xf}`);
+	let fd = new FormData();
+	fd.append("u",u);
+    fd.append("tk",tk);
+	
+	if(op == "reply"){
+	       fd.append("m",xf);
+	       fd.append("xf","reply");
+	       fd.append("c",m);
+		   replyMessage(l,fd);
+	}
+	
+	else if(op == "forward"){
+		let t = await getValueFor("ace_current_t");
+	       fd.append("m",xf);
+	       fd.append("xf","forward");
+	       fd.append("c",m);
+	       fd.append("t",t);
+		   forwardMessage(l,fd);
+	}
+	
+	else if(op == "new"){
+		let t = await getValueFor("ace_current_t"), s = await getValueFor("ace_current_s");
+	       fd.append("s",s);
+	       fd.append("c",m);
+	       fd.append("t",t);
+		   sendNewMessage(fd);
+	}
+	
+	
+}

@@ -1,1 +1,0 @@
-Products (Name, quantityType, sku, costPrice, sellingPrice, stock, notes, categories, img
