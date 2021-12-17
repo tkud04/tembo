@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Platform, StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //import * as SplashScreen from 'expo-splash-screen';
 import NetInfo from '@react-native-community/netinfo';
@@ -22,7 +22,7 @@ import MoreStack from './navigation/MoreStack';
 import * as Notifications from 'expo-notifications';
 import * as helpers from './Helpers'; 
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createMaterialTopTabNavigator();
  
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
