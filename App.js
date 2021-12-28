@@ -14,10 +14,9 @@ import SplashScreen from './components/SplashScreen.js';
 import { UserProvider } from './contexts/UserContext';
 
 import AuthStack from './navigation/AuthStack';
-import InboxStack from './navigation/InboxStack';
-import DraftsStack from './navigation/DraftsStack';
-import SentStack from './navigation/SentStack';
-import MoreStack from './navigation/MoreStack';
+import ProfileStack from './navigation/ProfileStack';
+import AppStack from './navigation/AppStack';
+import SettingsStack from './navigation/SettingsStack';
 
 import * as Notifications from 'expo-notifications';
 import * as helpers from './Helpers'; 
@@ -42,7 +41,6 @@ export default function App() {
 	const [etk, setEtk] = useState('');
 	const [online, setOnline] = useState(false);
   const [notification, setNotification] = useState(false);
-  const [noNetworkAlerted, setNoNetworkAlerted] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
   let s = null, nm = "", ntt = "";
@@ -72,9 +70,7 @@ export default function App() {
 				u: u,
 				setU: setU,
 				online: online,
-				setOnline: setOnline,
-				noNetworkAlerted: noNetworkAlerted,
-				setNoNetworkAlerted: setNoNetworkAlerted
+				setOnline: setOnline
 			};
 	
 	useEffect(() => {
@@ -147,7 +143,7 @@ export default function App() {
 	  <SplashScreen/>
 	);
   }
-   let irn = loggedIn ? "InboxStack" : "AuthStack";
+   let irn = loggedIn ? "AppStack" : "AuthStack";
   return (
      <UserProvider value={ctx}>
 	 <NavigationContainer ref={navigationRef}>
@@ -161,42 +157,32 @@ export default function App() {
 	  {loggedIn ? (
 	  <>
 	  <Tab.Screen
-        name="InboxStack"
-        component={InboxStack}
+        name="AppStack"
+        component={AppStack}
         options={{
-          tabBarLabel: 'Inbox',  
+          tabBarLabel: 'Dashboard',  
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="inbox" color={color} size={26} />
+            <MaterialCommunityIcons name="view-dashboard" color={color} size={26} />
           ),
         }}
       />
 	  <Tab.Screen
-        name="DraftsStack"
-        component={DraftsStack}
+        name="ProfileStack"
+        component={ProfileStack}
         options={{
-          tabBarLabel: 'Drafts',
+          tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="email-edit" color={color} size={26} />
+            <MaterialCommunityIcons name="account-box" color={color} size={26} />
           ),
         }}
       />
 	  <Tab.Screen
-        name="SentStack"
-        component={SentStack}
+        name="SettingsStack"
+        component={SettingsStack}
         options={{
-          tabBarLabel: 'Sent',
+          tabBarLabel: 'Settings',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="email-send" color={color} size={26} />
-          ),
-        }}
-      />
-	  <Tab.Screen
-        name="MoreStack"
-        component={MoreStack}
-        options={{
-          tabBarLabel: 'More',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="menu" color={color} size={26} />
+            <MaterialCommunityIcons name="account-cog" color={color} size={26} />
           ),
         }}
       />
