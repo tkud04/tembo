@@ -32,7 +32,7 @@ deploy_branch_preview:
         uses: mshick/add-pr-comment@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EXPO_PROJECT: "@justussoh/github-actions-expo-boiler-template" # Put in your own Expo project name here
+          EXPO_PROJECT: "@tkud04/tembo" # Put in your own Expo project name here
         with:
           message: |
             ## Application
