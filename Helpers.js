@@ -48,6 +48,15 @@ export async function remove(key) {
   await SecureStore.deleteItemAsync(key);
 }
 
+export async function getCredentials() {
+	let ret = await Keychain.getGenericPassword();
+	return ret;
+}
+
+export async function setCredentials(dt) {
+	await Keychain.setGenericPassword(dt.u,dt.p);
+}
+
 export function serializeJSON(data) {
   return Object.keys(data).map(function (keyName) {
     return encodeURIComponent(keyName) + '=' + encodeURIComponent(data[keyName])
