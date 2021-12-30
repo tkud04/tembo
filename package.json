@@ -28,6 +28,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-flash-message": "^0.2.0",
     "react-native-gesture-handler": "~2.1.0",
+    "react-native-keychain": "^8.0.0",
     "react-native-pager-view": "5.4.9",
     "react-native-paper": "^4.9.2",
     "react-native-really-awesome-button": "^1.6.0",

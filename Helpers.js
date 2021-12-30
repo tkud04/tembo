@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Platform, StyleSheet, View, Text, Alert} from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import * as Keychain from 'react-native-keychain';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
