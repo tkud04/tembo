@@ -79,30 +79,35 @@ export default function App() {
         //make any API calls you need to do here
         //await Font.loadAsync(Entypo.font);
 		let ttk = await helpers.getValueFor("ace_tk");
-		let uu = await helpers.getValueFor("ace_u");
+		let uu = null, credentials = null;
 		
-		/***
+		
 		try {
     // Retrieve the credentials
-    const credentials = await Keychain.getGenericPassword();
-    if (credentials) {
-      console.log(
-        'Credentials successfully loaded for user ' + credentials.username
-      );
-    } else {
-      console.log('No credentials stored');
-    }
-  } catch (error) {
-    console.log("Keychain couldn't be accessed!", error);
-  }
-		***/
-		
-		
-		if(ttk != null && uu != null){
+    credentials = await helpers.getCredentials();
+    if(credentials)
+   {
+      uu = credentials.username;
+      console.log(`Credentials successfully loaded for user ${uu}`);
+      
+      if(ttk != null && uu != null){
 			setTk(ttk);
 			 setU(uu);
 		    setLoggedIn(true);
 		}
+    }
+    else
+    {
+       console.log('No credentials stored');
+    }
+  }
+ catch (error) {
+    console.log("Keychain couldn't be accessed!", error);
+  }
+
+		
+		
+		
 		
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
