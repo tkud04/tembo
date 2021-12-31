@@ -14,9 +14,9 @@ import SplashScreen from './components/SplashScreen.js';
 import { UserProvider } from './contexts/UserContext';
 
 import AuthStack from './navigation/AuthStack';
-import ProfileStack from './navigation/ProfileStack';
+//import ProfileStack from './navigation/ProfileStack';
 import AppStack from './navigation/AppStack';
-import SettingsStack from './navigation/SettingsStack';
+//import SettingsStack from './navigation/SettingsStack';
 
 import * as Notifications from 'expo-notifications';
 import * as helpers from './Helpers'; 
