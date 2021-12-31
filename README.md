@@ -1,2 +1,2 @@
-# demo3
-Android inventory app for Tecno Mobile (React Native)
+# tembo
+An inventory management app for Tecno Mobile (React Native)
