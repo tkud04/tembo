@@ -1,33 +1,24 @@
-deploy_branch_preview:
-    name: Deploy Branch Preview
-    needs: test
+name: Expo GitHub Action
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish:
+    name: Install and publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: 12.x
-      - uses: expo/expo-github-action@v5
+          node-version: 14.x
+      - uses: expo/expo-github-action@v6
         with:
-          expo-packager: npm
+          expo-version: 4.x
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
-          expo-cache: true
-      - name: Cache Node Modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Install Packages
-        run: npm install
-      - name: Expo Publish Channel
-        run: expo publish --non-interactive --release-channel pr${{ github.event.number }}
+      - run: yarn install
+      - run: expo publish
       - name: Add Comment To PR
         uses: mshick/add-pr-comment@v1
         env:
