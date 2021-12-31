@@ -27,7 +27,7 @@ jobs:
       
       #Adding node
       - uses: actions/setup-node@v2
-      with:
+        with:
           node-version: 14.x
       - uses: expo/expo-github-action@v6
         with:
