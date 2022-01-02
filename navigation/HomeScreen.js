@@ -47,18 +47,18 @@ const styles = StyleSheet.create({
     //justifyContent: 'center',
   },
   titleBar: {
-    width: 100%;
-	margin-top: 40px;
-    padding-left: 80px;
-	flex-direction: row;
+    width: 100%,
+	margin-top: 40px,
+    padding-left: 80px,
+	flex-direction: row,
   },
   itemsLayout: {
-    flex-direction: row;
-	flex: 1;		
+    flex-direction: row,
+	flex: 1
   },
   column: {
-	  width: 50%;
-	  align-items: center;
+	  width: 50%,
+	  align-items: center
   },
   formGroup: {
 	  marginTop: 30,
